@@ -1,4 +1,4 @@
-OTU,Domain,Phylum,Class,Order,Family,Genus,Species
+otu,Domain,Phylum,Class,Order,Family,Genus,Species
 MW633475.1,k__Eukaryota,p__Ascomycota,c__dothideomyceta,o__Cladosporiales,f__Cladosporiaceae,g__Cladosporium,s__Cladosporium_herbarum
 AF347031.1,k__Eukaryota,p__Ascomycota,c__dothideomyceta,o__Pleosporales,f__Pleosporaceae,g__Alternaria,s__Alternaria_alternata
 MZ159329.1,k__Eukaryota,p__Basidiomycota,c__Opisthokonta,o__Corticiales,f__Corticiaceae,g__Phlebiella,s__Phlebiella_vaga
