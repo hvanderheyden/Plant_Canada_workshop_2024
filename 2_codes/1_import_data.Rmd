@@ -1,0 +1,72 @@
+---
+title: "Import sequencing data into R"
+author: "Hervé Van der Heyden"
+date: "2024-06-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+The First step 
+.
+.
+.bla bla bla 
+.
+.
+.
+
+Let's start with the Illumina dataset
+
+For these steps wee will need the following libraries 
+```{r}
+library("tidyverse")
+library("phyloseq")
+```
+
+First import the ASV table 
+```{r}
+biom_illumina<- read.csv("1_Raw_data/Illumina/illumina_ASV_table.tsv", 
+                        header=TRUE, sep="\t")
+head(biom_illumina)
+```
+
+Then import the taxonomy table 
+```{r}
+taxo_illumina<- read.csv("1_Raw_data/Illumina/illumina_taxonomy.tsv", 
+                        header=TRUE, sep="\t")
+head(taxo_illumina)
+```
+
+Then define the row names from the otu column
+```{r}
+biom_illumina <- biom_illumina %>%
+  tibble::column_to_rownames("otu") 
+
+taxo_illumina <- taxo_illumina %>%
+  tibble::column_to_rownames("otu") 
+```
+
+
+Transform otu and taxonomy tables into matrixes
+```{r}
+biom_illumina <- as.matrix(biom_illumina)
+taxo_illumina <- as.matrix(taxo_illumina)
+
+class(biom_illumina)
+class(taxo_illumina) 
+```
+
+convert to phyloseq objects
+```{r}
+OTU_illumina = otu_table(biom_illumina, taxa_are_rows = TRUE)
+TAX_illumina = phyloseq::tax_table(taxo_illumina)
+
+illuminaPS <- phyloseq(OTU_illumina, TAX_illumina)
+illuminaPS
+```
+
+
