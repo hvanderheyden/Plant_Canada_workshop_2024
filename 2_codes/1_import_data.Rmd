@@ -5,7 +5,7 @@ date: "2024-06-20"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include=TRUE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
@@ -32,6 +32,7 @@ First import the ASV table
 biom_illumina<- read.csv("1_Raw_data/Illumina/illumina_ASV_table.tsv", 
                         header=TRUE, sep="\t")
 head(biom_illumina)
+
 ```
 
 Then import the taxonomy table 
