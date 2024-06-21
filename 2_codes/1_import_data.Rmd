@@ -3,11 +3,10 @@ title: "Import sequencing data into R"
 author: "Hervé Van der Heyden"
 date: "2024-06-20"
 output: html_document
+editor_options: 
+chunk_output_type: console
 ---
 
-```{r setup, include=TRUE}
-knitr::opts_chunk$set(echo = TRUE)
-```
 
 ## R Markdown
 
