@@ -9,7 +9,8 @@ editor_options:
 chunk_output_type: console
 ---
 
-## R Markdown
+
+
 
 The First step .
 . .bla bla bla .
@@ -27,7 +28,7 @@ library("phyloseq")
 First import the ASV table
 
 ```{r}
-biom_illumina<- read.csv("/1_Raw_data/Illumina/illumina_ASV_table.tsv", 
+biom_illumina<- read.csv("1_Raw_data/Illumina/illumina_ASV_table.tsv", 
                         header=TRUE, sep="\t")
 head(biom_illumina)
 
@@ -36,7 +37,7 @@ head(biom_illumina)
 Then import the taxonomy table
 
 ```{r}
-taxo_illumina<- read.csv("Plant_Canada_2024_workshop/1_Raw_data/Illumina/illumina_taxonomy.tsv", 
+taxo_illumina<- read.csv("1_Raw_data/Illumina/illumina_taxonomy.tsv", 
                         header=TRUE, sep="\t")
 head(taxo_illumina)
 ```
