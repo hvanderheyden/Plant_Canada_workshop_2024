@@ -1,4 +1,4 @@
-## “R Biovigilance of Phytopathogens Based on a Metabarcoding Approach”
+## R Biovigilance of Phytopathogens Based on a Metabarcoding Approach
 
 ### Workshop organization committee
 ##### Wen Chen (AAFC -Workshop Instructor), Hervé Van der Heyden (AAFC - Preparation of workshop materials and website development) and Guillaume J. Bilodeau (CFIA)*
@@ -13,12 +13,19 @@
 ## Data used for the workshop  
 ##### Data were collected once a week in 2021 in the southwest Montreal Muck soil region using a Cyclone sampler. DNA extractions were performed in Dr. Chen's laboratory and sequenced on Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden).
 
-##### Data were collected once a week in 2021 in the Muck's region southwest of Montreal using a Cyclone sampler. DNA extractions were performed in Dr. Chen's laboratory and sequenced on Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden).
+##### Data were collected by Dr. Carrisse's team once a week in 2021 in the Muck's region southwest of Montreal using a Cyclone sampler (Figure 1). DNA extractions were performed in Dr. Chen's laboratory and sequenced on Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden). Illumina and IonTorrent data were analysed using Dr Marc-Olivier Duceppe's pipeline (avilable here: https://github.com/duceppemo/QIIME2_ITS) with a database modified from UNITE v9.0 (2023-07-18). 
 
-![plot](https://github.com/hvanderheyden/Plant_Canada_2024_workshop/blob/main/4_Figures/Map_intro.png)
-*Figure 1. Location of the sites sampled used for this workshop*
+![plot](https://github.com/hvanderheyden/Plant_Canada_2024_workshop/blob/main/4_Figures/Pr%C3%A9sentation1.jpg)
+*Figure 1. Location of the sites sampled used for this workshop (credit to Philippe Vigneault (AAFC))*
 
-#### The full list of accessions used to train the QIIME2 classifier is provided in the file data/accession_list.txt, and the specific commands used are provided in the file codes/QIIME2_pipeline_Phyto_paper.txt. The QIIME2 artifacts obtained are provided in the data/from_QIIME2 folder.
-#### Fastq files are available trough figshare (https://doi.org/10.6084/M9.FIGSHARE.24549865).
-
-
+## R packages needed for the workshop  
+```{r}
+install.packages("BiocManager")
+library("tidyverse") # install.packages("tidyverse")
+library("phyloseq") # BiocManager::install("phyloseq")
+library(microbiome) # BiocManager::install("microbiome")
+library(microbiomeutilities) # remotes::install_github("microsud/microbiomeutilities")
+library("ape") # install.install.packages('ape')
+library(ampvis2) # install.packages("remotes") remotes::install_github("kasperskytte/ampvis2", Ncpus = 6)
+library(MicrobiotaProcess) # BiocManager::install("MicrobiotaProcess")
+``` 
