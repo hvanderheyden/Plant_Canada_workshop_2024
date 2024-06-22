@@ -21,11 +21,13 @@ The First step .
 . .bla bla bla .
 . .
 
+
+
 Let's start with the Illumina dataset
 
 For these steps wee will need the following libraries
 
-```{r}
+```{r, message=FALSE,echo=TRUE}
 library("tidyverse")
 library("phyloseq")
 ```
@@ -35,7 +37,7 @@ First import the ASV table
 ```{r}
 biom_illumina<- read.csv("Raw_data/Illumina/illumina_ASV_table.tsv", 
                         header=TRUE, sep="\t")
-head(biom_illumina)
+head(biom_illumina[,1:5],10)
 
 ```
 
@@ -44,7 +46,7 @@ Then import the taxonomy table
 ```{r}
 taxo_illumina<- read.csv("Raw_data/Illumina/illumina_taxonomy.tsv", 
                         header=TRUE, sep="\t")
-head(taxo_illumina)
+head(taxo_illumina[,1:7],10)
 ```
 
 Then define the row names from the otu column
@@ -76,3 +78,68 @@ TAX_illumina = phyloseq::tax_table(taxo_illumina)
 illuminaPS <- phyloseq(OTU_illumina, TAX_illumina)
 illuminaPS
 ```
+
+Let's repeat for the IonTorrent dataset 
+
+```{r}
+biom_IonTorrent<- read.csv("Raw_data/IonTorrent/iontorrent_ASV_table.tsv", 
+                        header=TRUE, sep="\t")
+head(biom_IonTorrent[,1:5],10)
+
+
+taxo_IonTorrent<- read.csv("Raw_data/IonTorrent/iontorrent_taxonomy.tsv", 
+                        header=TRUE, sep="\t")
+head(taxo_IonTorrent[,1:7],10)
+
+biom_IonTorrent <- biom_IonTorrent %>%
+  tibble::column_to_rownames("otu") 
+
+taxo_IonTorrent <- taxo_IonTorrent %>%
+  tibble::column_to_rownames("otu") 
+
+
+biom_IonTorrent <- as.matrix(biom_IonTorrent)
+taxo_IonTorrent <- as.matrix(taxo_IonTorrent)
+
+class(biom_IonTorrent)
+class(taxo_IonTorrent) 
+
+OTU_IonTorrent = otu_table(biom_IonTorrent, taxa_are_rows = TRUE)
+TAX_IonTorrent = phyloseq::tax_table(taxo_IonTorrent)
+
+IonTorrentPS <- phyloseq(OTU_IonTorrent, TAX_IonTorrent)
+IonTorrentPS
+```
+
+And Again for the Nanopore dataset 
+
+```{r}
+biom_Nanopore<- read.csv("Raw_data/Nanopore/Nanopore_pseudo_ASV_table.csv", 
+                        header=TRUE, sep=";")
+head(biom_Nanopore[,1:5],10)
+
+
+taxo_Nanopore<- read.csv("Raw_data/Nanopore/Nanopore_taxonomy.csv", 
+                        header=TRUE, sep=",")
+head(taxo_Nanopore[,1:7],10)
+
+biom_Nanopore <- biom_Nanopore %>%
+  tibble::column_to_rownames("otu") 
+
+taxo_Nanopore <- taxo_Nanopore %>%
+  tibble::column_to_rownames("otu") 
+
+
+biom_Nanopore <- as.matrix(biom_Nanopore)
+taxo_Nanopore <- as.matrix(taxo_Nanopore)
+
+class(biom_Nanopore)
+class(taxo_Nanopore) 
+
+OTU_Nanopore = otu_table(biom_Nanopore, taxa_are_rows = TRUE)
+TAX_Nanopore = phyloseq::tax_table(taxo_Nanopore)
+
+NanoporePS <- phyloseq(OTU_Nanopore, TAX_Nanopore)
+NanoporePS
+```
+

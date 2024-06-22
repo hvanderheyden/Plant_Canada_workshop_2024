@@ -8,7 +8,9 @@ navbar:
       href: index.html
     - text: "Importing data into R"
       href: 1_import_data.html
-    - text: "Importing data into R"
+    - text: "Data preprocessing"
+      href: 1_import_data.html
+    - text: "Data preprocessing"
       href: 1_import_data.html
 
 output:
