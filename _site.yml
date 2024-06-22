@@ -4,7 +4,9 @@ navbar:
   title: "R Biovigilance of Phytopathogens Based on a Metabarcoding Approach"
   href: index.html
   left:
-    - text: "Setup"
+    - text: "Introduction"
+      href: index.html
+    - text: "Importing data into R"
       href: 1_import_data.html
     - text: "Importing data into R"
       href: 1_import_data.html
