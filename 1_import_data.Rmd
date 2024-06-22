@@ -2,15 +2,24 @@
 title: "Import sequencing data into R"
 author: "Hervé Van der Heyden"
 date: "2024-06-20"
-output: html_document
-editor_options: 
-  markdown: 
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
     wrap: sentence
 chunk_output_type: console
 ---
 
-
-
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(fig.align = "center")
+library("knitcitations")
+library("knitr")
+cite_options(citation_format = "pandoc", max.names = 3, style = "html", hyperlink = "to.doc")
+bib <- read.bibtex("bibtexlib.bib")
+source("style.R")
+```
 
 The First step .
 . .bla bla bla .
