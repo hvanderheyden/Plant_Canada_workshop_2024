@@ -1,7 +1,5 @@
 ---
 title: "Import sequencing data into R"
-author: "Hervé Van der Heyden"
-date: "2024-06-20"
 output:
   html_document: default
   pdf_document: default
@@ -46,7 +44,7 @@ Then import the taxonomy table
 ```{r}
 taxo_illumina<- read.csv("Raw_data/Illumina/illumina_taxonomy.tsv", 
                         header=TRUE, sep="\t")
-head(taxo_illumina[,1:7],10)
+head(taxo_illumina[,1:8],10)
 ```
 
 Then define the row names from the otu column
@@ -89,7 +87,7 @@ head(biom_IonTorrent[,1:5],10)
 
 taxo_IonTorrent<- read.csv("Raw_data/IonTorrent/iontorrent_taxonomy.tsv", 
                         header=TRUE, sep="\t")
-head(taxo_IonTorrent[,1:7],10)
+head(taxo_IonTorrent[,1:8],10)
 
 biom_IonTorrent <- biom_IonTorrent %>%
   tibble::column_to_rownames("otu") 
@@ -121,7 +119,7 @@ head(biom_Nanopore[,1:5],10)
 
 taxo_Nanopore<- read.csv("Raw_data/Nanopore/Nanopore_taxonomy.csv", 
                         header=TRUE, sep=",")
-head(taxo_Nanopore[,1:7],10)
+head(taxo_Nanopore[,1:8],10)
 
 biom_Nanopore <- biom_Nanopore %>%
   tibble::column_to_rownames("otu") 

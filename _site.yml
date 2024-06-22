@@ -4,11 +4,9 @@ navbar:
   title: "R Biovigilance of Phytopathogens Based on a Metabarcoding Approach"
   href: index.html
   left:
-    - text: "Introduction"
-      href: index.html
     - text: "Importing data into R"
       href: 1_import_data.html
-    - text: "Data preprocessing"
+    - text: "Data cleaning"
       href: 1_import_data.html
     - text: "Data preprocessing"
       href: 1_import_data.html
@@ -19,7 +17,8 @@ output:
     toc_float:
       collapsed: false
     toc_depth: 2
-    theme: flatly
+    theme: cosmo
+    colortheme: Antibes
     css: tutorial.css
     includes:
       before_body: header.html

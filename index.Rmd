@@ -1,5 +1,6 @@
 ---
 title: "Introduction"
+date: "2024-07-07"
 output:
   html_document: default
   pdf_document: default
@@ -38,7 +39,7 @@ title: "Introduction"
 
 ---
 
-![plot]()
+![plot](Figures/presentation1)
 *Figure 1. Location of the sites sampled used for this workshop (credit to Philippe Vigneault (AAFC))*
 
 ## R packages needed for the workshop  
