@@ -3,8 +3,8 @@ title: "Import sequencing data into R"
 author: "Hervé Van der Heyden"
 date: "2024-06-20"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 editor_options:
   markdown:
     wrap: sentence
@@ -14,11 +14,7 @@ chunk_output_type: console
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.align = "center")
-library("knitcitations")
 library("knitr")
-cite_options(citation_format = "pandoc", max.names = 3, style = "html", hyperlink = "to.doc")
-bib <- read.bibtex("bibtexlib.bib")
-source("style.R")
 ```
 
 The First step .
@@ -37,7 +33,7 @@ library("phyloseq")
 First import the ASV table
 
 ```{r}
-biom_illumina<- read.csv("1_Raw_data/Illumina/illumina_ASV_table.tsv", 
+biom_illumina<- read.csv("Raw_data/Illumina/illumina_ASV_table.tsv", 
                         header=TRUE, sep="\t")
 head(biom_illumina)
 
@@ -46,7 +42,7 @@ head(biom_illumina)
 Then import the taxonomy table
 
 ```{r}
-taxo_illumina<- read.csv("1_Raw_data/Illumina/illumina_taxonomy.tsv", 
+taxo_illumina<- read.csv("Raw_data/Illumina/illumina_taxonomy.tsv", 
                         header=TRUE, sep="\t")
 head(taxo_illumina)
 ```
