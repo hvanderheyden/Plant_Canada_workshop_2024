@@ -3,6 +3,7 @@ output_dir: "."
 navbar:
   title: "R Biovigilance of Phytopathogens Based on a Metabarcoding Approach"
   href: index.html
+  icon: fa-home
   left:
     - text: "Importing data into R"
       href: 1_import_data.html
@@ -13,10 +14,11 @@ navbar:
 
 output:
   html_document:
-    theme: sandstone
-    highlight: tango
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 2
+    theme: flatly
+    css: tutorial.css
     includes:
-      in_header: googlecode.html
-      before_body: 
-      after_body: 
-    css: styles.css 
+      before_body: header.html

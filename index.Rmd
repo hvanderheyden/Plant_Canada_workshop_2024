@@ -39,8 +39,10 @@ title: "Introduction"
 
 ---
 
-![plot](Figures/presentation1)
-*Figure 1. Location of the sites sampled used for this workshop (credit to Philippe Vigneault (AAFC))*
+```{r, echo=FALSE, fig.cap="Figure 1. Location of the sites sampled used for this workshop (credit to Philippe Vigneault (AAFC))", out.width = '100%'}
+knitr::include_graphics("Figures/presentation1.jpg")
+```
+
 
 ## R packages needed for the workshop  
 ```{r, message=FALSE,echo=TRUE, warning=FALSE}
