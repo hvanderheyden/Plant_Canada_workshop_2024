@@ -13,12 +13,10 @@ navbar:
 
 output:
   html_document:
-    toc: true
-    toc_float:
-      collapsed: false
-    toc_depth: 2
-    theme: cosmo
-    colortheme: Antibes
-    css: tutorial.css
+    theme: sandstone
+    highlight: tango
     includes:
-      before_body: header.html
+      in_header: googlecode.html
+      before_body: 
+      after_body: 
+    css: styles.css 
