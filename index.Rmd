@@ -19,7 +19,11 @@ R Biovigilance of Phytopathogens Based on a Metabarcoding Approach
 Workshop organization committee
 -----
 
-Wen Chen (AAFC -Workshop Instructor), Hervé Van der Heyden (AAFC - Preparation of workshop materials and website development) and Guillaume J. Bilodeau (CFIA)
+Wen Chen (AAFC -Workshop Instructor)
+
+Hervé Van der Heyden (AAFC - Preparation of workshop materials and website development)
+
+Guillaume J. Bilodeau (CFIA)
 
 Description 
 -----

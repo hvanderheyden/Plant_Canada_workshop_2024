@@ -24,13 +24,14 @@ library("tidyverse")
 library("phyloseq")
 ```
 
+Tables to Phyloseq
+----
 First import the ASV table
 
 ```{r}
 biom_illumina<- read.csv("Raw_data/Illumina/illumina_ASV_table.tsv", 
                         header=TRUE, sep="\t")
 head(biom_illumina[,1:5],10)
-
 ```
 
 Then import the taxonomy table
@@ -71,6 +72,7 @@ illuminaPS <- phyloseq(OTU_illumina, TAX_illumina)
 illuminaPS
 ```
 
+
 Let's repeat for the IonTorrent dataset 
 
 ```{r}
@@ -88,7 +90,6 @@ biom_IonTorrent <- biom_IonTorrent %>%
 
 taxo_IonTorrent <- taxo_IonTorrent %>%
   tibble::column_to_rownames("otu") 
-
 
 biom_IonTorrent <- as.matrix(biom_IonTorrent)
 taxo_IonTorrent <- as.matrix(taxo_IonTorrent)
@@ -112,7 +113,7 @@ head(biom_Nanopore[,1:5],10)
 
 
 taxo_Nanopore<- read.csv("Raw_data/Nanopore/Nanopore_taxonomy.csv", 
-                        header=TRUE, sep=",")
+                        header=TRUE, sep=";")
 head(taxo_Nanopore[,1:8],10)
 
 biom_Nanopore <- biom_Nanopore %>%
@@ -135,6 +136,9 @@ NanoporePS <- phyloseq(OTU_Nanopore, TAX_Nanopore)
 NanoporePS
 ```
 
+Merging phyloseq objects
+----
+
 To compare 
 
 
@@ -154,12 +158,16 @@ tax_Nanopore = phyloseq::tax_table(NanoporePS)
 
 combined_tax <- merge_phyloseq(tax_illumina, tax_Iontorrent, tax_Nanopore)
 
-str(combined_tax)
 head(combined_tax)
 
 combined_tax <- as.matrix(combined_tax)
 combined_tax = phyloseq::tax_table(combined_tax)
 ```
+
+
+We now have 3 Phyloseq objects, which contain no metadata.
+
+
 
 ```{r}
 meta <- read.csv("Raw_data/metadata_organicsoil1.tsv", 
@@ -179,7 +187,8 @@ combinedPS <- merge_phyloseq(combined_otu, combined_tax, samples);combinedPS
 
 ```
 
-
+Saving phyloseq objects
+----
 
 
 
