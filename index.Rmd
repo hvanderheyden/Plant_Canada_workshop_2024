@@ -1,13 +1,7 @@
 ---
 title: "Introduction"
 date: "2024-07-07"
-output:
-  html_document: default
-  pdf_document: default
-editor_options:
-  markdown:
-    wrap: sentence
-chunk_output_type: console
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -20,38 +14,47 @@ library("knitr")
 title: "Introduction"
 ---
 
-### R Biovigilance of Phytopathogens Based on a Metabarcoding Approach
+R Biovigilance of Phytopathogens Based on a Metabarcoding Approach
 
-#### Workshop organization committee
-##### Wen Chen (AAFC -Workshop Instructor), Hervé Van der Heyden (AAFC - Preparation of workshop materials and website development) and Guillaume J. Bilodeau (CFIA)*
+Workshop organization committee
+-----
 
-#### Description 
-##### Metabarcoding combines DNA barcoding with high-throughput sequencing (HTS) technologies for rapid and high-throughput identification of multiple species from environmental samples, offering a powerful tool for biodiversity studies and ecosystem monitoring. It has transformed our ability to profile complex microbial communities and track plant pathogens in various environments. 
+Wen Chen (AAFC -Workshop Instructor), Hervé Van der Heyden (AAFC - Preparation of workshop materials and website development) and Guillaume J. Bilodeau (CFIA)
 
-##### This workshop will provide hands-on experience in metabarcoding-based community analysis using R, a versatile programming language and environment for statistical computing and graphics. You will learn about various R packages and tools that are essential for community data analysis, enabling you to effectively analyze and interpret metabarcoding data. 
+Description 
+-----
 
-##### This workshop is designed to demonstrate how you may use metabarcoding for plant pathogen monitoring and tracking. This is crucial for early detection and management of plant diseases and for agriculture and biodiversity conservation. We will explore case studies and practical applications, highlighting how metabarcoding, combined with R analysis, becomes a potential diagnostic tool for Biovigilance of phytopathogens.
+Metabarcoding combines DNA barcoding with high-throughput sequencing (HTS) technologies for rapid and high-throughput identification of multiple species from environmental samples, offering a powerful tool for biodiversity studies and ecosystem monitoring. It has transformed our ability to profile complex microbial communities and track plant pathogens in various environments. 
 
-#### Data used for the workshop  
-##### Data were collected once a week in 2021 in the southwest Montreal Muck soil region using a Cyclone sampler. DNA extractions were performed in Dr. Chen's laboratory and sequenced on Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden).
+This workshop will provide hands-on experience in metabarcoding-based community analysis using R, a versatile programming language and environment for statistical computing and graphics. You will learn about various R packages and tools that are essential for community data analysis, enabling you to effectively analyze and interpret metabarcoding data. 
 
-##### Data were collected by Dr. Carrisse's team once a week in 2021 in the Muck's region southwest of Montreal using a Cyclone sampler (Figure 1). DNA extractions were performed in Dr. Chen's laboratory and sequenced on Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden). Illumina and IonTorrent data were analysed using Dr Marc-Olivier Duceppe's pipeline (avilable here: https://github.com/duceppemo/QIIME2_ITS) with a database modified from UNITE v9.0 (2023-07-18). 
+This workshop is designed to demonstrate how you may use metabarcoding for plant pathogen monitoring and tracking. This is crucial for early detection and management of plant diseases and for agriculture and biodiversity conservation. We will explore case studies and practical applications, highlighting how metabarcoding, combined with R analysis, becomes a potential diagnostic tool for Biovigilance of phytopathogens.
 
----
+What the workshop is not about 
+-----
+
+This workshop is not dedicated to learning the basics of R and R-studio. We believe there are plenty of tutorials and workshops available online or through research groups. Here are a few examples of resources for learning the basics: 
+
+Sydney E. Everhart, Nikita Gambhir, Kaitlin Gold, Lucky Mehra and Zhian N. Kamvar offered APS attendees an introduction to R for plant pathologists in 2020, available at:
+
+https://github.com/everhartlab/APS_IntroR_2020
+
+Several tutorials and primers are also available from the Grunwald group. See, for example, this primer on reproducible science using R, prepared by Zachary S.L. Foster, Zhian N. Kamvar, and Niklaus J. Grünwald: 
+
+https://grunwaldlab.github.io/Reproducible-science-in-R/
+
+The Centre québécois des sciences de la biodiversité (CQBS) also offers a wide range of training courses at various levels, from introduction classes to advanced multivariate analyses:  
+
+https://r.qcbs.ca/workshops/ 
+
+
+Data used for the workshop
+-----
 
 ```{r, echo=FALSE, fig.cap="Figure 1. Location of the sites sampled used for this workshop (credit to Philippe Vigneault (AAFC))", out.width = '100%'}
 knitr::include_graphics("Figures/presentation1.jpg")
 ```
 
+Data were collected once a week in 2021 in the southwest Montreal Muck soil region using a Cyclone sampler. DNA extractions were performed in Dr. Chen's laboratory and sequenced on Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden).
 
-## R packages needed for the workshop  
-```{r, message=FALSE,echo=TRUE, warning=FALSE}
-# if needed, install.packages("BiocManager", repos = "http://cran.us.r-project.org")
-library("tidyverse") # install.packages("tidyverse")
-library("phyloseq") # BiocManager::install("phyloseq")
-library(microbiome) # BiocManager::install("microbiome")
-library(microbiomeutilities) # remotes::install_github("microsud/microbiomeutilities")
-library("ape") # install.install.packages('ape')
-library(ampvis2) # install.packages("remotes") remotes::install_github("kasperskytte/ampvis2", Ncpus = 6)
-library(MicrobiotaProcess) # BiocManager::install("MicrobiotaProcess")
-``` 
+Data were collected by Dr. Carrisse's team once a week in 2021 in the Muck's region southwest of Montreal using a Cyclone sampler (Figure 1). DNA extractions were performed in Dr. Chen's laboratory and sequenced on Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden). Illumina and IonTorrent data were analysed using Dr Marc-Olivier Duceppe's pipeline (avilable here: https://github.com/duceppemo/QIIME2_ITS) with a database modified from UNITE v9.0 (2023-07-18). 

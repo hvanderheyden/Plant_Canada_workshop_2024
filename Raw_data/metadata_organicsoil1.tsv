@@ -1,4 +1,4 @@
-#SampleID	InputFileName	Samplename	seq_tech	SiteID	Region	Year	Week	X_coord	Y_coord
+SampleID	InputFileName	Samplename	seq_tech	SiteID	Region	Year	Week	X_coord	Y_coord
 IonT_QC0221WK20	B1_9_L001_R1_001.fastq.gz	QC02_21_WK20	IonTorrent	QC02	Frelighsburg	2021	WK20	45.05353	-72.8625
 IonT_QC0221WK21	B2_9_L001_R1_001.fastq.gz	QC02_21_WK21	IonTorrent	QC02	Frelighsburg	2021	WK21	45.05353	-72.8625
 IonT_QC0221WK22	B4_9_L001_R1_001.fastq.gz	QC02_21_WK22	IonTorrent	QC02	Frelighsburg	2021	WK22	45.05353	-72.8625

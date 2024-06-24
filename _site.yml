@@ -5,20 +5,23 @@ navbar:
   href: index.html
   icon: fa-home
   left:
+    - text: "Workshop Requirements"
+      href: setup_requirements.html 
     - text: "Importing data into R"
-      href: 1_import_data.html
+      href: 1_import_data.html    
+    - text: "Data preprocessing"
+      href: 1_import_data.html    
     - text: "Data cleaning"
       href: 1_import_data.html
-    - text: "Data preprocessing"
-      href: 1_import_data.html
+  right:
+  - href: https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io
+    icon: fa-github
 
 output:
   html_document:
     toc: true
     toc_float:
-      collapsed: false
+      collapsed: TRUE
     toc_depth: 2
     theme: flatly
-    css: tutorial.css
-    includes:
-      before_body: header.html
+    highlight: tango

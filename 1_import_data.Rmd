@@ -1,12 +1,6 @@
 ---
 title: "Import sequencing data into R"
-output:
-  html_document: default
-  pdf_document: default
-editor_options:
-  markdown:
-    wrap: sentence
-chunk_output_type: console
+output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -140,4 +134,61 @@ TAX_Nanopore = phyloseq::tax_table(taxo_Nanopore)
 NanoporePS <- phyloseq(OTU_Nanopore, TAX_Nanopore)
 NanoporePS
 ```
+
+To compare 
+
+
+```{r}
+otu_illumina = otu_table(illuminaPS)
+otu_Iontorrent = otu_table(IonTorrentPS)
+otu_Nanopore = otu_table(NanoporePS)
+
+combined_otu <- merge_phyloseq(otu_illumina, otu_Iontorrent, otu_Nanopore)
+```
+
+
+```{r}
+tax_illumina  = phyloseq::tax_table(illuminaPS)
+tax_Iontorrent = phyloseq::tax_table(IonTorrentPS)
+tax_Nanopore = phyloseq::tax_table(NanoporePS)
+
+combined_tax <- merge_phyloseq(tax_illumina, tax_Iontorrent, tax_Nanopore)
+
+str(combined_tax)
+head(combined_tax)
+
+combined_tax <- as.matrix(combined_tax)
+combined_tax = phyloseq::tax_table(combined_tax)
+```
+
+```{r}
+meta <- read.csv("Raw_data/metadata_organicsoil1.tsv", 
+                 header=TRUE, sep="\t")
+head(meta)
+
+meta <- meta %>% 
+  tibble::column_to_rownames("SampleID")
+
+samples = sample_data(meta)
+```
+
+merge the otu, tax and meta objects into a final PS object: 
+
+```{r}
+combinedPS <- merge_phyloseq(combined_otu, combined_tax, samples);combinedPS
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
 
