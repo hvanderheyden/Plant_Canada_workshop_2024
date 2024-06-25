@@ -2,3 +2,42 @@
 title: "Data cleanning"
 output: html_document
 ---
+
+The next step toward analyzing our data is to get them clean. 
+So lets load our phyloseq object
+
+```{r}
+combinedPS_final<-readRDS("Processed_data/combinedPS_final.rds")
+```
+
+and needed packages
+
+```{r, message=FALSE,echo=TRUE}
+library("tidyverse")
+library("phyloseq")
+```
+
+The first step of our cleaning process 
+
+```{r}
+taxM <- data.frame(phyloseq::tax_table(combinedPS_final))
+tax.cleanM <- data.frame(row.names = row.names(taxM),
+                         Kingdom = str_replace(taxM[,1], "k__",""),
+                         Phylum = str_replace(taxM[,2], "p__",""),
+                         Class = str_replace(taxM[,3], "c__",""),
+                         Order = str_replace(taxM[,4], "o__",""),
+                         Family = str_replace(taxM[,5], "f__",""),
+                         Genus = str_replace(taxM[,6], "g__",""),
+                         Species = str_replace(taxM[,7], "s__",""),
+                         stringsAsFactors = FALSE)
+for (i in 1:7){ tax.cleanM[,i] <- as.character(tax.cleanM[,i])}
+
+tax.cleanM<-tax.cleanM %>% 
+  mutate(Species=str_replace(Species, "g__", " ")) %>% 
+  mutate(Species=str_replace(Species, "g__", " "))%>% 
+  mutate(Genus=str_replace(Genus, "f__", " "))%>% 
+  mutate(Family=str_replace(Family, "o__", " "))%>% 
+  mutate(Species=str_replace(Species, "_", " "))
+
+head(tax.cleanM)
+```
