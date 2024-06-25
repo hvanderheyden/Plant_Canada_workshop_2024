@@ -20,52 +20,47 @@ library("phyloseq")
 
 Tables to Phyloseq
 ----
-Let's start by importing the saved tables into the raw_data directory, using the basic read.csv function, and checking the first rows and columns with the head() function.
+Let's start by importing the tables from the raw_data directory: 
+- using the read.csv function import the table;
+- check the first rows and columns with the head() function;
+- define the row names from the OTU column with tibble::column-to_rownames;
+- transform otu and taxonomy tables into matrixes (and confirm the object class with the class() function)
 
 ```{r}
 biom_illumina<- read.csv("Raw_data/Illumina/illumina_ASV_table.tsv", 
                         header=TRUE, sep="\t")
 head(biom_illumina[,1:5],10)
+
+biom_illumina <- biom_illumina %>%
+  tibble::column_to_rownames("otu") 
+
+biom_illumina <- as.matrix(biom_illumina)
+class(biom_illumina)
 ```
 
-Then import the taxonomy table in the same way.
+Next, import the taxonomy table in the same way.
 
 ```{r}
 taxo_illumina<- read.csv("Raw_data/Illumina/illumina_taxonomy.tsv", 
                         header=TRUE, sep="\t")
 head(taxo_illumina[,1:8],10)
-```
-
-Then define the row names from the otu column
-
-```{r}
-biom_illumina <- biom_illumina %>%
-  tibble::column_to_rownames("otu") 
 
 taxo_illumina <- taxo_illumina %>%
-  tibble::column_to_rownames("otu") 
-```
+  tibble::column_to_rownames("otu")
 
-Transform otu and taxonomy tables into matrixes
-
-```{r}
-biom_illumina <- as.matrix(biom_illumina)
 taxo_illumina <- as.matrix(taxo_illumina)
-
-class(biom_illumina)
 class(taxo_illumina) 
 ```
 
-convert to phyloseq objects
+And merge the two tables into a single phyloseq objects
 
 ```{r}
-OTU_illumina = otu_table(biom_illumina, taxa_are_rows = TRUE)
+OTU_illumina = phyloseq::otu_table(biom_illumina, taxa_are_rows = TRUE)
 TAX_illumina = phyloseq::tax_table(taxo_illumina)
 
 illuminaPS <- phyloseq(OTU_illumina, TAX_illumina)
 illuminaPS
 ```
-
 
 Let's repeat for the IonTorrent dataset 
 
@@ -74,24 +69,24 @@ biom_IonTorrent<- read.csv("Raw_data/IonTorrent/iontorrent_ASV_table.tsv",
                         header=TRUE, sep="\t")
 head(biom_IonTorrent[,1:5],10)
 
+biom_IonTorrent <- biom_IonTorrent %>%
+  tibble::column_to_rownames("otu")
+
+biom_IonTorrent <- as.matrix(biom_IonTorrent)
+class(biom_IonTorrent)
+
 
 taxo_IonTorrent<- read.csv("Raw_data/IonTorrent/iontorrent_taxonomy.tsv", 
                         header=TRUE, sep="\t")
 head(taxo_IonTorrent[,1:8],10)
 
-biom_IonTorrent <- biom_IonTorrent %>%
-  tibble::column_to_rownames("otu") 
-
 taxo_IonTorrent <- taxo_IonTorrent %>%
   tibble::column_to_rownames("otu") 
 
-biom_IonTorrent <- as.matrix(biom_IonTorrent)
 taxo_IonTorrent <- as.matrix(taxo_IonTorrent)
-
-class(biom_IonTorrent)
 class(taxo_IonTorrent) 
 
-OTU_IonTorrent = otu_table(biom_IonTorrent, taxa_are_rows = TRUE)
+OTU_IonTorrent = phyloseq::otu_table(biom_IonTorrent, taxa_are_rows = TRUE)
 TAX_IonTorrent = phyloseq::tax_table(taxo_IonTorrent)
 
 IonTorrentPS <- phyloseq(OTU_IonTorrent, TAX_IonTorrent)
@@ -105,41 +100,42 @@ biom_Nanopore<- read.csv("Raw_data/Nanopore/Nanopore_pseudo_ASV_table.csv",
                         header=TRUE, sep=";")
 head(biom_Nanopore[,1:5],10)
 
+biom_Nanopore <- biom_Nanopore %>%
+  tibble::column_to_rownames("otu")
+
+biom_Nanopore <- as.matrix(biom_Nanopore)
+class(biom_Nanopore)
+
 
 taxo_Nanopore<- read.csv("Raw_data/Nanopore/Nanopore_taxonomy.csv", 
                         header=TRUE, sep=";")
 head(taxo_Nanopore[,1:8],10)
 
-biom_Nanopore <- biom_Nanopore %>%
-  tibble::column_to_rownames("otu") 
-
 taxo_Nanopore <- taxo_Nanopore %>%
   tibble::column_to_rownames("otu") 
 
-
-biom_Nanopore <- as.matrix(biom_Nanopore)
 taxo_Nanopore <- as.matrix(taxo_Nanopore)
-
-class(biom_Nanopore)
 class(taxo_Nanopore) 
 
-OTU_Nanopore = otu_table(biom_Nanopore, taxa_are_rows = TRUE)
+OTU_Nanopore = phyloseq::otu_table(biom_Nanopore, taxa_are_rows = TRUE)
 TAX_Nanopore = phyloseq::tax_table(taxo_Nanopore)
 
 NanoporePS <- phyloseq(OTU_Nanopore, TAX_Nanopore)
 NanoporePS
 ```
 
-Merging phyloseq objects
+Merging objects
 ----
 
-To compare 
-
+Now we want to merge the phyloseq objects we've created
+To do that we will generate:
+- a combined biom-table (using the phyloseq::otu_table function)
+- a combined taxonomy table (using the phyloseq::tax_table)  
 
 ```{r}
-otu_illumina = otu_table(illuminaPS)
-otu_Iontorrent = otu_table(IonTorrentPS)
-otu_Nanopore = otu_table(NanoporePS)
+otu_illumina = phyloseq::otu_table(illuminaPS)
+otu_Iontorrent = phyloseq::otu_table(IonTorrentPS)
+otu_Nanopore = phyloseq::otu_table(NanoporePS)
 
 combined_otu <- merge_phyloseq(otu_illumina, otu_Iontorrent, otu_Nanopore)
 ```
@@ -151,15 +147,10 @@ tax_Iontorrent = phyloseq::tax_table(IonTorrentPS)
 tax_Nanopore = phyloseq::tax_table(NanoporePS)
 
 combined_tax <- merge_phyloseq(tax_illumina, tax_Iontorrent, tax_Nanopore)
-
-head(combined_tax)
-
-combined_tax <- as.matrix(combined_tax)
-combined_tax = phyloseq::tax_table(combined_tax)
 ```
 
-
-We now have 3 Phyloseq objects, which contain no metadata.
+Adding metadata 
+----
 
 
 
