@@ -3,7 +3,7 @@ title: "Import sequencing data into R"
 output: html_document
 ---
 
-```{r setup, include=FALSE}
+```{r, setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(fig.align = "center")
 library("knitr")
@@ -155,7 +155,7 @@ Adding metadata
 
 
 ```{r}
-meta <- read.csv("Raw_data/metadata_organicsoil1.tsv", 
+meta <- read.csv("Raw_data/metadata_organicsoil.tsv", 
                  header=TRUE, sep="\t")
 head(meta)
 
@@ -188,28 +188,15 @@ combinedPS_final
 Saving phyloseq objects
 ----
 
-Before saving our work, lets inspect our phyloseq object, to make sure that everything is under control.
+Before saving our work, to make sure that everything is under control, you can inspect the phyloseq object with the following functions: 
 
-```{r}
+```{r message=FALSE,echo=TRUE, results="hide"}
 sample_names(combinedPS_final)
 rank_names(combinedPS_final)
 sample_variables(combinedPS_final)
-get_taxa(combinedPS_final)
 ```
 
 Finally, we save our phyloseq object into the processed_data directory
 ```{r}
-saveRDS(mock_raw, file= "Processed_data/combinedPS_final.rds")
+saveRDS(combinedPS_final, file= "Processed_data/combinedPS_final.rds")
 ```
-
-
-
-
-
-
-
-
-
-
-
-

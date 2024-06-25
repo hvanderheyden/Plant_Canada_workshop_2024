@@ -705,7 +705,7 @@ phyloseq::tax_table)</p>
 </div>
 <div id="adding-metadata" class="section level2">
 <h2>Adding metadata</h2>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Raw_data/metadata_organicsoil1.tsv&quot;</span>, </span>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Raw_data/metadata_organicsoil.tsv&quot;</span>, </span>
 <span id="cb34-2"><a href="#cb34-2" tabindex="-1"></a>                 <span class="at">header=</span><span class="cn">TRUE</span>, <span class="at">sep=</span><span class="st">&quot;</span><span class="sc">\t</span><span class="st">&quot;</span>)</span>
 <span id="cb34-3"><a href="#cb34-3" tabindex="-1"></a><span class="fu">head</span>(meta)</span></code></pre></div>
 <pre><code>##          SampleID              InputFileName   Samplename   seq_tech SiteID
@@ -726,15 +726,43 @@ phyloseq::tax_table)</p>
 <span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="st">&quot;SampleID&quot;</span>)</span>
 <span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a></span>
 <span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a>samples <span class="ot">=</span> <span class="fu">sample_data</span>(meta)</span></code></pre></div>
-<p>merge the otu, tax and meta objects into a final PS object:</p>
+<p>Finally, merge the biom table, tax table and metadata into a final
+phyloseq object:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>combinedPS <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(combined_otu, combined_tax, samples);combinedPS</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
 ## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]</code></pre>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ape&quot;</span>)</span></code></pre></div>
+<pre><code>## 
+## Attachement du package : &#39;ape&#39;</code></pre>
+<pre><code>## L&#39;objet suivant est masqué depuis &#39;package:dplyr&#39;:
+## 
+##     where</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>random_tree_combinedPS <span class="ot">=</span> <span class="fu">rtree</span>(<span class="fu">ntaxa</span>(combinedPS), </span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a>                    <span class="at">rooted=</span><span class="cn">TRUE</span>, </span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a>                    <span class="at">tip.label=</span><span class="fu">taxa_names</span>(combinedPS))</span>
+<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a></span>
+<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a>combinedPS_final <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(combined_otu, combined_tax, samples, random_tree_combinedPS)</span>
+<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a>combinedPS_final</span></code></pre></div>
+<pre><code>## phyloseq-class experiment-level object
+## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
+## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
+## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]
+## phy_tree()    Phylogenetic Tree: [ 5790 tips and 5789 internal nodes ]</code></pre>
 </div>
 <div id="saving-phyloseq-objects" class="section level2">
 <h2>Saving phyloseq objects</h2>
+<p>Before saving our work, to make sure that everything is under
+control, you can inspect the phyloseq object with the following
+functions:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">sample_names</span>(combinedPS_final)</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="fu">rank_names</span>(combinedPS_final)</span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a><span class="fu">sample_variables</span>(combinedPS_final)</span></code></pre></div>
+<p>Finally, we save our phyloseq object into the processed_data
+directory</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">saveRDS</span>(combinedPS_final, <span class="at">file=</span> <span class="st">&quot;Processed_data/combinedPS_final.rds&quot;</span>)</span></code></pre></div>
 </div>
 
 
