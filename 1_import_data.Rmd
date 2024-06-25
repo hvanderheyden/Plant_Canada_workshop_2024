@@ -9,15 +9,9 @@ knitr::opts_chunk$set(fig.align = "center")
 library("knitr")
 ```
 
-The First step .
-. .bla bla bla .
-. .
+There are many ways to import data into R, and numerous packages are available to analyze metabarcoding data. Among these, [Phyloseq](http://www.r-project.org) remains a versatile tool to import, store and analyze data. Moreover, many other packages can use a Phyloseq object as a starting point. We'll start by importing the tables using the Phyloseq package. 
 
-
-
-Let's start with the Illumina dataset
-
-For these steps wee will need the following libraries
+For these steps wee will need the following libraries: 
 
 ```{r, message=FALSE,echo=TRUE}
 library("tidyverse")
@@ -26,7 +20,7 @@ library("phyloseq")
 
 Tables to Phyloseq
 ----
-First import the ASV table
+Let's start by importing the saved tables into the raw_data directory, using the basic read.csv function, and checking the first rows and columns with the head() function.
 
 ```{r}
 biom_illumina<- read.csv("Raw_data/Illumina/illumina_ASV_table.tsv", 
@@ -34,7 +28,7 @@ biom_illumina<- read.csv("Raw_data/Illumina/illumina_ASV_table.tsv",
 head(biom_illumina[,1:5],10)
 ```
 
-Then import the taxonomy table
+Then import the taxonomy table in the same way.
 
 ```{r}
 taxo_illumina<- read.csv("Raw_data/Illumina/illumina_taxonomy.tsv", 
