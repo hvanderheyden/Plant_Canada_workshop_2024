@@ -188,18 +188,19 @@ combinedPS_final
 Saving phyloseq objects
 ----
 
+Before saving our work, lets inspect our phyloseq object, to make sure that everything is under control.
 
+```{r}
+sample_names(combinedPS_final)
+rank_names(combinedPS_final)
+sample_variables(combinedPS_final)
+get_taxa(combinedPS_final)
+```
 
-# inspect your  phyloseq object: 
-sample_names(mock_raw)
-rank_names(mock_raw)
-sample_variables(mock_raw)
-
-get_taxa(mock_raw)
-
-saveRDS(mock_raw, file= "R_objects/mock_raw.rds")
-
-
+Finally, we save our phyloseq object into the processed_data directory
+```{r}
+saveRDS(mock_raw, file= "Processed_data/combinedPS_final.rds")
+```
 
 
 
