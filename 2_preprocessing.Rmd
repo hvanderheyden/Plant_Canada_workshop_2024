@@ -1,8 +1,4 @@
 ---
-title: "2_Preprocessing"
-author: "Hervé Van der Heyden"
-date: "2024-06-21"
+title: "Data cleanning"
 output: html_document
 ---
-
-

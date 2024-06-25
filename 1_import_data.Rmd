@@ -165,15 +165,41 @@ meta <- meta %>%
 samples = sample_data(meta)
 ```
 
-merge the otu, tax and meta objects into a final PS object: 
+Finally, merge the biom table, tax table and metadata into a final phyloseq object: 
 
 ```{r}
 combinedPS <- merge_phyloseq(combined_otu, combined_tax, samples);combinedPS
 
 ```
 
+
+```{r}
+library("ape")
+
+random_tree_combinedPS = rtree(ntaxa(combinedPS), 
+                    rooted=TRUE, 
+                    tip.label=taxa_names(combinedPS))
+
+
+combinedPS_final <- phyloseq(combined_otu, combined_tax, samples, random_tree_combinedPS)
+combinedPS_final
+
+```
 Saving phyloseq objects
 ----
+
+
+
+# inspect your  phyloseq object: 
+sample_names(mock_raw)
+rank_names(mock_raw)
+sample_variables(mock_raw)
+
+get_taxa(mock_raw)
+
+saveRDS(mock_raw, file= "R_objects/mock_raw.rds")
+
+
 
 
 

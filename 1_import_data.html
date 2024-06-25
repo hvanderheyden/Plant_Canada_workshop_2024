@@ -686,10 +686,12 @@ function)</p>
 ## otu_table()   OTU Table:         [ 4241 taxa and 94 samples ]
 ## tax_table()   Taxonomy Table:    [ 4241 taxa by 7 taxonomic ranks ]</code></pre>
 </div>
-<div id="merging-phyloseq-objects" class="section level2">
-<h2>Merging Phyloseq objects</h2>
+<div id="merging-objects" class="section level2">
+<h2>Merging objects</h2>
 <p>Now we want to merge the phyloseq objects we’ve created To do that we
-will generate: - a combined biom-table - a combined taxonomy table</p>
+will generate: - a combined biom-table (using the phyloseq::otu_table
+function) - a combined taxonomy table (using the
+phyloseq::tax_table)</p>
 <div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a>otu_illumina <span class="ot">=</span> phyloseq<span class="sc">::</span><span class="fu">otu_table</span>(illuminaPS)</span>
 <span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a>otu_Iontorrent <span class="ot">=</span> phyloseq<span class="sc">::</span><span class="fu">otu_table</span>(IonTorrentPS)</span>
 <span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a>otu_Nanopore <span class="ot">=</span> phyloseq<span class="sc">::</span><span class="fu">otu_table</span>(NanoporePS)</span>
