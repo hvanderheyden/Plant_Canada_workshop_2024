@@ -124,6 +124,7 @@ NanoporePS <- phyloseq(OTU_Nanopore, TAX_Nanopore)
 NanoporePS
 ```
 
+
 Merging objects
 ----
 

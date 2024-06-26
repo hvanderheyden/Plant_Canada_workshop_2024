@@ -7,7 +7,7 @@ navbar:
   left:
     - text: "Workshop Requirements"
       href: setup_requirements.html 
-    - text: "Part 1 -- import and clean"
+    - text: "Part I: Data cleaning and filtering"
       menu:
         - text: "Importing data into R"
           href: 1_import_data.html    
@@ -16,7 +16,7 @@ navbar:
         - text: "Data filtering"
           href: 3_summaries.html
           
-    - text: "Part 2 -- "
+    - text: "Part II -- "
       menu:
         - text: "Importing data into R"
           href: 1_import_data.html    
@@ -25,7 +25,7 @@ navbar:
         - text: "Summaries"
           href: 3_summaries.html
           
-    - text: "Part 3 -- "
+    - text: "Part III -- "
       menu:
         - text: "Importing data into R"
           href: 1_import_data.html    

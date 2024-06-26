@@ -49,12 +49,40 @@ Sample filtering
 ---- 
 
 Another important thing is to identify and remove samples with low read counts. We can first plot the read distribution per sample using the plot_read_distribution function of the [microbiomutilities](https://microsud.github.io/microbiomeutilities/articles/microbiomeutilities.html) package.
-There are no 
+Once again, there is no consensus on the minimum read depth threshold to consider a sample to be valid or to keep or not.
+
+Lets first have a look at the read distribution per sample. 
 
 ```{r, message=FALSE}
-combinedPS_clean_DEP_raw<-plot_read_distribution(combinedPS_clean, 
-                                groups = "seq_tech", 
-                                plot.type = "histogram")+
+plot_read_distribution(combinedPS_clean, 
+                       groups = "seq_tech", 
+                       plot.type = "histogram")+
+  theme_biome_utils()+
+  scale_x_continuous(trans='log10',
+                   limits=c(1, 500000))+
+  scale_fill_manual(values=c("#111111"))+
+  geom_vline(xintercept = 500, 
+             colour = "black", 
+             linetype="dashed")+
+  theme(legend.position="none")+
+  labs(x = "Reads per samples", 
+       y = "Count")
+```
+
+We can see that only few samples have less than a 1000 reads, lets remove them. 
+
+(Rarefaction is also an option, it can be performed with the rarefy_even_depth function from the phyloseq package)
+
+```{r}
+combinedPS_clean_pruned_filtered <- prune_samples(sample_sums(combinedPS_clean_pruned) >= 1000, combinedPS_clean_pruned);combinedPS_clean_pruned_filtered
+```
+
+
+
+```{r, message=FALSE}
+plot_read_distribution(combinedPS_clean_pruned_filtered, 
+                       groups = "seq_tech", 
+                       plot.type = "histogram")+
   theme_biome_utils()+
   scale_x_continuous(trans='log10',
                    limits=c(1, 500000))+
@@ -64,10 +92,7 @@ combinedPS_clean_DEP_raw<-plot_read_distribution(combinedPS_clean,
              linetype="dashed")+
   theme(legend.position="none")+
   labs(x = "Reads per samples", 
-       y = "Count");combinedPS_clean_DEP_raw
+       y = "Count")
 ```
-
-
-
 
 
