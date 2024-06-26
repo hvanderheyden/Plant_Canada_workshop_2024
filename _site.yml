@@ -13,7 +13,7 @@ navbar:
           href: 1_import_data.html    
         - text: "Data cleaning"
           href: 2_preprocessing.html    
-        - text: "Summaries"
+        - text: "Data filtering"
           href: 3_summaries.html
           
     - text: "Part 2 -- "
