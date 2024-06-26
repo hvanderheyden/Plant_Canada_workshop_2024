@@ -7,7 +7,7 @@ The next step toward analyzing our data is to get them clean.
 So lets load our phyloseq object
 
 ```{r}
-combinedPS_final<-readRDS("Processed_data/combinedPS_final.rds")
+combinedPS_clean<-readRDS("Processed_data/combinedPS_final.rds")
 ```
 
 and needed packages
@@ -16,11 +16,15 @@ and needed packages
 library("tidyverse")
 library("phyloseq")
 ```
+Clean taxonomy
+----
 
-The first step of our cleaning process 
+The first step in our cleaning process will be to remove the prefixes that appear in front of each taxon (e.g. k__, s__, etc.).
+
+To get there, we need to extract the tax table from our Phyloseq object, transformed it into a data frame (taxM) and generate a clean version the taxonomy table, as a new dataframe (taxM.clean). 
 
 ```{r}
-taxM <- data.frame(phyloseq::tax_table(combinedPS_final))
+taxM <- data.frame(phyloseq::tax_table(combinedPS_clean))
 tax.cleanM <- data.frame(row.names = row.names(taxM),
                          Kingdom = str_replace(taxM[,1], "k__",""),
                          Phylum = str_replace(taxM[,2], "p__",""),
@@ -32,12 +36,136 @@ tax.cleanM <- data.frame(row.names = row.names(taxM),
                          stringsAsFactors = FALSE)
 for (i in 1:7){ tax.cleanM[,i] <- as.character(tax.cleanM[,i])}
 
-tax.cleanM<-tax.cleanM %>% 
-  mutate(Species=str_replace(Species, "g__", " ")) %>% 
-  mutate(Species=str_replace(Species, "g__", " "))%>% 
-  mutate(Genus=str_replace(Genus, "f__", " "))%>% 
-  mutate(Family=str_replace(Family, "o__", " "))%>% 
-  mutate(Species=str_replace(Species, "_", " "))
+tax.cleanM<-tax.cleanM %>%
+ mutate(Species=str_replace(Species, "_", " "))
 
-head(tax.cleanM)
+head(tax.cleanM[,5:7])
+```
+
+Species clusters 
+---- 
+As ITS do not allow precise identification of certain species (oomycetes in this case, but also fungi), it is necessary to group certain species into species clusters. This gives us greater confidence in our identification. (See for example [Van der Heyden et al. 2024](https://onlinelibrary.wiley.com/doi/10.1002/edn3.529))
+
+So let's continue to modify our tax.cleanM dataframe to replace some of the species of our taxonomy tables with species clusters.  
+
+```{r}
+tax.cleanM<-tax.cleanM %>%
+# P. cactorum cluster (calde 1a) 
+  mutate(Species=str_replace(Species, "Phytophthora cactorum", "Phytophthora cactorum cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora idaei", "Phytophthora cactorum cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora alpina", "Phytophthora cactorum cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora pseudotsugae", "Phytophthora cactorum cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora aleatoria", "Phytophthora cactorum cluster"))%>% 
+  # P. citricola complex (clade 2c)
+  mutate(Species=str_replace(Species, "Phytophthora citricola", "Phytophthora citricola complex"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora acerina", "Phytophthora citricola complex"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora plurivora", "Phytophthora citricola complex"))%>% 
+  # P. nemorosa cluster (clade 3a)
+  mutate(Species=str_replace(Species, "Phytophthora nemorosa", "Phytophthora nemorosa cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora ilicis", "Phytophthora nemorosa cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora pseudosyringae", "Phytophthora nemorosa cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora pluvialis", "Phytophthora nemorosa cluster"))%>% 
+  # P. cooljarloo cluster (clade 6a)
+  mutate(Species=str_replace(Species, "Phytophthora aquae-cooljarloo", "Phytophthora cooljarloo cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora rosacearum", "Phytophthora cooljarloo cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora kwongonina", "Phytophthora cooljarloo cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora pseudorosacearum", "Phytophthora cooljarloo cluster"))%>% 
+  # P. inundata cluster (clade 6a)
+  mutate(Species=str_replace(Species, "Phytophthora inundata", "Phytophthora inundata cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora humicola", "Phytophthora inundata cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora condilina", "Phytophthora inundata cluster"))%>% 
+  # P. chlamydospora cluster (clade 6b)
+  mutate(Species=str_replace(Species, "Phytophthora chlamydospora", "Phytophthora chlamydospora cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora borealis", "Phytophthora chlamydospora cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora mississippiae", "Phytophthora chlamydospora cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora gonapodyides", "Phytophthora chlamydospora cluster"))%>%
+# P. megasperma cluster (clade 6b)
+  mutate(Species=str_replace(Species, "Phytophthora megasperma", "Phytophthora megasperma cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora crassamura", "Phytophthora megasperma cluster"))%>%
+  # P. europaea cluster (clade 7a)
+  mutate(Species=str_replace(Species, "Phytophthora europaea", "Phytophthora europaea cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora abietivora", "Phytophthora europaea cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora uliginosa", "Phytophthora europaea cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora flexuosa", "Phytophthora europaea cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora sp. cadmea", "Phytophthora europaea cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora tyrrhenica", "Phytophthora europaea cluster"))%>%
+  # P. pisi cluster (clade 7a)
+  mutate(Species=str_replace(Species, "Phytophthora pisi", "Phytophthora pisi cluster"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora asiatica", "Phytophthora pisi cluster"))%>%
+  # P. cryptogea complex (clade 8a)
+  mutate(Species=str_replace(Species, "Phytophthora cryptogea", "Phytophthora cryptogea complex"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora pseudocryptogea", "Phytophthora cryptogea complex"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora erythroseptica", "Phytophthora cryptogea complex"))%>%
+  mutate(Species=str_replace(Species, "Phytophthora kelmanii", "Phytophthora cryptogea complex"))%>%
+  # G. attrantheridium complex (clade F)
+  mutate(Species=str_replace(Species, "Globisporangium attrantheridium", "Globisporangium attrantheridium complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium sp. balticum", "Globisporangium attrantheridium complex"))%>%
+  mutate(Genus = if_else(Species == "Globisporangium attrantheridium complex", "Globisporangium", Genus))%>%
+  # G. irregulare complex (clade F)
+  mutate(Species=str_replace(Species, "Globisporangium irregulare", "Globisporangium irregulare complex"))%>%
+  mutate(Species=str_replace(Species, "Globisporangium cryptoirregulare", "Globisporangium irregulare complex"))%>%
+  mutate(Species=str_replace(Species, "Globisporangium cylindrosporum", "Globisporangium irregulare complex"))%>%
+  # G. Sylvaticum complex (clade F)
+  mutate(Species=str_replace(Species, "Globisporangium sylvaticum", "Globisporangium sylvaticum complex"))%>%
+  mutate(Species=str_replace(Species, "Globisporangium terrestre", "Globisporangium sylvaticum complex"))%>%
+  mutate(Genus = if_else(Species == "Globisporangium irregulare complex", "Globisporangium", Genus))%>%
+  # G. heterothallicum complex (clade J)
+  mutate(Species=str_replace(Species, "Globisporangium heterothallicum", "Globisporangium heterothallicum complex"))%>%
+  mutate(Species=str_replace(Species, "Globisporangium glomeratum", "Globisporangium heterothallicum complex"))%>%
+  # G. megalacanthum complex (clade J)
+  mutate(Species=str_replace(Species, "Globisporangium megalacanthum", "Globisporangium megalacanthum complex"))%>%
+  mutate(Species=str_replace(Species, "Globisporangium polymastum", "Globisporangium megalacanthum complex")) %>%
+  mutate(Species=str_replace(Species, "Globisporangium buismaniae", "Globisporangium megalacanthum complex"))%>%
+  # P. arrhenomanes cluster (clade B1)
+  mutate(Species=str_replace(Species, "Pythium arrhenomanes", "Pythium arrhenomanes cluster"))%>%
+  mutate(Species=str_replace(Species, "Pythium aristoporum", "Pythium arrhenomanes cluster"))%>%
+  mutate(Species=str_replace(Species, "Pythium phragmitis", "Pythium arrhenomanes cluster"))%>%
+  # P. myriotylum complex (clade B1)
+  mutate(Species=str_replace(Species, "Pythium myriotylum", "Pythium myriotylum complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium zingiberis", "Pythium myriotylum complex"))%>%
+  # P. salpingophorum complex (clade B1)
+  mutate(Species=str_replace(Species, "Pythium cf. salpingophorum/conidiophorum", "Pythium salpingophorum complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium conidiophorum", "Pythium salpingophorum complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium salpingophorum", "Pythium salpingophorum complex"))%>%
+  # P. dissotocum complex (clade B2)
+  mutate(Species=str_replace(Species, "Pythium dissotocum", "Pythium dissotocum complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium aff. dictyosporum", "Pythium dissotocum complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium coloratum", "Pythium dissotocum complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium diclinum", "Pythium dissotocum complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium lutarium", "Pythium dissotocum complex"))%>%
+  # P. pachycaule complex (clade B2)
+  mutate(Species=str_replace(Species, "Pythium pachycaule", "Pythium pachycaule complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium oopapillum", "Pythium pachycaule complex"))%>%
+  # P. aquatile complex (clade B2)
+  mutate(Species=str_replace(Species, "Pythium aquatile", "Pythium aquatile complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium sukuiense", "Pythium aquatile complex"))%>%
+  # P. minus complex (clade E2)
+  mutate(Species=str_replace(Species, "Pythium minus", "Pythium minus complex"))%>%
+  mutate(Species=str_replace(Species, "Pythium aff. pleroticum", "Pythium minus complex"))%>%
+  # E. undulatum complex (clade H)
+  mutate(Species=str_replace(Species, "Elongisporangium undulatum", "Elongisporangium undulatum complex"))%>%
+  mutate(Species=str_replace(Species, "Elongisporangium dimorphum", "Elongisporangium undulatum complex"))%>%
+  # S. sclerotiorum cluster
+  mutate(Species=str_replace(Species, "Sclerotinia sclerotiorum", "Sclerotinia sclerotiorum cluster"))%>%
+  mutate(Species=str_replace(Species, "Sclerotinia minor", "Sclerotinia sclerotiorum cluster"))%>%
+  mutate(Species=str_replace(Species, "Sclerotinia trifoliorum", "Sclerotinia sclerotiorum cluster"))%>%
+  # B. cinerea complex 
+  mutate(Species=str_replace(Species, "Botrytis cinerea", "Botrytis cinerea complex"))%>%
+  mutate(Species=str_replace(Species, "Botrytis fabae", "Botrytis cinerea complex"))%>%
+  mutate(Species=str_replace(Species, "Botrytis pelargonii", "Botrytis cinerea complex"))
+```
+
+Replace taxonomy
+----
+
+```{r}
+phyloseq::tax_table(combinedPS_clean) <- as.matrix(tax.cleanM)
+
+combinedPS_clean
+```
+
+Again, we save our phyloseq object into the processed_data directory
+
+```{r}
+saveRDS(combinedPS_clean, file= "Processed_data/combinedPS_clean.rds")
 ```

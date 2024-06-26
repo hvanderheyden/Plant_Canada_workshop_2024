@@ -11,8 +11,8 @@ navbar:
       href: 1_import_data.html    
     - text: "Data cleaning"
       href: 2_preprocessing.html    
-    - text: "Summary statistics"
-      href: 1_import_data.html
+    - text: "Summaries"
+      href: 3_summaries.html
   right:
   - href: https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io
     icon: fa-github
