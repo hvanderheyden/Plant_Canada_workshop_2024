@@ -3,15 +3,14 @@ title: "Summaries"
 output: html_document
 ---
 
-Now that we have cleaned our taxonomy, lets have a look to 
+Now that we've cleaned up our taxonomy, let's take a look at the read distribution across the samples and remove samples with low read depths. 
 
-
-
+Let's load our latest Phyloseq object 
 ```{r}
 combinedPS_clean<-readRDS("Processed_data/combinedPS_clean.rds")
 ```
 
-
+and needed packages 
 ```{r, message=FALSE,echo=TRUE}
 library("microbiome") 
 library("microbiomeutilities")
@@ -19,11 +18,17 @@ library("cowplot")
 library("ggpubr")
 ```
 
+As mentioned previously, there are plenty of packages available to analyse metabaroding data. To summarize the data the [Microbiome](https://microbiome.github.io/tutorials/cleaning_taxonomy_table.html) package provide a simple 
+
+
 
 
 ```{r}
-summarize_phyloseq(combinedPS_clean)
+microbiome::summarize_phyloseq(combinedPS_clean)
 ```
+
+
+[microbiomutilities](https://microsud.github.io/microbiomeutilities/articles/microbiomeutilities.html)
 
 
 ```{r, message=FALSE}

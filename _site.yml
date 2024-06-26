@@ -7,7 +7,7 @@ navbar:
   left:
     - text: "Workshop Requirements"
       href: setup_requirements.html 
-    - text: "Part 1"
+    - text: "Part 1 -- import and clean"
       menu:
         - text: "Importing data into R"
           href: 1_import_data.html    
@@ -16,7 +16,16 @@ navbar:
         - text: "Summaries"
           href: 3_summaries.html
           
-    - text: "Part 2"
+    - text: "Part 2 -- "
+      menu:
+        - text: "Importing data into R"
+          href: 1_import_data.html    
+        - text: "Data cleaning"
+          href: 2_preprocessing.html    
+        - text: "Summaries"
+          href: 3_summaries.html
+          
+    - text: "Part 3 -- "
       menu:
         - text: "Importing data into R"
           href: 1_import_data.html    
@@ -24,9 +33,6 @@ navbar:
           href: 2_preprocessing.html    
         - text: "Summaries"
           href: 3_summaries.html  
-      
-      
-      
       
   right:
   - href: https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io

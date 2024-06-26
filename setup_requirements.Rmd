@@ -23,13 +23,27 @@ Required R packages
 -----
 
 ```{r, message=FALSE,echo=TRUE, warning=FALSE}
-# if needed, install.packages("BiocManager")
-library("tidyverse") # install.packages("tidyverse")
-library("phyloseq") # BiocManager::install("phyloseq")
-library(microbiome) # BiocManager::install("microbiome")
-library(microbiomeutilities) # remotes::install_github("microsud/microbiomeutilities")
-library("ape") # install.install.packages('ape')
-library(ampvis2) # install.packages("remotes") remotes::install_github("kasperskytte/ampvis2", Ncpus = 6)
-library(MicrobiotaProcess) # BiocManager::install("MicrobiotaProcess")
+
+# install.packages(c("tidyverse", "ape", "cowplot", "ggpubr", "remotes", "BiocManager"))
+library("tidyverse")
+library("ape")
+library("cowplot")
+library("ggpubr")
+library("remotes")
+library("BiocManager")
+
+# BiocManager::install(c("phyloseq", "microbiome","MicrobiotaProcess")
+library("phyloseq")
+library("microbiome")
+library("MicrobiotaProcess")
+
+# remotes::install_github("microsud/microbiomeutilities")
+library("microbiomeutilities") 
+
+# remotes::install_github("kasperskytte/ampvis2")
+library("ampvis2") 
+
+
+
 ``` 
 
