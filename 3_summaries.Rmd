@@ -1,5 +1,5 @@
 ---
-title: "Summaries"
+title: "Filtering"
 output: html_document
 ---
 
@@ -77,7 +77,7 @@ We can see that only few samples have less than a 1000 reads, lets remove them.
 combinedPS_clean_pruned_filtered <- prune_samples(sample_sums(combinedPS_clean_pruned) >= 1000, combinedPS_clean_pruned);combinedPS_clean_pruned_filtered
 ```
 
-
+Lets first have a look at the read distribution per sample after filtering. 
 
 ```{r, message=FALSE}
 plot_read_distribution(combinedPS_clean_pruned_filtered, 
@@ -95,4 +95,11 @@ plot_read_distribution(combinedPS_clean_pruned_filtered,
        y = "Count")
 ```
 
+Saving phyloseq objects
+----
 
+Once again, we save our phyloseq object into the processed_data directory
+
+```{r}
+saveRDS(combinedPS_clean_pruned_filtered, file= "Processed_data/combinedPS_clean_pruned_filtered.rds")
+```

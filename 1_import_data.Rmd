@@ -1,5 +1,5 @@
 ---
-title: "Import sequencing data into R"
+title: "Import data into R"
 output: html_document
 ---
 

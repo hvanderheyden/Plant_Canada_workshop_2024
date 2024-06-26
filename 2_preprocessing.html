@@ -11,7 +11,7 @@
 
 
 
-<title>Data cleanning</title>
+<title>Cleaning taxonomy</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -414,7 +414,25 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 1 -- import and clean
+    Part I: Data cleaning and filtering
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_import_data.html">Importing data into R</a>
+    </li>
+    <li>
+      <a href="2_preprocessing.html">Data cleaning</a>
+    </li>
+    <li>
+      <a href="3_summaries.html">Data filtering</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Part II -- 
      
     <span class="caret"></span>
   </a>
@@ -432,25 +450,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 2 -- 
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="1_import_data.html">Importing data into R</a>
-    </li>
-    <li>
-      <a href="2_preprocessing.html">Data cleaning</a>
-    </li>
-    <li>
-      <a href="3_summaries.html">Summaries</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 3 -- 
+    Part III -- 
      
     <span class="caret"></span>
   </a>
@@ -483,7 +483,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Data cleanning</h1>
+<h1 class="title toc-ignore">Cleaning taxonomy</h1>
 
 </div>
 
@@ -517,20 +517,13 @@ version the taxonomy table, as a new dataframe (taxM.clean).</p>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;_&quot;</span>, <span class="st">&quot; &quot;</span>))</span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="fu">head</span>(tax.cleanM[,<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>])</span></code></pre></div>
-<pre><code>##                                           Family           Genus
-## fa63e3da2e1d882e6bb841244b577616 Peronosporaceae          Bremia
-## MW597180.1                        Strophariaceae        Pholiota
-## MT002324.1                          unidentified Sistotremastrum
-## JN192379.1                         Pleosporaceae      Curvularia
-## KC992967.1                       Psathyrellaceae     Coprinopsis
-## AJ884641.1                           Agaricaceae        Agaricus
-##                                                    Species
-## fa63e3da2e1d882e6bb841244b577616          Bremia elliptica
-## MW597180.1                               Pholiota decorata
-## MT002324.1                       Sistotremastrum induratum
-## JN192379.1                        Curvularia heteropogonis
-## KC992967.1                             Coprinopsis udicola
-## AJ884641.1                             Agaricus romagnesii</code></pre>
+<pre><code>##                        Family          Genus                      Species
+## MW729423.1        Xylariaceae        Nemania          Nemania yunnanensis
+## AF106521.1        Orbiliaceae        Orbilia              Orbilia elegans
+## KY104144.1     Malasseziaceae     Malassezia              Malassezia nana
+## HM131235.1       Pucciniaceae       Puccinia Puccinia coronati-brevispora
+## MH857828.1 Cunninghamellaceae        Absidia           Absidia cuneospora
+## KU187882.1  Leucosporidiaceae Leucosporidium     Leucosporidium krtinense</code></pre>
 </div>
 <div id="species-clusters" class="section level2">
 <h2>Species clusters</h2>
@@ -657,6 +650,9 @@ of the species of our taxonomy tables with species clusters.</p>
 ## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 5790 tips and 5789 internal nodes ]</code></pre>
+</div>
+<div id="saving-phyloseq-objects" class="section level2">
+<h2>Saving phyloseq objects</h2>
 <p>Again, we save our phyloseq object into the processed_data
 directory</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">saveRDS</span>(combinedPS_clean, <span class="at">file=</span> <span class="st">&quot;Processed_data/combinedPS_clean.rds&quot;</span>)</span></code></pre></div>

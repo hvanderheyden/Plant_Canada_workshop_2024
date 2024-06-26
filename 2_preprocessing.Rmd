@@ -1,5 +1,5 @@
 ---
-title: "Data cleanning"
+title: "Cleaning taxonomy"
 output: html_document
 ---
 
@@ -163,6 +163,8 @@ phyloseq::tax_table(combinedPS_clean) <- as.matrix(tax.cleanM)
 
 combinedPS_clean
 ```
+Saving phyloseq objects
+----
 
 Again, we save our phyloseq object into the processed_data directory
 

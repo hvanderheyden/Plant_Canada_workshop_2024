@@ -314,7 +314,25 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 1 -- import and clean
+    Part I: Data cleaning and filtering
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_import_data.html">Importing data into R</a>
+    </li>
+    <li>
+      <a href="2_preprocessing.html">Data cleaning</a>
+    </li>
+    <li>
+      <a href="3_summaries.html">Data filtering</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Part II -- 
      
     <span class="caret"></span>
   </a>
@@ -332,25 +350,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 2 -- 
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="1_import_data.html">Importing data into R</a>
-    </li>
-    <li>
-      <a href="2_preprocessing.html">Data cleaning</a>
-    </li>
-    <li>
-      <a href="3_summaries.html">Summaries</a>
-    </li>
-  </ul>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 3 -- 
+    Part III -- 
      
     <span class="caret"></span>
   </a>
@@ -459,12 +459,13 @@ in Dr. Chen’s laboratory and sequenced on Illumina (Chen), IonTorrent
 <p>Data were collected by Dr. Carrisse’s team once a week in 2021 in the
 Muck’s region southwest of Montreal using a Cyclone sampler (Figure 1).
 DNA extractions were performed in Dr. Chen’s laboratory and sequenced on
-Illumina (Chen), IonTorrent (Bilodeau) and Nanopore (Van der Heyden).
-Illumina and IonTorrent data were analysed using Dr Marc-Olivier
-Duceppe’s pipeline (avilable here: <a
-href="https://github.com/duceppemo/QIIME2_ITS"
+Illumina (Chen–oomycetes only), IonTorrent (Bilodeau–oomycetes only) and
+Nanopore (Van der Heyden–oomycetes and fungi). Illumina and IonTorrent
+data were analysed using Dr Marc-Olivier Duceppe’s pipeline (avilable
+here: <a href="https://github.com/duceppemo/QIIME2_ITS"
 class="uri">https://github.com/duceppemo/QIIME2_ITS</a>) with a database
-modified from UNITE v9.0 (2023-07-18).</p>
+modified from UNITE v9.0 (2023-07-18), while Nanopore data were analysed
+using a custom script based on Minimap2.</p>
 </div>
 
 

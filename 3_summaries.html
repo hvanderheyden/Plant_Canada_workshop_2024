@@ -11,7 +11,7 @@
 
 
 
-<title>Summaries</title>
+<title>Filtering</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -414,7 +414,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 1 -- import and clean
+    Part I: Data cleaning and filtering
      
     <span class="caret"></span>
   </a>
@@ -432,7 +432,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 2 -- 
+    Part II -- 
      
     <span class="caret"></span>
   </a>
@@ -450,7 +450,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part 3 -- 
+    Part III -- 
      
     <span class="caret"></span>
   </a>
@@ -483,7 +483,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Summaries</h1>
+<h1 class="title toc-ignore">Filtering</h1>
 
 </div>
 
@@ -493,20 +493,19 @@ distribution across the samples and remove samples with low read
 depths.</p>
 <p>Let’s load our latest Phyloseq object</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>combinedPS_clean<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/combinedPS_clean.rds&quot;</span>);combinedPS_clean</span></code></pre></div>
-<pre><code>## Le chargement a nécessité le package : phyloseq</code></pre>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
 ## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 5790 tips and 5789 internal nodes ]</code></pre>
 <p>and needed packages</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiome&quot;</span>) </span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiomeutilities&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiome&quot;</span>) </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiomeutilities&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: remplacement de l&#39;importation précédente &#39;ggplot2::alpha&#39; par
 ## &#39;microbiome::alpha&#39; lors du chargement de &#39;microbiomeutilities&#39;</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;cowplot&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggpubr&quot;</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;phyloseq&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;cowplot&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggpubr&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;phyloseq&quot;</span>)</span></code></pre></div>
 <div id="taxa-filtering" class="section level2">
 <h2>Taxa filtering</h2>
 <p>As mentioned previously, there are plenty of packages available to
@@ -517,7 +516,7 @@ data.</p>
 <p>This will provide: - min, max, total, mean and median number of reads
 - number of singletons and low occurence ASVs (OTUs) - data sparsity
 (zero inflated data)</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">str</span>(microbiome<span class="sc">::</span><span class="fu">summarize_phyloseq</span>(combinedPS_clean))</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">str</span>(microbiome<span class="sc">::</span><span class="fu">summarize_phyloseq</span>(combinedPS_clean))</span></code></pre></div>
 <pre><code>## Compositional = NO2</code></pre>
 <pre><code>## 1] Min. number of reads = 52] Max. number of reads = 4809473] Total number of reads = 162142594] Average number of reads = 57497.37234042555] Median number of reads = 214377] Sparsity = 0.9728726466517236] Any OTU sum to 1 or less? YES8] Number of singletons = 16399] Percent of OTUs that are singletons 
 ##         (i.e. exactly one read detected across all samples)11.537132987910210] Number of sample variables are: 9InputFileNameSamplenameseq_techSiteIDRegionYearWeekX_coordY_coord2</code></pre>
@@ -542,14 +541,14 @@ Rong and Massart, 2023</a> for an interesting discussion on technical
 errors control) and <a
 href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10569954/">Zhou et
 al. 2023</a> for examples of filtering thresholds.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>combinedPS_clean_pruned <span class="ot">=</span> <span class="fu">prune_taxa</span>(<span class="fu">taxa_sums</span>(combinedPS_clean) <span class="sc">&gt;</span> <span class="dv">09</span>, combinedPS_clean); combinedPS_clean_pruned</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>combinedPS_clean_pruned <span class="ot">=</span> <span class="fu">prune_taxa</span>(<span class="fu">taxa_sums</span>(combinedPS_clean) <span class="sc">&gt;</span> <span class="dv">09</span>, combinedPS_clean); combinedPS_clean_pruned</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 2969 taxa and 282 samples ]
 ## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 2969 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 2969 tips and 2968 internal nodes ]</code></pre>
 <p>Lets have another look at the data summary:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">str</span>(microbiome<span class="sc">::</span><span class="fu">summarize_phyloseq</span>(combinedPS_clean_pruned))</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">str</span>(microbiome<span class="sc">::</span><span class="fu">summarize_phyloseq</span>(combinedPS_clean_pruned))</span></code></pre></div>
 <pre><code>## Compositional = NO2</code></pre>
 <pre><code>## 1] Min. number of reads = 52] Max. number of reads = 4809423] Total number of reads = 162085394] Average number of reads = 57477.08865248235] Median number of reads = 214097] Sparsity = 0.9518093586445286] Any OTU sum to 1 or less? NO8] Number of singletons = 09] Percent of OTUs that are singletons 
 ##         (i.e. exactly one read detected across all samples)010] Number of sample variables are: 9InputFileNameSamplenameseq_techSiteIDRegionYearWeekX_coordY_coord2</code></pre>
@@ -575,48 +574,56 @@ href="https://microsud.github.io/microbiomeutilities/articles/microbiomeutilitie
 package. Once again, there is no consensus on the minimum read depth
 threshold to consider a sample to be valid or to keep or not.</p>
 <p>Lets first have a look at the read distribution per sample.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">plot_read_distribution</span>(combinedPS_clean, </span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>                       <span class="at">groups =</span> <span class="st">&quot;seq_tech&quot;</span>, </span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>                       <span class="at">plot.type =</span> <span class="st">&quot;histogram&quot;</span>)<span class="sc">+</span></span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="fu">theme_biome_utils</span>()<span class="sc">+</span></span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>,</span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>                   <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">500000</span>))<span class="sc">+</span></span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#111111&quot;</span>))<span class="sc">+</span></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">500</span>, </span>
-<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
-<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;none&quot;</span>)<span class="sc">+</span></span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Reads per samples&quot;</span>, </span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 6 rows containing missing values or values outside the scale range
-## (`geom_bar()`).</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">plot_read_distribution</span>(combinedPS_clean, </span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>                       <span class="at">groups =</span> <span class="st">&quot;seq_tech&quot;</span>, </span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>                       <span class="at">plot.type =</span> <span class="st">&quot;histogram&quot;</span>)<span class="sc">+</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">theme_biome_utils</span>()<span class="sc">+</span></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>,</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>                   <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">500000</span>))<span class="sc">+</span></span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#111111&quot;</span>))<span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">500</span>, </span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;none&quot;</span>)<span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Reads per samples&quot;</span>, </span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 6 rows containing missing values or values outside the scale
+## range (`geom_bar()`).</code></pre>
 <p><img src="3_summaries_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>We can see that only few samples have less than a 1000 reads, lets
 remove them.</p>
 <p>(Rarefaction is also an option, it can be performed with the
 rarefy_even_depth function from the phyloseq package)</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>combinedPS_clean_pruned_filtered <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(<span class="fu">sample_sums</span>(combinedPS_clean_pruned) <span class="sc">&gt;=</span> <span class="dv">1000</span>, combinedPS_clean_pruned);combinedPS_clean_pruned_filtered</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>combinedPS_clean_pruned_filtered <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(<span class="fu">sample_sums</span>(combinedPS_clean_pruned) <span class="sc">&gt;=</span> <span class="dv">1000</span>, combinedPS_clean_pruned);combinedPS_clean_pruned_filtered</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 2969 taxa and 277 samples ]
 ## sample_data() Sample Data:       [ 277 samples by 9 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 2969 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 2969 tips and 2968 internal nodes ]</code></pre>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="fu">plot_read_distribution</span>(combinedPS_clean_pruned_filtered, </span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>                       <span class="at">groups =</span> <span class="st">&quot;seq_tech&quot;</span>, </span>
-<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a>                       <span class="at">plot.type =</span> <span class="st">&quot;histogram&quot;</span>)<span class="sc">+</span></span>
-<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a>  <span class="fu">theme_biome_utils</span>()<span class="sc">+</span></span>
-<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>,</span>
-<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a>                   <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">500000</span>))<span class="sc">+</span></span>
-<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#111111&quot;</span>))<span class="sc">+</span></span>
-<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1000</span>, </span>
-<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
-<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;none&quot;</span>)<span class="sc">+</span></span>
-<span id="cb21-12"><a href="#cb21-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Reads per samples&quot;</span>, </span>
-<span id="cb21-13"><a href="#cb21-13" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 6 rows containing missing values or values outside the scale range
-## (`geom_bar()`).</code></pre>
+<p>Lets first have a look at the read distribution per sample after
+filtering.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">plot_read_distribution</span>(combinedPS_clean_pruned_filtered, </span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a>                       <span class="at">groups =</span> <span class="st">&quot;seq_tech&quot;</span>, </span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a>                       <span class="at">plot.type =</span> <span class="st">&quot;histogram&quot;</span>)<span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a>  <span class="fu">theme_biome_utils</span>()<span class="sc">+</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a>                   <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">500000</span>))<span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#111111&quot;</span>))<span class="sc">+</span></span>
+<span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1000</span>, </span>
+<span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
+<span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;none&quot;</span>)<span class="sc">+</span></span>
+<span id="cb20-12"><a href="#cb20-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Reads per samples&quot;</span>, </span>
+<span id="cb20-13"><a href="#cb20-13" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 6 rows containing missing values or values outside the scale
+## range (`geom_bar()`).</code></pre>
 <p><img src="3_summaries_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+</div>
+<div id="saving-phyloseq-objects" class="section level2">
+<h2>Saving phyloseq objects</h2>
+<p>Once again, we save our phyloseq object into the processed_data
+directory</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="fu">saveRDS</span>(combinedPS_clean_pruned_filtered, <span class="at">file=</span> <span class="st">&quot;Processed_data/combinedPS_clean_pruned_filtered.rds&quot;</span>)</span></code></pre></div>
 </div>
 
 
