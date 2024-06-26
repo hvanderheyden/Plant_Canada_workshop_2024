@@ -3,7 +3,7 @@ title: "Summaries"
 output: html_document
 ---
 
-Now that we have cleaned our taxonomy, lets 
+Now that we have cleaned our taxonomy, lets have a look to 
 
 
 
