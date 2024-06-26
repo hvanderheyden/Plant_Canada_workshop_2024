@@ -2,3 +2,42 @@
 title: "Summaries"
 output: html_document
 ---
+
+Now that we have cleaned our taxonomy, lets 
+
+
+
+```{r}
+combinedPS_clean<-readRDS("Processed_data/combinedPS_clean.rds")
+```
+
+
+```{r, message=FALSE,echo=TRUE}
+library("microbiome") 
+library("microbiomeutilities")
+library("cowplot")
+library("ggpubr")
+```
+
+
+
+```{r}
+summarize_phyloseq(combinedPS_clean)
+```
+
+
+```{r, message=FALSE}
+Dep_raw<-plot_read_distribution(combinedPS_clean, 
+                                groups = "seq_tech", 
+                                plot.type = "histogram")+
+  theme_biome_utils()+
+  scale_x_continuous(trans='log10',
+                   limits=c(1, 50000000))+
+  scale_fill_manual(values=c("#111111"))+
+  geom_vline(xintercept = 1000, 
+             colour = "black", 
+             linetype="dashed")+
+  theme(legend.position="none")+
+  labs(x = "Reads per samples", 
+       y = "Count");Dep_raw
+```
