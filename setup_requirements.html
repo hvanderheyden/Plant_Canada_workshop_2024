@@ -11,7 +11,7 @@
 
 
 
-<title>Summaries</title>
+<title>Import sequencing data into R</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -483,83 +483,47 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Summaries</h1>
+<h1 class="title toc-ignore">Import sequencing data into R</h1>
 
 </div>
 
 
-<p>Now that we’ve cleaned up our taxonomy, let’s take a look at the read
-distribution across the samples and remove samples with low read
-depths.</p>
-<p>Let’s load our latest Phyloseq object</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>combinedPS_clean<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/combinedPS_clean.rds&quot;</span>)</span></code></pre></div>
-<p>and needed packages</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiome&quot;</span>) </span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiomeutilities&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: remplacement de l&#39;importation précédente &#39;ggplot2::alpha&#39; par
-## &#39;microbiome::alpha&#39; lors du chargement de &#39;microbiomeutilities&#39;</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;cowplot&quot;</span>)</span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggpubr&quot;</span>)</span></code></pre></div>
-<p>As mentioned previously, there are plenty of packages available to
-analyse metabaroding data. To summarize the data the <a
-href="https://microbiome.github.io/tutorials/cleaning_taxonomy_table.html">Microbiome</a>
-package provide a simple</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>microbiome<span class="sc">::</span><span class="fu">summarize_phyloseq</span>(combinedPS_clean)</span></code></pre></div>
-<pre><code>## Compositional = NO2</code></pre>
-<pre><code>## 1] Min. number of reads = 52] Max. number of reads = 4809473] Total number of reads = 162142594] Average number of reads = 57497.37234042555] Median number of reads = 214377] Sparsity = 0.9728726466517236] Any OTU sum to 1 or less? YES8] Number of singletons = 16399] Percent of OTUs that are singletons 
-##         (i.e. exactly one read detected across all samples)11.537132987910210] Number of sample variables are: 9InputFileNameSamplenameseq_techSiteIDRegionYearWeekX_coordY_coord2</code></pre>
-<pre><code>## [[1]]
-## [1] &quot;1] Min. number of reads = 5&quot;
-## 
-## [[2]]
-## [1] &quot;2] Max. number of reads = 480947&quot;
-## 
-## [[3]]
-## [1] &quot;3] Total number of reads = 16214259&quot;
-## 
-## [[4]]
-## [1] &quot;4] Average number of reads = 57497.3723404255&quot;
-## 
-## [[5]]
-## [1] &quot;5] Median number of reads = 21437&quot;
-## 
-## [[6]]
-## [1] &quot;7] Sparsity = 0.972872646651723&quot;
-## 
-## [[7]]
-## [1] &quot;6] Any OTU sum to 1 or less? YES&quot;
-## 
-## [[8]]
-## [1] &quot;8] Number of singletons = 1639&quot;
-## 
-## [[9]]
-## [1] &quot;9] Percent of OTUs that are singletons \n        (i.e. exactly one read detected across all samples)11.5371329879102&quot;
-## 
-## [[10]]
-## [1] &quot;10] Number of sample variables are: 9&quot;
-## 
-## [[11]]
-## [1] &quot;InputFileName&quot; &quot;Samplename&quot;    &quot;seq_tech&quot;      &quot;SiteID&quot;       
-## [5] &quot;Region&quot;        &quot;Year&quot;          &quot;Week&quot;          &quot;X_coord&quot;      
-## [9] &quot;Y_coord&quot;</code></pre>
-<p><a
-href="https://microsud.github.io/microbiomeutilities/articles/microbiomeutilities.html">microbiomutilities</a></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>Dep_raw<span class="ot">&lt;-</span><span class="fu">plot_read_distribution</span>(combinedPS_clean, </span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                                <span class="at">groups =</span> <span class="st">&quot;seq_tech&quot;</span>, </span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                                <span class="at">plot.type =</span> <span class="st">&quot;histogram&quot;</span>)<span class="sc">+</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>  <span class="fu">theme_biome_utils</span>()<span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>(<span class="at">trans=</span><span class="st">&#39;log10&#39;</span>,</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>                   <span class="at">limits=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">50000000</span>))<span class="sc">+</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#111111&quot;</span>))<span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="dv">1000</span>, </span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>             <span class="at">colour =</span> <span class="st">&quot;black&quot;</span>, </span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>             <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;none&quot;</span>)<span class="sc">+</span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Reads per samples&quot;</span>, </span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">&quot;Count&quot;</span>);Dep_raw</span></code></pre></div>
-<pre><code>## Warning: Removed 6 rows containing missing values or values outside the scale
-## range (`geom_bar()`).</code></pre>
-<p><img src="3_summaries_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div id="installing-r-and-rstudio" class="section level2">
+<h2>Installing R and RStudio</h2>
+<p>Install R and RStudio:</p>
+<ol style="list-style-type: decimal">
+<li><p>Download and install the <a href="http://www.r-project.org">R</a>
+statistical computing and graphing environment. This works
+cross-platform on Windows, OS X and Linux operating systems.</p></li>
+<li><p>Download and install the free, open source edition of the <a
+href="https://www.rstudio.com/products/rstudio/download/">RStudio
+Desktop</a> integrated development environment (IDE), which we
+recommend. This is basically a point-and-click interface for R that
+includes a text editor, file browser, and some other
+conveniences.</p></li>
+</ol>
+</div>
+<div id="required-r-packages" class="section level2">
+<h2>Required R packages</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(c(&quot;tidyverse&quot;, &quot;ape&quot;, &quot;cowplot&quot;, &quot;ggpubr&quot;, &quot;remotes&quot;, &quot;BiocManager&quot;))</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ape&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;cowplot&quot;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggpubr&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;remotes&quot;</span>)</span>
+<span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="co"># BiocManager::install(c(&quot;phyloseq&quot;, &quot;microbiome&quot;,&quot;MicrobiotaProcess&quot;)</span></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;phyloseq&quot;</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiome&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;MicrobiotaProcess&quot;</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;microsud/microbiomeutilities&quot;)</span></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiomeutilities&quot;</span>) </span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;kasperskytte/ampvis2&quot;)</span></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ampvis2&quot;</span>) </span></code></pre></div>
+</div>
 
 
 
