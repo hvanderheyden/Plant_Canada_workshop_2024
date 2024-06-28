@@ -6,7 +6,8 @@ navbar:
   icon: fa-home
   left:
     - text: "Workshop Requirements"
-      href: setup_requirements.html 
+      href: setup_requirements.html
+      
     - text: "Part I: Data cleaning and filtering"
       menu:
         - text: "Importing data into R"
@@ -18,8 +19,8 @@ navbar:
           
     - text: "Part II -- "
       menu:
-        - text: "Importing data into R"
-          href: 1_import_data.html    
+        - text: "stacked bar charts"
+          href: 4_stacked_bar_charts.html    
         - text: "Data cleaning"
           href: 2_preprocessing.html    
         - text: "Summaries"

@@ -1,0 +1,167 @@
+---
+title: "stacked bar charts"
+output: html_document
+---
+
+One of the first things that comes to mind when presenting metabarcoding data is the ever-popular stacked bar chart. Again, there are many packages that can be used to draw stacked bar charts (see for example [MicrobiotaProcess](https://github.com/YuLab-SMU/MicrobiotaProcess/)), but let's do it manually this time instead.
+
+Let's load our latest Phyloseq object and librariries. 
+```{r, message=FALSE,echo=TRUE}
+library("phyloseq")
+library("tidyverse")
+
+WorkingPS<-readRDS("Processed_data/combinedPS_clean_pruned_filtered.rds");WorkingPS
+
+
+
+# Because The Nanopore data set also contains fungi, lets keep only the Oomycota Phylum. 
+WorkingPS<-subset_taxa(WorkingPS, Phylum=="Oomycota");WorkingPS
+
+```
+
+Here is a function borrowed from the MicrobiotaProcess package that will be helpful later when plotting our bar chart. 
+
+```{r, message=FALSE,echo=TRUE}
+get_cols <- function (n){
+  col <- c("#8dd3c7", "#ffffb3", "#bebada", "#fb8072", "#80b1d3",
+           "#fdb462", "#b3de69", "#fccde5", "#d9d9d9", "#bc80bd",
+           "#ccebc5", "#ffed6f")
+  
+  col2 <- c("#1f78e4", "#ffff33", "#c2a5cf", "#ff7f00", "#810f7c",
+            "#a6cee3", "#006d2c", "#4d4d4d", "#8c510a", "#d73027",
+            "#78c679", "#7f0000", "#41b6c4", "#e7298a", "#54278f")
+  
+  col3 <- c("#a6cee3", "#1f78b4", "#b2df8a", "#33a02c", "#fb9a99",
+            "#e31a1c", "#fdbf6f", "#ff7f00", "#cab2d6", "#6a3d9a",
+            "#ffff99", "#b15928")
+  colorRampPalette(col2)(n)
+}
+```
+
+The phyloseq psmelt function converts our phyloseq object into a data frame. 
+
+```{r}
+WorkingPS_melt <- psmelt(WorkingPS)
+
+head(WorkingPS_melt)
+```
+
+
+```{r}
+genus_abundance <- WorkingPS_melt %>%
+  group_by(seq_tech, Week) %>%
+  mutate(rel_abund = Abundance / sum(Abundance)) %>%
+  ungroup() %>%
+  select(-Abundance) %>%
+  pivot_longer(c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species"),
+               names_to="level",
+               values_to="taxon");head(genus_abundance)
+```
+
+```{r}
+genus_abundance %>%
+  filter(level=="Genus") %>% 
+  group_by(seq_tech, Week, taxon) %>% 
+  summarize(rel_abund = sum(rel_abund), .groups="drop") %>% 
+  group_by(seq_tech, Week, taxon) %>% 
+  summarize(mean_rel_abund=mean(rel_abund), .groups="drop") %>% 
+  ggplot(aes(x=Week, y=mean_rel_abund, fill=taxon))+
+  geom_col()+
+  facet_wrap(vars(seq_tech), nrow = 3)+
+  labs(x="Week",
+       y="Relative abundance (%)")+
+  theme(legend.text = element_text(face="italic"))+
+  scale_fill_manual(values=get_cols(29))+ # This line calls the "get_cols">" function above
+  guides(fill= guide_legend(keywidth = 0.6, 
+                            keyheight = 0.7, 
+                            ncol=1))+
+  theme(axis.text.x = element_text(angle = 60, 
+                                   vjust = 0.5, 
+                                   hjust=0.4))
+```
+
+
+
+
+
+```{r}
+predefined_species = c("Peronospora manshurica",
+                     "Peronospora variabilis",
+                      "Bremia elliptica",
+                      "Hyaloperonospora nesliae",
+                      "Peronospora destructor",
+                      "Hyaloperonospora camelinae",
+                      "Peronospora aparines",
+                      "Peronospora erucastri",
+                      "Albugo candida",
+                      "Plasmopara viticola",
+                      "Bremia lactucae",
+                      "Hyaloperonospora brassicae",
+                      "Pseudoperonospora cubensis"
+);predefined_species
+```
+
+
+```{r}
+WorkingPS_melt2 <-  WorkingPS_melt %>%
+  mutate(Species = case_when(
+    Species %in% 
+      predefined_species ~ Species,  # Keep valid species as is
+    TRUE ~ "Other"  # Replace other species with "other"
+  ))
+
+head(WorkingPS_melt2)
+```
+
+
+
+
+```{r}
+genus_abundance2 <- WorkingPS_melt2 %>%
+  group_by(seq_tech, Week) %>%
+  mutate(rel_abund = Abundance / sum(Abundance)) %>%
+  ungroup() %>%
+  select(-Abundance) %>%
+  pivot_longer(c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species"),
+               names_to="level",
+               values_to="taxon")%>%
+  mutate(taxon = factor(taxon,
+                       levels=c("Peronospora manshurica",
+                                "Peronospora variabilis",
+                                "Peronospora destructor",                       
+                                "Peronospora aparines",
+                                "Peronospora erucastri",
+                                "Bremia elliptica",
+                                "Bremia lactucae",
+                                "Albugo candida",
+                                "Hyaloperonospora nesliae",
+                                "Hyaloperonospora brassicae",
+                                "Hyaloperonospora camelinae",
+                                "Plasmopara viticola",
+                                "Pseudoperonospora cubensis",
+                                "Other")))
+```
+
+
+
+```{r}
+genus_abundance2 %>%
+  filter(level=="Species") %>% 
+  group_by(seq_tech, Week, taxon) %>% 
+  summarize(rel_abund = sum(rel_abund), .groups="drop") %>% 
+  group_by(seq_tech, Week, taxon) %>% 
+  summarize(mean_rel_abund=mean(rel_abund), .groups="drop") %>% 
+  ggplot(aes(x=Week, y=mean_rel_abund, fill=taxon))+
+  geom_col()+
+  facet_wrap(vars(seq_tech), nrow = 3)+
+  labs(x="Week",
+       y="Relative abundance (%)")+
+  theme(legend.text = element_text(face="italic"))+
+  scale_fill_manual(values=get_cols(29))+ # This line calls the "get_cols">" function above
+  guides(fill= guide_legend(keywidth = 0.6, 
+                            keyheight = 0.7, 
+                            ncol=1))+
+  theme(axis.text.x = element_text(angle = 60, 
+                                   vjust = 0.5, 
+                                   hjust=0.4))
+```

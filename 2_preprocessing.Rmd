@@ -145,14 +145,39 @@ tax.cleanM<-tax.cleanM %>%
   # E. undulatum complex (clade H)
   mutate(Species=str_replace(Species, "Elongisporangium undulatum", "Elongisporangium undulatum complex"))%>%
   mutate(Species=str_replace(Species, "Elongisporangium dimorphum", "Elongisporangium undulatum complex"))%>%
-  # S. sclerotiorum cluster
-  mutate(Species=str_replace(Species, "Sclerotinia sclerotiorum", "Sclerotinia sclerotiorum cluster"))%>%
-  mutate(Species=str_replace(Species, "Sclerotinia minor", "Sclerotinia sclerotiorum cluster"))%>%
-  mutate(Species=str_replace(Species, "Sclerotinia trifoliorum", "Sclerotinia sclerotiorum cluster"))%>%
-  # B. cinerea complex 
-  mutate(Species=str_replace(Species, "Botrytis cinerea", "Botrytis cinerea complex"))%>%
-  mutate(Species=str_replace(Species, "Botrytis fabae", "Botrytis cinerea complex"))%>%
-  mutate(Species=str_replace(Species, "Botrytis pelargonii", "Botrytis cinerea complex"))
+  # Peronospora bulbocapni cluster
+  mutate(Species=str_replace(Species, "Peronospora bulbocapni", "Peronospora bulbocapni cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora dicentrae", "Peronospora bulbocapni cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora chrysosplenii", "Peronospora bulbocapni cluster"))%>%
+  # Peronospora ranunculi cluster
+  mutate(Species=str_replace(Species, "Peronospora ficariae", "Peronospora ranunculi cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora ranunculi", "Peronospora ranunculi cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora hiemalis", "Peronospora ranunculi cluster")) %>% 
+  mutate(Species=str_replace(Species, "Peronospora illyrica", "Peronospora ranunculi cluster")) %>% 
+  # Peronospora alpicola cluster
+  mutate(Species=str_replace(Species, "Peronospora alpicola", "Peronospora alpicola cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora pulveracea", "Peronospora alpicola cluster"))%>%
+  # Peronospora corydalis cluster
+  mutate(Species=str_replace(Species, "Peronospora corydalis", "Peronospora corydalis cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora esulae", "Peronospora corydalis cluster"))%>%
+  # Peronospora meconopsidis cluster
+  mutate(Species=str_replace(Species, "Peronospora meconopsidis", "Peronospora meconopsidis cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora cristata", "Peronospora meconopsidis cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora apula", "Peronospora meconopsidis cluster")) %>% 
+  mutate(Species=str_replace(Species, "Peronospora argemones", "Peronospora meconopsidis cluster")) %>% 
+  # Peronospora alsinearum cluster
+  mutate(Species=str_replace(Species, "Peronospora alsinearum", "Peronospora alsinearum cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora campestris", "Peronospora alsinearum cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora paula", "Peronospora alsinearum cluster")) %>% 
+  mutate(Species=str_replace(Species, "Peronospora parva", "Peronospora alsinearum cluster")) %>% 
+  # Peronospora effusa cluster
+  mutate(Species=str_replace(Species, "Peronospora effusa", "Peronospora effusa cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora farinosa", "Peronospora effusa cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora polycarpi", "Peronospora effusa cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora rumicis", "Peronospora effusa cluster"))%>%
+  # Peronospora boni-henrici cluster
+  mutate(Species=str_replace(Species, "Peronospora boni-henrici", "Peronospora boni-henrici cluster"))%>%
+  mutate(Species=str_replace(Species, "Peronospora minor", "Peronospora boni-henrici cluster"))
 ```
 
 Replace taxonomy
