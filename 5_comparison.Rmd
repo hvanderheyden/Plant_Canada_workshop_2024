@@ -10,6 +10,9 @@ output: html_document
 library("MicrobiotaProcess")
 library("ggpubr")
 library("ape")
+library("VennDiagram")
+library("UpSetR")
+library("vegan")
 
 WorkingPS<-readRDS("Processed_data/WorkingPS.rds")
 ```
@@ -19,31 +22,26 @@ WorkingPS<-readRDS("Processed_data/WorkingPS.rds")
 WorkingPS_glom <- get_taxadf(WorkingPS, 
                      taxlevel=7,
                      type = "species")
-```
 
-Upset Plot 
-----
+WorkingPS_glom_tree = rtree(ntaxa(WorkingPS_glom), 
+                    rooted=TRUE, 
+                    tip.label=taxa_names(WorkingPS_glom))
 
-```{r, message=FALSE,echo=TRUE}
-upsetda <- get_upset(obj=WorkingPS_glom, factorNames="seq_tech")
-library(VennDiagram)
-library(UpSetR)
 
-upset(upsetda, sets=unique(as.vector(sample_data(WorkingPS_glom)$seq_tech)), 
-      sets.bar.color = "#56B4E9",
-      order.by = "freq", 
-      empty.intersections = "on")
+WorkingPS_glom2 <- phyloseq(phyloseq::tax_table(WorkingPS_glom),
+                            phyloseq::otu_table(WorkingPS_glom),
+                            WorkingPS_glom_tree,
+                            phyloseq::sample_data(WorkingPS_glom))
 
 ```
-
 
 PcoA 
 ----
 
 ```{r, message=FALSE,echo=TRUE}
 
-pcoa_results <- get_pcoa(obj=WorkingPS_glom, 
-                      distmethod="bray", 
+pcoa_results <- get_pcoa(obj=WorkingPS_glom2, 
+                      distmethod="wunifrac", 
                       method="hellinger")
 
 
@@ -66,10 +64,31 @@ pcoaplot1 <- ggordpoint(obj=pcoa_results,
 
 ```
 
+
+Upset Plot 
+----
+
+```{r}
+upsetda <- get_upset(obj=WorkingPS_glom2, factorNames="seq_tech")
+
+upset(upsetda, sets=unique(as.vector(sample_data(WorkingPS_glom2)$seq_tech)), 
+      sets.bar.color = "#56B4E9",
+      order.by = "freq", 
+      empty.intersections = "on")
+
+```
+
 Permanova
 ---- 
 
+```{r}
+dist_mat <- get_dist(WorkingPS_glom2, distmethod ="wunifrac", method="hellinger")
+sampleda <- data.frame(sample_data(WorkingPS_glom2), check.names=FALSE)
+sampleda <- sampleda[match(colnames(as.matrix(dist_mat)),rownames(sampleda)),,drop=FALSE]
+sampleda$seq_tech <- factor(sampleda$seq_tech)
+set.seed(1024)
+adonis_res <- adonis(dist_mat ~ seq_tech*Week, data=sampleda, permutation=9999)
+data.frame(adonis_res$aov.tab)
 
-
-
+```
 

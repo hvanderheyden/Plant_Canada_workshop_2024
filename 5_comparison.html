@@ -488,52 +488,88 @@ div.tocify {
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;MicrobiotaProcess&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggpubr&quot;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ape&quot;</span>)</span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" tabindex="-1"></a>WorkingPS<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/WorkingPS.rds&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>WorkingPS_glom <span class="ot">&lt;-</span> <span class="fu">get_taxadf</span>(WorkingPS, </span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                     <span class="at">taxlevel=</span><span class="dv">7</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">&quot;species&quot;</span>)</span></code></pre></div>
-<div id="upset-plot" class="section level2">
-<h2>Upset Plot</h2>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>upsetda <span class="ot">&lt;-</span> <span class="fu">get_upset</span>(<span class="at">obj=</span>WorkingPS_glom, <span class="at">factorNames=</span><span class="st">&quot;seq_tech&quot;</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">library</span>(VennDiagram)</span></code></pre></div>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;VennDiagram&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: le package &#39;VennDiagram&#39; a été compilé avec la version R 4.4.1</code></pre>
 <pre><code>## Warning: le package &#39;futile.logger&#39; a été compilé avec la version R 4.4.1</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(UpSetR)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;UpSetR&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: le package &#39;UpSetR&#39; a été compilé avec la version R 4.4.1</code></pre>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="fu">upset</span>(upsetda, <span class="at">sets=</span><span class="fu">unique</span>(<span class="fu">as.vector</span>(<span class="fu">sample_data</span>(WorkingPS_glom)<span class="sc">$</span>seq_tech)), </span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>      <span class="at">sets.bar.color =</span> <span class="st">&quot;#56B4E9&quot;</span>,</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>      <span class="at">order.by =</span> <span class="st">&quot;freq&quot;</span>, </span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>      <span class="at">empty.intersections =</span> <span class="st">&quot;on&quot;</span>)</span></code></pre></div>
-<p><img src="5_comparison_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
-</div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;vegan&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>WorkingPS<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/WorkingPS.rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>WorkingPS_glom <span class="ot">&lt;-</span> <span class="fu">get_taxadf</span>(WorkingPS, </span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>                     <span class="at">taxlevel=</span><span class="dv">7</span>,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">&quot;species&quot;</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>WorkingPS_glom_tree <span class="ot">=</span> <span class="fu">rtree</span>(<span class="fu">ntaxa</span>(WorkingPS_glom), </span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>                    <span class="at">rooted=</span><span class="cn">TRUE</span>, </span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                    <span class="at">tip.label=</span><span class="fu">taxa_names</span>(WorkingPS_glom))</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>WorkingPS_glom2 <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(phyloseq<span class="sc">::</span><span class="fu">tax_table</span>(WorkingPS_glom),</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>                            phyloseq<span class="sc">::</span><span class="fu">otu_table</span>(WorkingPS_glom),</span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>                            WorkingPS_glom_tree,</span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>                            phyloseq<span class="sc">::</span><span class="fu">sample_data</span>(WorkingPS_glom))</span></code></pre></div>
+<pre><code>## Plus d’une classe &quot;phylo&quot; est trouvée en cache : Utilisation de la première, depuis l’espace de noms &#39;phyloseq&#39;</code></pre>
+<pre><code>## Aussi défini par &#39;tidytree&#39;</code></pre>
+<pre><code>## Plus d’une classe &quot;phylo&quot; est trouvée en cache : Utilisation de la première, depuis l’espace de noms &#39;phyloseq&#39;</code></pre>
+<pre><code>## Aussi défini par &#39;tidytree&#39;</code></pre>
+<pre><code>## Plus d’une classe &quot;phylo&quot; est trouvée en cache : Utilisation de la première, depuis l’espace de noms &#39;phyloseq&#39;</code></pre>
+<pre><code>## Aussi défini par &#39;tidytree&#39;</code></pre>
+<pre><code>## Plus d’une classe &quot;phylo&quot; est trouvée en cache : Utilisation de la première, depuis l’espace de noms &#39;phyloseq&#39;</code></pre>
+<pre><code>## Aussi défini par &#39;tidytree&#39;</code></pre>
 <div id="pcoa" class="section level2">
 <h2>PcoA</h2>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>pcoa_results <span class="ot">&lt;-</span> <span class="fu">get_pcoa</span>(<span class="at">obj=</span>WorkingPS_glom, </span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>                      <span class="at">distmethod=</span><span class="st">&quot;bray&quot;</span>, </span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>                      <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>pcoaplot1 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>pcoa_results,</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>                          <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>                          <span class="at">biplot=</span><span class="cn">FALSE</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a>                          <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>, <span class="st">&quot;Region&quot;</span>), </span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>                          <span class="at">ellipse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>                          <span class="at">poinsize =</span> <span class="fl">1.8</span>,</span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>                          <span class="at">stroke =</span> <span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.box =</span> <span class="st">&quot;horizontal&quot;</span>, <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)<span class="sc">+</span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span><span class="st">&quot;Set2&quot;</span>)<span class="sc">+</span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>))<span class="sc">+</span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span> </span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.direction =</span> <span class="st">&quot;vertical&quot;</span>, <span class="at">legend.box =</span> <span class="st">&quot;vertical&quot;</span>)<span class="sc">+</span></span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a>                             <span class="at">keyheight =</span> <span class="fl">0.7</span>,</span>
-<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a>                             <span class="at">ncol =</span> <span class="dv">1</span>));pcoaplot1</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>pcoa_results <span class="ot">&lt;-</span> <span class="fu">get_pcoa</span>(<span class="at">obj=</span>WorkingPS_glom2, </span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>                      <span class="at">distmethod=</span><span class="st">&quot;wunifrac&quot;</span>, </span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>                      <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>pcoaplot1 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>pcoa_results,</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>                          <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>                          <span class="at">biplot=</span><span class="cn">FALSE</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>                          <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>, <span class="st">&quot;Region&quot;</span>), </span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>                          <span class="at">ellipse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>                          <span class="at">poinsize =</span> <span class="fl">1.8</span>,</span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>                          <span class="at">stroke =</span> <span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.box =</span> <span class="st">&quot;horizontal&quot;</span>, <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)<span class="sc">+</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  <span class="fu">scale_fill_brewer</span>(<span class="at">palette =</span><span class="st">&quot;Set2&quot;</span>)<span class="sc">+</span></span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>))<span class="sc">+</span></span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span> </span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.direction =</span> <span class="st">&quot;vertical&quot;</span>, <span class="at">legend.box =</span> <span class="st">&quot;vertical&quot;</span>)<span class="sc">+</span></span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
+<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>                             <span class="at">keyheight =</span> <span class="fl">0.7</span>,</span>
+<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>                             <span class="at">ncol =</span> <span class="dv">1</span>));pcoaplot1</span></code></pre></div>
+<p><img src="5_comparison_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+</div>
+<div id="upset-plot" class="section level2">
+<h2>Upset Plot</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>upsetda <span class="ot">&lt;-</span> <span class="fu">get_upset</span>(<span class="at">obj=</span>WorkingPS_glom2, <span class="at">factorNames=</span><span class="st">&quot;seq_tech&quot;</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">upset</span>(upsetda, <span class="at">sets=</span><span class="fu">unique</span>(<span class="fu">as.vector</span>(<span class="fu">sample_data</span>(WorkingPS_glom2)<span class="sc">$</span>seq_tech)), </span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>      <span class="at">sets.bar.color =</span> <span class="st">&quot;#56B4E9&quot;</span>,</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>      <span class="at">order.by =</span> <span class="st">&quot;freq&quot;</span>, </span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>      <span class="at">empty.intersections =</span> <span class="st">&quot;on&quot;</span>)</span></code></pre></div>
 <p><img src="5_comparison_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 </div>
 <div id="permanova" class="section level2">
 <h2>Permanova</h2>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(WorkingPS_glom2, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(WorkingPS_glom2), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> sampleda[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_mat)),<span class="fu">rownames</span>(sampleda)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a>sampleda<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda<span class="sc">$</span>seq_tech)</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a>adonis_res <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_mat <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, <span class="at">data=</span>sampleda, <span class="at">permutation=</span><span class="dv">9999</span>)</span></code></pre></div>
+<pre><code>## Warning in adonis(dist_mat ~ seq_tech * Week, data = sampleda, permutation = 9999): &#39;adonis&#39; est obsolète.
+## Utilisez plutôt ‘adonis2’.
+## Voir help(&quot;Deprecated&quot;) et help(&quot;vegan-deprecated&quot;).</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">data.frame</span>(adonis_res<span class="sc">$</span>aov.tab)</span></code></pre></div>
+<pre><code>##                Df SumsOfSqs    MeanSqs   F.Model         R2 Pr..F.
+## seq_tech        2  4.783406 2.39170301 32.035776 0.12468904 0.0001
+## Week           15 13.903790 0.92691933 12.415664 0.36243008 0.0001
+## seq_tech:Week  30  2.578976 0.08596585  1.151474 0.06722615 0.1079
+## Residuals     229 17.096511 0.07465725        NA 0.44565473     NA
+## Total         276 38.362682         NA        NA 1.00000000     NA</code></pre>
 </div>
 
 
