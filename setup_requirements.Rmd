@@ -24,13 +24,15 @@ Required R packages
 
 ```{r, message=FALSE,echo=TRUE, warning=FALSE}
 
-# install.packages(c("tidyverse", "ape", "cowplot", "ggpubr", "remotes", "BiocManager"))
+# install.packages(c("tidyverse", "ape", "cowplot", "ggpubr", "remotes", "BiocManager", "UpSetR","VennDiagram" ))
 library("tidyverse")
 library("ape")
 library("cowplot")
 library("ggpubr")
 library("remotes")
 library("BiocManager")
+library("UpSetR")
+library("VennDiagram")
 
 # BiocManager::install(c("phyloseq", "microbiome","MicrobiotaProcess")
 library("phyloseq")

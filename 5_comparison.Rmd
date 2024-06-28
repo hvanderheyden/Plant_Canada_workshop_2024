@@ -1,0 +1,75 @@
+---
+title: "Sequencing technology comparison"
+output: html_document
+---
+
+
+
+
+```{r, message=FALSE,echo=TRUE}
+library("MicrobiotaProcess")
+library("ggpubr")
+library("ape")
+
+WorkingPS<-readRDS("Processed_data/WorkingPS.rds")
+```
+
+
+```{r}
+WorkingPS_glom <- get_taxadf(WorkingPS, 
+                     taxlevel=7,
+                     type = "species")
+```
+
+Upset Plot 
+----
+
+```{r, message=FALSE,echo=TRUE}
+upsetda <- get_upset(obj=WorkingPS_glom, factorNames="seq_tech")
+library(VennDiagram)
+library(UpSetR)
+
+upset(upsetda, sets=unique(as.vector(sample_data(WorkingPS_glom)$seq_tech)), 
+      sets.bar.color = "#56B4E9",
+      order.by = "freq", 
+      empty.intersections = "on")
+
+```
+
+
+PcoA 
+----
+
+```{r, message=FALSE,echo=TRUE}
+
+pcoa_results <- get_pcoa(obj=WorkingPS_glom, 
+                      distmethod="bray", 
+                      method="hellinger")
+
+
+pcoaplot1 <- ggordpoint(obj=pcoa_results,
+                          pc=c(1, 2),
+                          biplot=FALSE,
+                          factorNames=c("seq_tech", "Region"), 
+                          ellipse=TRUE,
+                          poinsize = 1.8,
+                          stroke = 0.2)+
+  theme(legend.box = "horizontal", legend.position = "right")+
+  scale_fill_brewer(palette ="Set2")+
+  theme(legend.text=element_text(size=8))+
+  theme(legend.title = element_blank())+ 
+  theme(plot.title = element_blank())+
+  theme(legend.direction = "vertical", legend.box = "vertical")+
+  guides(fill = guide_legend(keywidth = 0.6, 
+                             keyheight = 0.7,
+                             ncol = 1));pcoaplot1
+
+```
+
+Permanova
+---- 
+
+
+
+
+

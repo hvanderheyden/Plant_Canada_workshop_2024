@@ -3,7 +3,7 @@ title: "stacked bar charts"
 output: html_document
 ---
 
-One of the first things that comes to mind when presenting metabarcoding data is the ever-popular stacked bar chart. Again, there are many packages that can be used to draw stacked bar charts (see for example [MicrobiotaProcess](https://github.com/YuLab-SMU/MicrobiotaProcess/)), but let's do it manually this time instead.
+One of the first things that comes to mind when presenting metabarcoding data is the ever-popular stacked bar chart. Again, there are many packages that can be used to draw stacked bar charts (see for example [MicrobiotaProcess](https://github.com/YuLab-SMU/MicrobiotaProcess)), but let's do it manually this time instead.
 
 Let's load our latest Phyloseq object and librariries. 
 ```{r, message=FALSE,echo=TRUE}
@@ -17,6 +17,7 @@ WorkingPS<-readRDS("Processed_data/combinedPS_clean_pruned_filtered.rds");Workin
 # Because The Nanopore data set also contains fungi, lets keep only the Oomycota Phylum. 
 WorkingPS<-subset_taxa(WorkingPS, Phylum=="Oomycota");WorkingPS
 
+saveRDS(WorkingPS, file= "Processed_data/WorkingPS.rds")
 ```
 
 Here is a function borrowed from the MicrobiotaProcess package that will be helpful later when plotting our bar chart. 

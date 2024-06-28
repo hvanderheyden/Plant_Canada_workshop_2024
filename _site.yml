@@ -20,11 +20,9 @@ navbar:
     - text: "Part II -- "
       menu:
         - text: "stacked bar charts"
-          href: 4_stacked_bar_charts.html    
-        - text: "Data cleaning"
-          href: 2_preprocessing.html    
-        - text: "Summaries"
-          href: 3_summaries.html
+          href: 4_stacked_barchart.html    
+        - text: "Comparisons"
+          href: 5_comparison.html
           
     - text: "Part III -- "
       menu:
