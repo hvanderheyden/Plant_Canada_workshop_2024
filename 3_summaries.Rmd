@@ -3,6 +3,10 @@ title: "Filtering"
 output: html_document
 ---
 
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 Now that we've cleaned up our taxonomy, let's take a look at the read distribution across the samples and remove samples with low read depths. 
 
 Let's load our latest Phyloseq object 

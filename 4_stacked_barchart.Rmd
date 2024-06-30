@@ -3,6 +3,10 @@ title: "stacked bar charts"
 output: html_document
 ---
 
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 One of the first things that comes to mind when presenting metabarcoding data is the ever-popular stacked bar chart. Again, there are many packages that can be used to draw stacked bar charts (see for example [MicrobiotaProcess](https://github.com/YuLab-SMU/MicrobiotaProcess)), but let's do it manually this time instead.
 
 Let's load our latest Phyloseq object and librariries. 
@@ -39,6 +43,9 @@ get_cols <- function (n){
 }
 ```
 
+Summarize the data 
+----
+
 The phyloseq psmelt function converts our phyloseq object into a data frame. 
 
 ```{r}
@@ -46,6 +53,8 @@ WorkingPS_melt <- psmelt(WorkingPS)
 
 head(WorkingPS_melt)
 ```
+
+Using the dplyr package (included in the tidyverse package) we create a tibble to summarize abundance and use the pivot_longer function to transpose the taxonomy from column to row.  
 
 
 ```{r}
@@ -56,8 +65,15 @@ genus_abundance <- WorkingPS_melt %>%
   select(-Abundance) %>%
   pivot_longer(c("Kingdom", "Phylum", "Class", "Order", "Family", "Genus", "Species"),
                names_to="level",
-               values_to="taxon");head(genus_abundance)
+               values_to="taxon")
+
+str(genus_abundance)
 ```
+
+Genus bar chart 
+----
+
+We then summarize the data, by sequencing technology and by week, at the genus level and input them into ggplot2 to obtain our bar chart with weeks on the x-axis and relative abundance on the y-axis, with facets for sequencing technologies. 
 
 ```{r}
 genus_abundance %>%
@@ -81,27 +97,32 @@ genus_abundance %>%
                                    hjust=0.4))
 ```
 
+Species bar chart
+---- 
 
+The first bar chart shows that the profiles are fairly similar between the three technologies, although some genera appear to be over- or under-represented with certain technologies. We would now like to examine the distribution of species as a function of time and sequencing technology. However, with over 80 species, it is difficult to get a clear representation of species distribution with a stacked bar chart, and we need to reduce the number of species to be plotted. 
 
+To do that let's start by creating a list of predefined species that we want to be plotted in our bar chart: 
 
 
 ```{r}
-predefined_species = c("Peronospora manshurica",
-                     "Peronospora variabilis",
-                      "Bremia elliptica",
-                      "Hyaloperonospora nesliae",
-                      "Peronospora destructor",
-                      "Hyaloperonospora camelinae",
-                      "Peronospora aparines",
-                      "Peronospora erucastri",
-                      "Albugo candida",
-                      "Plasmopara viticola",
-                      "Bremia lactucae",
-                      "Hyaloperonospora brassicae",
-                      "Pseudoperonospora cubensis"
-);predefined_species
+predefined_species = c("Albugo candida",
+                       "Bremia lactucae cluster",
+                       "Hyaloperonospora nesliae",
+                       "Hyaloperonospora brassicae",
+                       "Hyaloperonospora camelinae",
+                       "Peronospora manshurica",
+                       "Peronospora variabilis",
+                       "Peronospora destructor",                       
+                       "Peronospora aparines",
+                       "Peronospora erucastri",
+                       "Plasmopara viticola",
+                       "Pseudoperonospora cubensis",
+)
 ```
 
+
+And replace anything not in our list with "Other":
 
 ```{r}
 WorkingPS_melt2 <-  WorkingPS_melt %>%
@@ -114,7 +135,7 @@ WorkingPS_melt2 <-  WorkingPS_melt %>%
 head(WorkingPS_melt2)
 ```
 
-
+Generate a second tibble with using this predefined list of species: 
 
 
 ```{r}
@@ -127,23 +148,22 @@ genus_abundance2 <- WorkingPS_melt2 %>%
                names_to="level",
                values_to="taxon")%>%
   mutate(taxon = factor(taxon,
-                       levels=c("Peronospora manshurica",
-                                "Peronospora variabilis",
-                                "Peronospora destructor",                       
-                                "Peronospora aparines",
-                                "Peronospora erucastri",
-                                "Bremia elliptica",
-                                "Bremia lactucae",
-                                "Albugo candida",
-                                "Hyaloperonospora nesliae",
-                                "Hyaloperonospora brassicae",
-                                "Hyaloperonospora camelinae",
-                                "Plasmopara viticola",
-                                "Pseudoperonospora cubensis",
-                                "Other")))
+                       levels=c("Albugo candida",
+                       "Bremia lactucae cluster",
+                       "Hyaloperonospora nesliae",
+                       "Hyaloperonospora brassicae",
+                       "Hyaloperonospora camelinae",
+                       "Peronospora manshurica",
+                       "Peronospora variabilis",
+                       "Peronospora destructor",                       
+                       "Peronospora aparines",
+                       "Peronospora erucastri",
+                       "Plasmopara viticola",
+                       "Pseudoperonospora cubensis",
+                       "Other")))
 ```
 
-
+summarize the data at the species level and pipe that into ggplot2 to get our bar chart at the species level: 
 
 ```{r}
 genus_abundance2 %>%
@@ -158,7 +178,7 @@ genus_abundance2 %>%
   labs(x="Week",
        y="Relative abundance (%)")+
   theme(legend.text = element_text(face="italic"))+
-  scale_fill_manual(values=get_cols(29))+ # This line calls the "get_cols">" function above
+  scale_fill_manual(values=get_cols(14))+ # This line calls the "get_cols">" function above
   guides(fill= guide_legend(keywidth = 0.6, 
                             keyheight = 0.7, 
                             ncol=1))+
@@ -166,3 +186,5 @@ genus_abundance2 %>%
                                    vjust = 0.5, 
                                    hjust=0.4))
 ```
+
+Again we can see some similitude and differences between sequencing technologies, now lets see how different they are. 

@@ -17,25 +17,37 @@ navbar:
         - text: "Data filtering"
           href: 3_summaries.html
           
-    - text: "Part II -- "
+    - text: "Part II -- Comparing sequencing techniques"
       menu:
         - text: "stacked bar charts"
           href: 4_stacked_barchart.html    
         - text: "Comparisons"
           href: 5_comparison.html
           
-    - text: "Part III -- "
+    - text: "Part III -- Anlysing diversity"
       menu:
-        - text: "Importing data into R"
+        - text: "Heat maps"
           href: 1_import_data.html    
-        - text: "Data cleaning"
+        - text: "alpha diversity"
           href: 2_preprocessing.html    
-        - text: "Summaries"
-          href: 3_summaries.html  
+        - text: "Temporal distribution"
+          href: 3_summaries.html
+          
+         
+          
       
   right:
-  - href: https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io
-    icon: fa-github
+  - icon: fa-github
+    href: https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io
+    
+  - text: "Supplementary material"
+    menu:
+      - text: "Heat maps"
+        href: 1_import_data.html    
+      - text: "alpha diversity"
+        href: 2_preprocessing.html    
+      - text: "Temporal distribution"
+        href: 3_summaries.html    
 
 output:
   html_document:

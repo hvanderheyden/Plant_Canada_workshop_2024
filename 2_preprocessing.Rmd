@@ -3,6 +3,10 @@ title: "Cleaning taxonomy"
 output: html_document
 ---
 
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
 The next step toward analyzing our data is to get them clean. 
 So lets load our phyloseq object
 
@@ -177,7 +181,10 @@ tax.cleanM<-tax.cleanM %>%
   mutate(Species=str_replace(Species, "Peronospora rumicis", "Peronospora effusa cluster"))%>%
   # Peronospora boni-henrici cluster
   mutate(Species=str_replace(Species, "Peronospora boni-henrici", "Peronospora boni-henrici cluster"))%>%
-  mutate(Species=str_replace(Species, "Peronospora minor", "Peronospora boni-henrici cluster"))
+  mutate(Species=str_replace(Species, "Peronospora minor", "Peronospora boni-henrici cluster"))%>%
+    # Bremia lactucae cluster
+  mutate(Species=str_replace(Species, "Bremia lactucae", "Bremia lactucae cluster"))%>%
+  mutate(Species=str_replace(Species, "Bremia elliptica", "Bremia lactucae cluster"))
 ```
 
 Replace taxonomy

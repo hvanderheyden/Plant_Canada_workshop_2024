@@ -432,7 +432,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part II -- 
+    Part II -- Comparing sequencing techniques
      
     <span class="caret"></span>
   </a>
@@ -447,19 +447,19 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part III -- 
+    Part III -- Anlysing diversity
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1_import_data.html">Importing data into R</a>
+      <a href="1_import_data.html">Heat maps</a>
     </li>
     <li>
-      <a href="2_preprocessing.html">Data cleaning</a>
+      <a href="2_preprocessing.html">alpha diversity</a>
     </li>
     <li>
-      <a href="3_summaries.html">Summaries</a>
+      <a href="3_summaries.html">Temporal distribution</a>
     </li>
   </ul>
 </li>
@@ -470,6 +470,24 @@ div.tocify {
     <span class="fa fa-github"></span>
      
   </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Supplementary material
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_import_data.html">Heat maps</a>
+    </li>
+    <li>
+      <a href="2_preprocessing.html">alpha diversity</a>
+    </li>
+    <li>
+      <a href="3_summaries.html">Temporal distribution</a>
+    </li>
+  </ul>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -775,19 +793,15 @@ phyloseq object:</p>
 ## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
 ## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ape&quot;</span>)</span></code></pre></div>
-<pre><code>## 
-## Attachement du package : &#39;ape&#39;</code></pre>
-<pre><code>## L&#39;objet suivant est masqué depuis &#39;package:dplyr&#39;:
-## 
-##     where</code></pre>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>random_tree_combinedPS <span class="ot">=</span> <span class="fu">rtree</span>(<span class="fu">ntaxa</span>(combinedPS), </span>
-<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a>                    <span class="at">rooted=</span><span class="cn">TRUE</span>, </span>
-<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a>                    <span class="at">tip.label=</span><span class="fu">taxa_names</span>(combinedPS))</span>
-<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a></span>
-<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a>combinedPS_final <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(combined_otu, combined_tax, samples, random_tree_combinedPS)</span>
-<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a>combinedPS_final</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ape&quot;</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a>random_tree_combinedPS <span class="ot">=</span> <span class="fu">rtree</span>(<span class="fu">ntaxa</span>(combinedPS), </span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a>                    <span class="at">rooted=</span><span class="cn">TRUE</span>, </span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a>                    <span class="at">tip.label=</span><span class="fu">taxa_names</span>(combinedPS))</span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a></span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a></span>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a>combinedPS_final <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(combined_otu, combined_tax, samples, random_tree_combinedPS)</span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a>combinedPS_final</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
 ## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
@@ -799,12 +813,12 @@ phyloseq object:</p>
 <p>Before saving our work, to make sure that everything is under
 control, you can inspect the phyloseq object with the following
 functions:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a><span class="fu">sample_names</span>(combinedPS_final)</span>
-<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a><span class="fu">rank_names</span>(combinedPS_final)</span>
-<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a><span class="fu">sample_variables</span>(combinedPS_final)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a><span class="fu">sample_names</span>(combinedPS_final)</span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">rank_names</span>(combinedPS_final)</span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="fu">sample_variables</span>(combinedPS_final)</span></code></pre></div>
 <p>Finally, we save our phyloseq object into the processed_data
 directory</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a><span class="fu">saveRDS</span>(combinedPS_final, <span class="at">file=</span> <span class="st">&quot;Processed_data/combinedPS_final.rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a><span class="fu">saveRDS</span>(combinedPS_final, <span class="at">file=</span> <span class="st">&quot;Processed_data/combinedPS_final.rds&quot;</span>)</span></code></pre></div>
 </div>
 
 

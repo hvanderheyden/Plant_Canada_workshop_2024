@@ -1,5 +1,5 @@
 ---
-title: "Import sequencing data into R"
+title: "Workshop Requirements"
 output: html_document
 ---
 
@@ -24,7 +24,7 @@ Required R packages
 
 ```{r, message=FALSE,echo=TRUE, warning=FALSE}
 
-# install.packages(c("tidyverse", "ape", "cowplot", "ggpubr", "remotes", "BiocManager", "UpSetR","VennDiagram" ))
+# install.packages(c("tidyverse", "ape", "cowplot", "ggpubr", "remotes", "BiocManager", "UpSetR"))
 library("tidyverse")
 library("ape")
 library("cowplot")
@@ -32,7 +32,6 @@ library("ggpubr")
 library("remotes")
 library("BiocManager")
 library("UpSetR")
-library("VennDiagram")
 
 # BiocManager::install(c("phyloseq", "microbiome","MicrobiotaProcess")
 library("phyloseq")

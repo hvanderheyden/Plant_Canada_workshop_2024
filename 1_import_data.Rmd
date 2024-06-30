@@ -3,10 +3,8 @@ title: "Import data into R"
 output: html_document
 ---
 
-```{r, setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_chunk$set(fig.align = "center")
-library("knitr")
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
 There are many ways to import data into R, and numerous packages are available to analyze metabarcoding data. Among these, [Phyloseq](http://www.r-project.org) remains a versatile tool to import, store and analyze data. Moreover, many other packages can use a Phyloseq object as a starting point. We'll start by importing the tables using the Phyloseq package. 

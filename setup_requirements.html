@@ -11,7 +11,7 @@
 
 
 
-<title>Import sequencing data into R</title>
+<title>Workshop Requirements</title>
 
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -432,7 +432,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part II -- 
+    Part II -- Comparing sequencing techniques
      
     <span class="caret"></span>
   </a>
@@ -447,19 +447,19 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part III -- 
+    Part III -- Anlysing diversity
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1_import_data.html">Importing data into R</a>
+      <a href="1_import_data.html">Heat maps</a>
     </li>
     <li>
-      <a href="2_preprocessing.html">Data cleaning</a>
+      <a href="2_preprocessing.html">alpha diversity</a>
     </li>
     <li>
-      <a href="3_summaries.html">Summaries</a>
+      <a href="3_summaries.html">Temporal distribution</a>
     </li>
   </ul>
 </li>
@@ -471,6 +471,24 @@ div.tocify {
      
   </a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Supplementary material
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_import_data.html">Heat maps</a>
+    </li>
+    <li>
+      <a href="2_preprocessing.html">alpha diversity</a>
+    </li>
+    <li>
+      <a href="3_summaries.html">Temporal distribution</a>
+    </li>
+  </ul>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -480,7 +498,7 @@ div.tocify {
 
 
 
-<h1 class="title toc-ignore">Import sequencing data into R</h1>
+<h1 class="title toc-ignore">Workshop Requirements</h1>
 
 </div>
 
@@ -502,7 +520,7 @@ conveniences.</p></li>
 </div>
 <div id="required-r-packages" class="section level2">
 <h2>Required R packages</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(c(&quot;tidyverse&quot;, &quot;ape&quot;, &quot;cowplot&quot;, &quot;ggpubr&quot;, &quot;remotes&quot;, &quot;BiocManager&quot;, &quot;UpSetR&quot;,&quot;VennDiagram&quot; ))</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(c(&quot;tidyverse&quot;, &quot;ape&quot;, &quot;cowplot&quot;, &quot;ggpubr&quot;, &quot;remotes&quot;, &quot;BiocManager&quot;, &quot;UpSetR&quot;))</span></span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ape&quot;</span>)</span>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;cowplot&quot;</span>)</span>
@@ -510,18 +528,17 @@ conveniences.</p></li>
 <span id="cb1-6"><a href="#cb1-6" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;remotes&quot;</span>)</span>
 <span id="cb1-7"><a href="#cb1-7" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;BiocManager&quot;</span>)</span>
 <span id="cb1-8"><a href="#cb1-8" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;UpSetR&quot;</span>)</span>
-<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;VennDiagram&quot;</span>)</span>
-<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a></span>
-<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="co"># BiocManager::install(c(&quot;phyloseq&quot;, &quot;microbiome&quot;,&quot;MicrobiotaProcess&quot;)</span></span>
-<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;phyloseq&quot;</span>)</span>
-<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiome&quot;</span>)</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;MicrobiotaProcess&quot;</span>)</span>
-<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;microsud/microbiomeutilities&quot;)</span></span>
-<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiomeutilities&quot;</span>) </span>
-<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a></span>
-<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;kasperskytte/ampvis2&quot;)</span></span>
-<span id="cb1-20"><a href="#cb1-20" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ampvis2&quot;</span>) </span></code></pre></div>
+<span id="cb1-9"><a href="#cb1-9" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" tabindex="-1"></a><span class="co"># BiocManager::install(c(&quot;phyloseq&quot;, &quot;microbiome&quot;,&quot;MicrobiotaProcess&quot;)</span></span>
+<span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;phyloseq&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiome&quot;</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;MicrobiotaProcess&quot;</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;microsud/microbiomeutilities&quot;)</span></span>
+<span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;microbiomeutilities&quot;</span>) </span>
+<span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" tabindex="-1"></a><span class="co"># remotes::install_github(&quot;kasperskytte/ampvis2&quot;)</span></span>
+<span id="cb1-19"><a href="#cb1-19" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ampvis2&quot;</span>) </span></code></pre></div>
 </div>
 
 
