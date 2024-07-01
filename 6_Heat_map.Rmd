@@ -38,7 +38,7 @@ amp_heatmap(
   max_abundance = NULL,
   round = 1)+
   theme(axis.text.x = element_text(angle = 90, 
-                                   size=10, 
+                                   size=8, 
                                    vjust = 1),
         axis.text.y = element_text(size=8, 
                                    face="italic"),
