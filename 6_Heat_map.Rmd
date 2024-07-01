@@ -6,30 +6,40 @@ output: html_document
 knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
 ```
 
+To begin exploring the distribution of species across the data set, the use of heat maps provides an at-a-glance overview of distribution at different levels.
+
+Several packages can be used to create heat maps, including Phyloseq, Microbiome, MicrobiotaProcess, microeco and others. Here we'll use Ampvis2 to generate our graphs. 
 
 ```{r, message=FALSE,echo=TRUE}
 library("ampvis2")
 library("ggpubr")
 
-WorkingPS<-readRDS("Processed_data/WorkingPS.rds")
+WorkingPS_glom<-readRDS("Processed_data/WorkingPS_glom.rds")
 ```
 
-```{r, message=FALSE,echo=TRUE}
-WorkingPS_glom2_amp <- amp_load(WorkingPS)
+Sequencing technologies by week 
+---- 
 
+First we need to convert our phyloseq object into an Ampvis2 object, then generate the heat map with the weeks (times) in x and the sequencing technology as facets. 
+
+```{r, fig.align="center", echo = TRUE, fig.width = 14, fig.height= 6}
+# Convert the PS object to ampvis 
+WorkingPS_amp <- amp_load(WorkingPS_glom)
+
+# Plot the heat map
 amp_heatmap(
-  WorkingPS_glom2_amp,
+  WorkingPS_amp,
   group_by = "Week",
   facet_by = "seq_tech",
   normalise = TRUE,
   tax_aggregate = "Species",
   tax_add = NULL,
-  tax_show = 20,
+  tax_show = 15,
   showRemainingTaxa = FALSE,
   tax_class = NULL,
   tax_empty = "remove",
   plot_values = TRUE,
-  plot_values_size = 1,
+  plot_values_size = 3,
   plot_legendbreaks = NULL,
   plot_colorscale = "log10",
   plot_na = FALSE,
@@ -39,14 +49,158 @@ amp_heatmap(
   round = 1)+
   theme(axis.text.x = element_text(angle = 90, 
                                    size=8, 
-                                   vjust = 1),
-        axis.text.y = element_text(size=8, 
+                                   vjust = 0),
+        axis.text.y = element_text(size=12, 
                                    face="italic"),
         legend.position="bottom")
 ```
 
+Site by week 
+----
+
+Let's start again by putting sites in the place of sequencing technologies. 
+
+```{r, fig.align="center", echo = TRUE, fig.width = 16, fig.height= 8}
+# Plot the heat map
+amp_heatmap(
+  WorkingPS_amp,
+  group_by = "Week",
+  facet_by = "SiteID",
+  normalise = TRUE,
+  tax_aggregate = "Species",
+  tax_add = NULL,
+  tax_show = 15,
+  showRemainingTaxa = FALSE,
+  tax_class = NULL,
+  tax_empty = "remove",
+  plot_values = TRUE,
+  plot_values_size = 3,
+  plot_legendbreaks = NULL,
+  plot_colorscale = "log10",
+  plot_na = FALSE,
+  measure = mean,
+  min_abundance = 10,
+  max_abundance = NULL,
+  round = 1)+
+  theme(axis.text.x = element_text(angle = 90, 
+                                   size=8, 
+                                   vjust = 0),
+        axis.text.y = element_text(size=12, 
+                                   face="italic"),
+        legend.position="bottom")
+```
+
+_Peronospora_ by site 
+----
+
+That's a lot of information, so let's try to extract genera of interest to reduce the number of taxa to display.
+
+```{r, fig.align="center", echo = TRUE, fig.width = 14, fig.height= 6}
+PeronosporaPS<-subset_taxa(WorkingPS_glom, Genus=="Peronospora");PeronosporaPS
 
 
+Peronospora_amp <- amp_load(PeronosporaPS)
 
+amp_heatmap(
+  Peronospora_amp,
+  group_by = "Week",
+  facet_by = "SiteID",
+  normalise = TRUE,
+  tax_aggregate = "Species",
+  tax_add = NULL,
+  tax_show = 12,
+  showRemainingTaxa = FALSE,
+  tax_class = NULL,
+  tax_empty = "remove",
+  plot_values = TRUE,
+  plot_values_size = 2,
+  plot_legendbreaks = NULL,
+  plot_colorscale = "log10",
+  plot_na = FALSE,
+  measure = mean,
+  min_abundance = 10,
+  max_abundance = NULL,
+  round = 1)+
+  theme(axis.text.x = element_text(angle = 90, 
+                                   size=8, 
+                                   vjust = 0),
+        axis.text.y = element_text(size=12, 
+                                   face="italic"),
+        legend.position="bottom")
+```
+
+_Hyaloperonospora_ by site 
+----
+
+```{r, fig.align="center", echo = TRUE, fig.width = 14, fig.height= 6}
+HyaloperonosporaPS<-subset_taxa(WorkingPS_glom, Genus=="Hyaloperonospora");HyaloperonosporaPS
+
+
+HyaloperonosporaPS_amp <- amp_load(HyaloperonosporaPS)
+
+amp_heatmap(
+  HyaloperonosporaPS_amp,
+  group_by = "Week",
+  facet_by = "SiteID",
+  normalise = TRUE,
+  tax_aggregate = "Species",
+  tax_add = NULL,
+  tax_show = 12,
+  showRemainingTaxa = FALSE,
+  tax_class = NULL,
+  tax_empty = "remove",
+  plot_values = TRUE,
+  plot_values_size = 2,
+  plot_legendbreaks = NULL,
+  plot_colorscale = "log10",
+  plot_na = FALSE,
+  measure = mean,
+  min_abundance = 10,
+  max_abundance = NULL,
+  round = 1)+
+  theme(axis.text.x = element_text(angle = 90, 
+                                   size=8, 
+                                   vjust = 0),
+        axis.text.y = element_text(size=12, 
+                                   face="italic"),
+        legend.position="bottom")
+```
+
+_Phytophthora_ by site 
+----
+
+```{r, fig.align="center", echo = TRUE, fig.width = 14, fig.height= 6}
+PhytophthoraPS<-subset_taxa(WorkingPS_glom, Genus=="Phytophthora");PhytophthoraPS
+
+
+Phytophthora_amp <- amp_load(PhytophthoraPS)
+
+amp_heatmap(
+  Phytophthora_amp,
+  group_by = "Week",
+  facet_by = "SiteID",
+  normalise = TRUE,
+  tax_aggregate = "Species",
+  tax_add = NULL,
+  tax_show = 12,
+  showRemainingTaxa = FALSE,
+  tax_class = NULL,
+  tax_empty = "remove",
+  plot_values = TRUE,
+  plot_values_size = 2,
+  plot_legendbreaks = NULL,
+  plot_colorscale = "log10",
+  plot_na = FALSE,
+  measure = mean,
+  min_abundance = 10,
+  max_abundance = NULL,
+  round = 1)+
+  theme(axis.text.x = element_text(angle = 90, 
+                                   size=8, 
+                                   vjust = 0),
+        axis.text.y = element_text(size=12, 
+                                   face="italic"),
+        legend.position="bottom")
+```
 
 

@@ -36,28 +36,14 @@ WorkingPS<-readRDS("Processed_data/WorkingPS.rds")
 
 To compare our sequencing methods, we first need to use the taxonomy; we can't make the comparison at the ASV level since they are not constant across data sets. 
 
-The get_taxadf function in the MicrobiotaProcess package is used to aggregate data with the same taxonomy. The tax_glom function in the phyloseq package also performs this task. We will also have to rebuild the tree and our phyloseq object. 
+The tax_glom function from the phyloseq package is used to aggregate data with the same taxonomy.The get_taxadf function from the MicrobiotaProcess package also performs this task. 
 
 ```{r}
-WorkingPS_glom <- get_taxadf(WorkingPS, 
-                     taxlevel=7,
-                     type = "species")
+
+WorkingPS_glom <- tax_glom(WorkingPS, taxrank="Species")
 
 
-
-WorkingPS_glom_tree = rtree(ntaxa(WorkingPS_glom), 
-                    rooted=TRUE, 
-                    tip.label=taxa_names(WorkingPS_glom))
-
-
-WorkingPS_glom2 <- phyloseq(phyloseq::tax_table(WorkingPS_glom),
-                            phyloseq::otu_table(WorkingPS_glom),
-                            WorkingPS_glom_tree,
-                            phyloseq::sample_data(WorkingPS_glom))
-
-WorkingPS_glom2
-
-saveRDS(WorkingPS_glom2, file= "Processed_data/WorkingPS_glom2.rds")
+saveRDS(WorkingPS_glom, file= "Processed_data/WorkingPS_glom.rds")
 
 ```
 
@@ -71,17 +57,17 @@ Once again, we'll use the MicrobiotaProcess package to obtain and plot the resul
 * Note here that we have used the robust centered log ratio (rclr), a transformation method commonly used in compositional data analysis. 
 
 ```{r}
-WorkingPS_glom2_PCA <- get_pca(obj=WorkingPS_glom2, 
+WorkingPS_glom_PCA <- get_pca(obj=WorkingPS_glom, 
                                method=("rclr"))
 
 
-pcaplot1 <-ggordpoint(obj=WorkingPS_glom2_PCA, pc=c(1, 2), biplot=FALSE, speciesannot=FALSE,
+pcaplot1 <-ggordpoint(obj=WorkingPS_glom_PCA, pc=c(1, 2), biplot=FALSE, speciesannot=FALSE,
                       factorNames=c("seq_tech"), ellipse=TRUE)+
   scale_fill_manual(values=get_cols(6))+
     theme(plot.title = element_blank())+
   theme(legend.position="Null")
 
-pcaplot2 <- ggordpoint(obj=WorkingPS_glom2_PCA, pc=c(1, 3), biplot=FALSE, speciesannot=FALSE,
+pcaplot2 <- ggordpoint(obj=WorkingPS_glom_PCA, pc=c(1, 3), biplot=FALSE, speciesannot=FALSE,
                        factorNames=c("seq_tech"), ellipse=TRUE) +
     theme(plot.title = element_blank())+
   scale_fill_manual(values=get_cols(6))
@@ -103,7 +89,7 @@ Similarly, let's use the get_pcoa function (MicrobiotaProcess) to obtain and plo
 * Note here that we have used the wieghted unifrac distance method, which account for phylogenetic distance and abundance.  
 
 ```{r}
-pcoa_results <- get_pcoa(obj=WorkingPS_glom2, 
+pcoa_results <- get_pcoa(obj=WorkingPS_glom, 
                       distmethod="wunifrac", 
                       method="hellinger")
 
@@ -153,9 +139,9 @@ Like Venn diagrams, UpSet graphs are a data visualization method for quantifying
 We use the get_upset function from the MicrobiotaProcess package to create our figure. 
 
 ```{r}
-upsetda <- get_upset(obj=WorkingPS_glom2, factorNames="seq_tech")
+upsetda <- get_upset(obj=WorkingPS_glom, factorNames="seq_tech")
 
-upset(upsetda, sets=unique(as.vector(sample_data(WorkingPS_glom2)$seq_tech)), 
+upset(upsetda, sets=unique(as.vector(sample_data(WorkingPS_glom)$seq_tech)), 
       sets.bar.color = "#56B4E9",
       order.by = "freq", 
       empty.intersections = "on")
@@ -175,9 +161,9 @@ We'll be using the Vegan package for this analysis.
 
 ```{r}
 # get the distance matrix 
-dist_mat <- get_dist(WorkingPS_glom2, distmethod ="wunifrac", method="hellinger")
+dist_mat <- get_dist(WorkingPS_glom, distmethod ="wunifrac", method="hellinger")
 # Match the sample names 
-sampleda <- data.frame(sample_data(WorkingPS_glom2), check.names=FALSE)
+sampleda <- data.frame(sample_data(WorkingPS_glom), check.names=FALSE)
 sampleda <- sampleda[match(colnames(as.matrix(dist_mat)),rownames(sampleda)),,drop=FALSE]
 sampleda$seq_tech <- factor(sampleda$seq_tech)
 # compute the PERMANOVA 
@@ -193,7 +179,7 @@ So we can see that there are differences between the technologies, but what are 
 
 First between IonTorrent and Nanopore 
 ```{r}
-Ion_nano<- subset_samples(WorkingPS_glom2, seq_tech !="Illumina")
+Ion_nano<- subset_samples(WorkingPS_glom, seq_tech !="Illumina")
 
 dist_Ion_nano <- get_dist(Ion_nano, distmethod ="wunifrac", method="hellinger")
 sampleda_Ion_nano <- data.frame(sample_data(Ion_nano), check.names=FALSE)
@@ -214,7 +200,7 @@ pairwise_p["Ion_nano"] <- adonis_Ion_nano[["aov.tab"]][["Pr(>F)"]][1]
 Then between IonTorrent and Illumina 
 ```{r}
 ##### Adonis for diseased plantations vs forest  ####
-Ion_Illu<- subset_samples(WorkingPS_glom2, seq_tech !="Nanopore")
+Ion_Illu<- subset_samples(WorkingPS_glom, seq_tech !="Nanopore")
 
 dist_Ion_Illu <- get_dist(Ion_Illu, distmethod ="wunifrac", method="hellinger")
 sampleda_Ion_Illu <- data.frame(sample_data(Ion_Illu), check.names=FALSE)
@@ -232,7 +218,7 @@ pairwise_p["Ion_Illu"] <- adonis_Ion_Illu[["aov.tab"]][["Pr(>F)"]][1]
 And finally between NAnopore and Illumina 
 ```{r}
 ##### Adonis for diseased plantations vs forest  ####
-Nano_Illu<- subset_samples(WorkingPS_glom2, seq_tech !="IonTorrent")
+Nano_Illu<- subset_samples(WorkingPS_glom, seq_tech !="IonTorrent")
 
 dist_Nano_Illu <- get_dist(Nano_Illu, distmethod ="wunifrac", method="hellinger")
 sampleda_Nano_Illu <- data.frame(sample_data(Nano_Illu), check.names=FALSE)

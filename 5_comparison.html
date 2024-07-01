@@ -513,33 +513,13 @@ div.tocify {
 <p>To compare our sequencing methods, we first need to use the taxonomy;
 we can’t make the comparison at the ASV level since they are not
 constant across data sets.</p>
-<p>The get_taxadf function in the MicrobiotaProcess package is used to
-aggregate data with the same taxonomy. The tax_glom function in the
-phyloseq package also performs this task. We will also have to rebuild
-the tree and our phyloseq object.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>WorkingPS_glom <span class="ot">&lt;-</span> <span class="fu">get_taxadf</span>(WorkingPS, </span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>                     <span class="at">taxlevel=</span><span class="dv">7</span>,</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>                     <span class="at">type =</span> <span class="st">&quot;species&quot;</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>WorkingPS_glom_tree <span class="ot">=</span> <span class="fu">rtree</span>(<span class="fu">ntaxa</span>(WorkingPS_glom), </span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>                    <span class="at">rooted=</span><span class="cn">TRUE</span>, </span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>                    <span class="at">tip.label=</span><span class="fu">taxa_names</span>(WorkingPS_glom))</span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a></span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>WorkingPS_glom2 <span class="ot">&lt;-</span> <span class="fu">phyloseq</span>(phyloseq<span class="sc">::</span><span class="fu">tax_table</span>(WorkingPS_glom),</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>                            phyloseq<span class="sc">::</span><span class="fu">otu_table</span>(WorkingPS_glom),</span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>                            WorkingPS_glom_tree,</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>                            phyloseq<span class="sc">::</span><span class="fu">sample_data</span>(WorkingPS_glom))</span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>WorkingPS_glom2</span></code></pre></div>
-<pre><code>## phyloseq-class experiment-level object
-## otu_table()   OTU Table:         [ 98 taxa and 277 samples ]
-## sample_data() Sample Data:       [ 277 samples by 9 sample variables ]
-## tax_table()   Taxonomy Table:    [ 98 taxa by 7 taxonomic ranks ]
-## phy_tree()    Phylogenetic Tree: [ 98 tips and 97 internal nodes ]</code></pre>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">saveRDS</span>(WorkingPS_glom2, <span class="at">file=</span> <span class="st">&quot;Processed_data/WorkingPS_glom2.rds&quot;</span>)</span></code></pre></div>
+<p>The tax_glom function from the phyloseq package is used to aggregate
+data with the same taxonomy.The get_taxadf function from the
+MicrobiotaProcess package also performs this task.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>WorkingPS_glom <span class="ot">&lt;-</span> <span class="fu">tax_glom</span>(WorkingPS, <span class="at">taxrank=</span><span class="st">&quot;Species&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="fu">saveRDS</span>(WorkingPS_glom, <span class="at">file=</span> <span class="st">&quot;Processed_data/WorkingPS_glom.rds&quot;</span>)</span></code></pre></div>
 <div id="pca" class="section level2">
 <h2>PCA</h2>
 <p>We can then use our agglomerated taxonomy to compare our 3 sequencing
@@ -550,22 +530,22 @@ plot the results of our PCA.</p>
 <li>Note here that we have used the robust centered log ratio (rclr), a
 transformation method commonly used in compositional data analysis.</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>WorkingPS_glom2_PCA <span class="ot">&lt;-</span> <span class="fu">get_pca</span>(<span class="at">obj=</span>WorkingPS_glom2, </span>
-<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>                               <span class="at">method=</span>(<span class="st">&quot;rclr&quot;</span>))</span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>pcaplot1 <span class="ot">&lt;-</span><span class="fu">ggordpoint</span>(<span class="at">obj=</span>WorkingPS_glom2_PCA, <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">biplot=</span><span class="cn">FALSE</span>, <span class="at">speciesannot=</span><span class="cn">FALSE</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>                      <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), <span class="at">ellipse=</span><span class="cn">TRUE</span>)<span class="sc">+</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))<span class="sc">+</span></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;Null&quot;</span>)</span>
-<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a></span>
-<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>pcaplot2 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>WorkingPS_glom2_PCA, <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), <span class="at">biplot=</span><span class="cn">FALSE</span>, <span class="at">speciesannot=</span><span class="cn">FALSE</span>,</span>
-<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a>                       <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), <span class="at">ellipse=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
-<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
-<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))</span>
-<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a></span>
-<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a>pcaplot1 <span class="sc">|</span> pcaplot2</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>WorkingPS_glom_PCA <span class="ot">&lt;-</span> <span class="fu">get_pca</span>(<span class="at">obj=</span>WorkingPS_glom, </span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>                               <span class="at">method=</span>(<span class="st">&quot;rclr&quot;</span>))</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>pcaplot1 <span class="ot">&lt;-</span><span class="fu">ggordpoint</span>(<span class="at">obj=</span>WorkingPS_glom_PCA, <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">biplot=</span><span class="cn">FALSE</span>, <span class="at">speciesannot=</span><span class="cn">FALSE</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                      <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), <span class="at">ellipse=</span><span class="cn">TRUE</span>)<span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))<span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;Null&quot;</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>pcaplot2 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>WorkingPS_glom_PCA, <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>), <span class="at">biplot=</span><span class="cn">FALSE</span>, <span class="at">speciesannot=</span><span class="cn">FALSE</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>                       <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), <span class="at">ellipse=</span><span class="cn">TRUE</span>) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))</span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>pcaplot1 <span class="sc">|</span> pcaplot2</span></code></pre></div>
 <p><img src="5_comparison_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
 <p>We can see from the graph that the data are fairly clustered by
 technology, that nanopore and illumina data are fairly close together,
@@ -580,43 +560,43 @@ obtain and plot our PCoA results.</p>
 <li>Note here that we have used the wieghted unifrac distance method,
 which account for phylogenetic distance and abundance.</li>
 </ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>pcoa_results <span class="ot">&lt;-</span> <span class="fu">get_pcoa</span>(<span class="at">obj=</span>WorkingPS_glom2, </span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>                      <span class="at">distmethod=</span><span class="st">&quot;wunifrac&quot;</span>, </span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>                      <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>pcoaplot1 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>pcoa_results,</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>                          <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>                          <span class="at">biplot=</span><span class="cn">FALSE</span>,</span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>                          <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), </span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>                          <span class="at">ellipse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>                          <span class="at">poinsize =</span> <span class="fl">1.8</span>,</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>                          <span class="at">stroke =</span> <span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.box =</span> <span class="st">&quot;horizontal&quot;</span>, <span class="at">legend.position =</span> <span class="st">&quot;Null&quot;</span>)<span class="sc">+</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))<span class="sc">+</span></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>))<span class="sc">+</span></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span> </span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>                             <span class="at">keyheight =</span> <span class="fl">0.7</span>,</span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>                             <span class="at">ncol =</span> <span class="dv">1</span>))</span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a></span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>pcoaplot2 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>pcoa_results,</span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>                          <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),</span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>                          <span class="at">biplot=</span><span class="cn">FALSE</span>,</span>
-<span id="cb6-24"><a href="#cb6-24" tabindex="-1"></a>                          <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), </span>
-<span id="cb6-25"><a href="#cb6-25" tabindex="-1"></a>                          <span class="at">ellipse=</span><span class="cn">TRUE</span>,</span>
-<span id="cb6-26"><a href="#cb6-26" tabindex="-1"></a>                          <span class="at">poinsize =</span> <span class="fl">1.8</span>,</span>
-<span id="cb6-27"><a href="#cb6-27" tabindex="-1"></a>                          <span class="at">stroke =</span> <span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb6-28"><a href="#cb6-28" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.box =</span> <span class="st">&quot;horizontal&quot;</span>, <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)<span class="sc">+</span></span>
-<span id="cb6-29"><a href="#cb6-29" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))<span class="sc">+</span></span>
-<span id="cb6-30"><a href="#cb6-30" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>))<span class="sc">+</span></span>
-<span id="cb6-31"><a href="#cb6-31" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span> </span>
-<span id="cb6-32"><a href="#cb6-32" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
-<span id="cb6-33"><a href="#cb6-33" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.direction =</span> <span class="st">&quot;vertical&quot;</span>, <span class="at">legend.box =</span> <span class="st">&quot;vertical&quot;</span>)<span class="sc">+</span></span>
-<span id="cb6-34"><a href="#cb6-34" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
-<span id="cb6-35"><a href="#cb6-35" tabindex="-1"></a>                             <span class="at">keyheight =</span> <span class="fl">0.7</span>,</span>
-<span id="cb6-36"><a href="#cb6-36" tabindex="-1"></a>                             <span class="at">ncol =</span> <span class="dv">1</span>))</span>
-<span id="cb6-37"><a href="#cb6-37" tabindex="-1"></a>pcoaplot1 <span class="sc">|</span> pcoaplot2</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>pcoa_results <span class="ot">&lt;-</span> <span class="fu">get_pcoa</span>(<span class="at">obj=</span>WorkingPS_glom, </span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                      <span class="at">distmethod=</span><span class="st">&quot;wunifrac&quot;</span>, </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                      <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>pcoaplot1 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>pcoa_results,</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>                          <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>                          <span class="at">biplot=</span><span class="cn">FALSE</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>                          <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), </span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>                          <span class="at">ellipse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>                          <span class="at">poinsize =</span> <span class="fl">1.8</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>                          <span class="at">stroke =</span> <span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.box =</span> <span class="st">&quot;horizontal&quot;</span>, <span class="at">legend.position =</span> <span class="st">&quot;Null&quot;</span>)<span class="sc">+</span></span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))<span class="sc">+</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>))<span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span> </span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>                             <span class="at">keyheight =</span> <span class="fl">0.7</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>                             <span class="at">ncol =</span> <span class="dv">1</span>))</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>pcoaplot2 <span class="ot">&lt;-</span> <span class="fu">ggordpoint</span>(<span class="at">obj=</span>pcoa_results,</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>                          <span class="at">pc=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>),</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>                          <span class="at">biplot=</span><span class="cn">FALSE</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>                          <span class="at">factorNames=</span><span class="fu">c</span>(<span class="st">&quot;seq_tech&quot;</span>), </span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>                          <span class="at">ellipse=</span><span class="cn">TRUE</span>,</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>                          <span class="at">poinsize =</span> <span class="fl">1.8</span>,</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>                          <span class="at">stroke =</span> <span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.box =</span> <span class="st">&quot;horizontal&quot;</span>, <span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)<span class="sc">+</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">6</span>))<span class="sc">+</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>))<span class="sc">+</span></span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span> </span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.direction =</span> <span class="st">&quot;vertical&quot;</span>, <span class="at">legend.box =</span> <span class="st">&quot;vertical&quot;</span>)<span class="sc">+</span></span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill =</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1"></a>                             <span class="at">keyheight =</span> <span class="fl">0.7</span>,</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1"></a>                             <span class="at">ncol =</span> <span class="dv">1</span>))</span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1"></a>pcoaplot1 <span class="sc">|</span> pcoaplot2</span></code></pre></div>
 <p><img src="5_comparison_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>Once again, we can see that the data are grouped by technology, and
 that Illumina’s data seem closer to Nanopore’s than IonTorrent’s.</p>
@@ -628,12 +608,12 @@ quantifying elements shared between and unique to given elements of
 comparison.</p>
 <p>We use the get_upset function from the MicrobiotaProcess package to
 create our figure.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>upsetda <span class="ot">&lt;-</span> <span class="fu">get_upset</span>(<span class="at">obj=</span>WorkingPS_glom2, <span class="at">factorNames=</span><span class="st">&quot;seq_tech&quot;</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">upset</span>(upsetda, <span class="at">sets=</span><span class="fu">unique</span>(<span class="fu">as.vector</span>(<span class="fu">sample_data</span>(WorkingPS_glom2)<span class="sc">$</span>seq_tech)), </span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>      <span class="at">sets.bar.color =</span> <span class="st">&quot;#56B4E9&quot;</span>,</span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>      <span class="at">order.by =</span> <span class="st">&quot;freq&quot;</span>, </span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>      <span class="at">empty.intersections =</span> <span class="st">&quot;on&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>upsetda <span class="ot">&lt;-</span> <span class="fu">get_upset</span>(<span class="at">obj=</span>WorkingPS_glom, <span class="at">factorNames=</span><span class="st">&quot;seq_tech&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">upset</span>(upsetda, <span class="at">sets=</span><span class="fu">unique</span>(<span class="fu">as.vector</span>(<span class="fu">sample_data</span>(WorkingPS_glom)<span class="sc">$</span>seq_tech)), </span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>      <span class="at">sets.bar.color =</span> <span class="st">&quot;#56B4E9&quot;</span>,</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>      <span class="at">order.by =</span> <span class="st">&quot;freq&quot;</span>, </span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>      <span class="at">empty.intersections =</span> <span class="st">&quot;on&quot;</span>)</span></code></pre></div>
 <p><img src="5_comparison_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p>We can see from this graph that 22 taxa are shared by the 3
 technologies, while 35 taxa are unique to IonTorrent and 19 taxa to
@@ -648,83 +628,83 @@ difference between the technologies?</p>
 to determine whether there is such a difference between the
 technologies.</p>
 <p>We’ll be using the Vegan package for this analysis.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="co"># get the distance matrix </span></span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(WorkingPS_glom2, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># Match the sample names </span></span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(WorkingPS_glom2), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> sampleda[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_mat)),<span class="fu">rownames</span>(sampleda)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>sampleda<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda<span class="sc">$</span>seq_tech)</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="co"># compute the PERMANOVA </span></span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>adonis_res <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_mat <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, <span class="at">data=</span>sampleda, <span class="at">permutation=</span><span class="dv">999</span>)</span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># print the results</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a><span class="fu">data.frame</span>(adonis_res<span class="sc">$</span>aov.tab)</span></code></pre></div>
-<pre><code>##                Df SumsOfSqs    MeanSqs  F.Model         R2 Pr..F.
-## seq_tech        2  4.935230 2.46761499 34.13914 0.12803172  0.001
-## Week           15 14.269119 0.95127459 13.16076 0.37017523  0.001
-## seq_tech:Week  30  2.790209 0.09300696  1.28674 0.07238472  0.013
-## Residuals     229 16.552373 0.07228110       NA 0.42940832     NA
-## Total         276 38.546930         NA       NA 1.00000000     NA</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># get the distance matrix </span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(WorkingPS_glom, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># Match the sample names </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(WorkingPS_glom), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> sampleda[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_mat)),<span class="fu">rownames</span>(sampleda)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>sampleda<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda<span class="sc">$</span>seq_tech)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co"># compute the PERMANOVA </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>adonis_res <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_mat <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, <span class="at">data=</span>sampleda, <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># print the results</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">data.frame</span>(adonis_res<span class="sc">$</span>aov.tab)</span></code></pre></div>
+<pre><code>##                Df SumsOfSqs    MeanSqs   F.Model         R2 Pr..F.
+## seq_tech        2  8.849188 4.42459423 48.041920 0.17077948  0.001
+## Week           15 18.230060 1.21533733 13.196044 0.35181985  0.001
+## seq_tech:Week  30  3.646632 0.12155439  1.319829 0.07037593  0.004
+## Residuals     229 21.090583 0.09209861        NA 0.40702475     NA
+## Total         276 51.816463         NA        NA 1.00000000     NA</code></pre>
 <p>So we can see that there are differences between the technologies,
 but what are they? Let’s try a pairwise comparison.</p>
 <p>First between IonTorrent and Nanopore</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>Ion_nano<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom2, seq_tech <span class="sc">!=</span><span class="st">&quot;Illumina&quot;</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>dist_Ion_nano <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Ion_nano, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>sampleda_Ion_nano <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Ion_nano), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>sampleda_Ion_nano <span class="ot">&lt;-</span> sampleda_Ion_nano[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Ion_nano)),<span class="fu">rownames</span>(sampleda_Ion_nano)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>sampleda_Ion_nano<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Ion_nano<span class="sc">$</span>seq_tech)</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>adonis_Ion_nano <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Ion_nano <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
-<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Ion_nano, </span>
-<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a></span>
-<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co"># create an object of type numeric to store the PERMANOVA results </span></span>
-<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>pairwise_p<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
-<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co"># and store the results for each comparison</span></span>
-<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Ion_nano&quot;</span>] <span class="ot">&lt;-</span> adonis_Ion_nano[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>Ion_nano<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom, seq_tech <span class="sc">!=</span><span class="st">&quot;Illumina&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>dist_Ion_nano <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Ion_nano, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>sampleda_Ion_nano <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Ion_nano), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>sampleda_Ion_nano <span class="ot">&lt;-</span> sampleda_Ion_nano[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Ion_nano)),<span class="fu">rownames</span>(sampleda_Ion_nano)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>sampleda_Ion_nano<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Ion_nano<span class="sc">$</span>seq_tech)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>adonis_Ion_nano <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Ion_nano <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Ion_nano, </span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co"># create an object of type numeric to store the PERMANOVA results </span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>pairwise_p<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co"># and store the results for each comparison</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Ion_nano&quot;</span>] <span class="ot">&lt;-</span> adonis_Ion_nano[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
 <p>Then between IonTorrent and Illumina</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="do">##### Adonis for diseased plantations vs forest  ####</span></span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>Ion_Illu<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom2, seq_tech <span class="sc">!=</span><span class="st">&quot;Nanopore&quot;</span>)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>dist_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Ion_Illu, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a>sampleda_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Ion_Illu), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
-<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a>sampleda_Ion_Illu <span class="ot">&lt;-</span> sampleda_Ion_Illu[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Ion_Illu)),<span class="fu">rownames</span>(sampleda_Ion_Illu)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a>sampleda_Ion_Illu<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Ion_Illu<span class="sc">$</span>seq_tech)</span>
-<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a></span>
-<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
-<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a>adonis_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Ion_Illu <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
-<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Ion_Illu, </span>
-<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
-<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a></span>
-<span id="cb11-14"><a href="#cb11-14" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Ion_Illu&quot;</span>] <span class="ot">&lt;-</span> adonis_Ion_Illu[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">##### Adonis for diseased plantations vs forest  ####</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>Ion_Illu<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom, seq_tech <span class="sc">!=</span><span class="st">&quot;Nanopore&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>dist_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Ion_Illu, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>sampleda_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Ion_Illu), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>sampleda_Ion_Illu <span class="ot">&lt;-</span> sampleda_Ion_Illu[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Ion_Illu)),<span class="fu">rownames</span>(sampleda_Ion_Illu)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>sampleda_Ion_Illu<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Ion_Illu<span class="sc">$</span>seq_tech)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>adonis_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Ion_Illu <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Ion_Illu, </span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Ion_Illu&quot;</span>] <span class="ot">&lt;-</span> adonis_Ion_Illu[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
 <p>And finally between NAnopore and Illumina</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="do">##### Adonis for diseased plantations vs forest  ####</span></span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>Nano_Illu<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom2, seq_tech <span class="sc">!=</span><span class="st">&quot;IonTorrent&quot;</span>)</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a></span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>dist_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Nano_Illu, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>sampleda_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Nano_Illu), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>sampleda_Nano_Illu <span class="ot">&lt;-</span> sampleda_Nano_Illu[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Nano_Illu)),<span class="fu">rownames</span>(sampleda_Nano_Illu)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>sampleda_Nano_Illu<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Nano_Illu<span class="sc">$</span>seq_tech)</span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>adonis_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Nano_Illu <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Nano_Illu, </span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a></span>
-<span id="cb12-15"><a href="#cb12-15" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Nano_Illu&quot;</span>] <span class="ot">&lt;-</span> adonis_Nano_Illu[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="do">##### Adonis for diseased plantations vs forest  ####</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>Nano_Illu<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom, seq_tech <span class="sc">!=</span><span class="st">&quot;IonTorrent&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>dist_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Nano_Illu, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>sampleda_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Nano_Illu), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>sampleda_Nano_Illu <span class="ot">&lt;-</span> sampleda_Nano_Illu[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Nano_Illu)),<span class="fu">rownames</span>(sampleda_Nano_Illu)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>sampleda_Nano_Illu<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Nano_Illu<span class="sc">$</span>seq_tech)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>adonis_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Nano_Illu <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Nano_Illu, </span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Nano_Illu&quot;</span>] <span class="ot">&lt;-</span> adonis_Nano_Illu[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
 <p>When processing pairwise data, it is important to correct the
 significance level for multiple comparisons, such as the Bonferroni
 correction. So lets apply the Bonferroni correction to our Permanova
 results.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">p.adjust</span>(pairwise_p, <span class="at">method=</span><span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">p.adjust</span>(pairwise_p, <span class="at">method=</span><span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
 <pre><code>##  Ion_nano  Ion_Illu Nano_Illu 
 ##     0.003     0.003     0.003</code></pre>
 <p>Given these results, we can conclude that the three methods are
 different from one another.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">detach</span>(package<span class="sc">:</span>MicrobiotaProcess)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">detach</span>(package<span class="sc">:</span>MicrobiotaProcess)</span></code></pre></div>
 </div>
 
 
