@@ -117,7 +117,7 @@ predefined_species = c("Albugo candida",
                        "Peronospora aparines",
                        "Peronospora erucastri",
                        "Plasmopara viticola",
-                       "Pseudoperonospora cubensis",
+                       "Pseudoperonospora cubensis"
 )
 ```
 

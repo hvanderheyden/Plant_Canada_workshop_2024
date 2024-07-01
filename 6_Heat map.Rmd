@@ -11,12 +11,11 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 library("ampvis2")
 library("ggpubr")
 
-WorkingPS_glom2<-readRDS("Processed_data/WorkingPS_glom2.rds")
-
+WorkingPS<-readRDS("Processed_data/WorkingPS.rds")
 ```
 
 ```{r, message=FALSE,echo=TRUE}
-WorkingPS_glom2_amp <- amp_load(WorkingPS_glom2)
+WorkingPS_glom2_amp <- amp_load(WorkingPS)
 
 amp_heatmap(
   WorkingPS_glom2_amp,
@@ -28,9 +27,9 @@ amp_heatmap(
   tax_show = 20,
   showRemainingTaxa = FALSE,
   tax_class = NULL,
-  tax_empty = "best",
+  tax_empty = "remove",
   plot_values = TRUE,
-  plot_values_size = 2,
+  plot_values_size = 1,
   plot_legendbreaks = NULL,
   plot_colorscale = "log10",
   plot_na = FALSE,
@@ -43,7 +42,7 @@ amp_heatmap(
                                    vjust = 1),
         axis.text.y = element_text(size=8, 
                                    face="italic"),
-        legend.position="right")
+        legend.position="bottom")
 ```
 
 

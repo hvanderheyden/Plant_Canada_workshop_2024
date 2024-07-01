@@ -432,7 +432,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part II -- 
+    Part II -- Comparing sequencing techniques
      
     <span class="caret"></span>
   </a>
@@ -447,19 +447,19 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part III -- 
+    Part III -- Anlysing diversity
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1_import_data.html">Importing data into R</a>
+      <a href="6_Heat_map.html">Heat maps</a>
     </li>
     <li>
-      <a href="2_preprocessing.html">Data cleaning</a>
+      <a href="7_alpha.html">alpha diversity</a>
     </li>
     <li>
-      <a href="3_summaries.html">Summaries</a>
+      <a href="8_time_series.html">Temporal distribution</a>
     </li>
   </ul>
 </li>
@@ -470,6 +470,24 @@ div.tocify {
     <span class="fa fa-github"></span>
      
   </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Supplementary material
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_import_data.html">Heat maps</a>
+    </li>
+    <li>
+      <a href="2_preprocessing.html">alpha diversity</a>
+    </li>
+    <li>
+      <a href="3_summaries.html">Temporal distribution</a>
+    </li>
+  </ul>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -667,7 +685,10 @@ of the species of our taxonomy tables with species clusters.</p>
 <span id="cb5-126"><a href="#cb5-126" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;Peronospora rumicis&quot;</span>, <span class="st">&quot;Peronospora effusa cluster&quot;</span>))<span class="sc">%&gt;%</span></span>
 <span id="cb5-127"><a href="#cb5-127" tabindex="-1"></a>  <span class="co"># Peronospora boni-henrici cluster</span></span>
 <span id="cb5-128"><a href="#cb5-128" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;Peronospora boni-henrici&quot;</span>, <span class="st">&quot;Peronospora boni-henrici cluster&quot;</span>))<span class="sc">%&gt;%</span></span>
-<span id="cb5-129"><a href="#cb5-129" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;Peronospora minor&quot;</span>, <span class="st">&quot;Peronospora boni-henrici cluster&quot;</span>))</span></code></pre></div>
+<span id="cb5-129"><a href="#cb5-129" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;Peronospora minor&quot;</span>, <span class="st">&quot;Peronospora boni-henrici cluster&quot;</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb5-130"><a href="#cb5-130" tabindex="-1"></a>    <span class="co"># Bremia lactucae cluster</span></span>
+<span id="cb5-131"><a href="#cb5-131" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;Bremia lactucae&quot;</span>, <span class="st">&quot;Bremia lactucae cluster&quot;</span>))<span class="sc">%&gt;%</span></span>
+<span id="cb5-132"><a href="#cb5-132" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;Bremia elliptica&quot;</span>, <span class="st">&quot;Bremia lactucae cluster&quot;</span>))</span></code></pre></div>
 </div>
 <div id="replace-taxonomy" class="section level2">
 <h2>Replace taxonomy</h2>

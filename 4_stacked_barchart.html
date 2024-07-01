@@ -432,7 +432,7 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part II -- 
+    Part II -- Comparing sequencing techniques
      
     <span class="caret"></span>
   </a>
@@ -447,19 +447,19 @@ div.tocify {
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part III -- 
+    Part III -- Anlysing diversity
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1_import_data.html">Importing data into R</a>
+      <a href="6_Heat_map.html">Heat maps</a>
     </li>
     <li>
-      <a href="2_preprocessing.html">Data cleaning</a>
+      <a href="7_alpha.html">alpha diversity</a>
     </li>
     <li>
-      <a href="3_summaries.html">Summaries</a>
+      <a href="8_time_series.html">Temporal distribution</a>
     </li>
   </ul>
 </li>
@@ -470,6 +470,24 @@ div.tocify {
     <span class="fa fa-github"></span>
      
   </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+    Supplementary material
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="1_import_data.html">Heat maps</a>
+    </li>
+    <li>
+      <a href="2_preprocessing.html">alpha diversity</a>
+    </li>
+    <li>
+      <a href="3_summaries.html">Temporal distribution</a>
+    </li>
+  </ul>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -525,6 +543,8 @@ will be helpful later when plotting our bar chart.</p>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>            <span class="st">&quot;#ffff99&quot;</span>, <span class="st">&quot;#b15928&quot;</span>)</span>
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a>  <span class="fu">colorRampPalette</span>(col2)(n)</span>
 <span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a>}</span></code></pre></div>
+<div id="summarize-the-data" class="section level2">
+<h2>Summarize the data</h2>
 <p>The phyloseq psmelt function converts our phyloseq object into a data
 frame.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>WorkingPS_melt <span class="ot">&lt;-</span> <span class="fu">psmelt</span>(WorkingPS)</span>
@@ -558,6 +578,9 @@ frame.</p>
 ## 246764 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
 ## 246613 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
 ## 61983  Peronosporales Peronosporaceae Peronospora Peronospora manshurica</code></pre>
+<p>Using the dplyr package (included in the tidyverse package) we create
+a tibble to summarize abundance and use the pivot_longer function to
+transpose the taxonomy from column to row.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>genus_abundance <span class="ot">&lt;-</span> WorkingPS_melt <span class="sc">%&gt;%</span></span>
 <span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week) <span class="sc">%&gt;%</span></span>
 <span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_abund =</span> Abundance <span class="sc">/</span> <span class="fu">sum</span>(Abundance)) <span class="sc">%&gt;%</span></span>
@@ -565,18 +588,31 @@ frame.</p>
 <span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Abundance) <span class="sc">%&gt;%</span></span>
 <span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">&quot;Kingdom&quot;</span>, <span class="st">&quot;Phylum&quot;</span>, <span class="st">&quot;Class&quot;</span>, <span class="st">&quot;Order&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Genus&quot;</span>, <span class="st">&quot;Species&quot;</span>),</span>
 <span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;level&quot;</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;taxon&quot;</span>);<span class="fu">head</span>(genus_abundance)</span></code></pre></div>
-<pre><code>## # A tibble: 6 × 14
-##   OTU         Sample InputFileName Samplename seq_tech SiteID Region  Year Week 
-##   &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;         &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;chr&gt;
-## 1 2949b355cd… IonT_… B82_9_L001_R… QC06_21_W… IonTorr… QC06   Sherr…  2021 WK33 
-## 2 2949b355cd… IonT_… B82_9_L001_R… QC06_21_W… IonTorr… QC06   Sherr…  2021 WK33 
-## 3 2949b355cd… IonT_… B82_9_L001_R… QC06_21_W… IonTorr… QC06   Sherr…  2021 WK33 
-## 4 2949b355cd… IonT_… B82_9_L001_R… QC06_21_W… IonTorr… QC06   Sherr…  2021 WK33 
-## 5 2949b355cd… IonT_… B82_9_L001_R… QC06_21_W… IonTorr… QC06   Sherr…  2021 WK33 
-## 6 2949b355cd… IonT_… B82_9_L001_R… QC06_21_W… IonTorr… QC06   Sherr…  2021 WK33 
-## # ℹ 5 more variables: X_coord &lt;dbl&gt;, Y_coord &lt;dbl&gt;, rel_abund &lt;dbl&gt;,
-## #   level &lt;chr&gt;, taxon &lt;chr&gt;</code></pre>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;taxon&quot;</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">str</span>(genus_abundance)</span></code></pre></div>
+<pre><code>## tibble [2,891,049 × 14] (S3: tbl_df/tbl/data.frame)
+##  $ OTU          : chr [1:2891049] &quot;2949b355cd00039476d9a808f2e76b8e&quot; &quot;2949b355cd00039476d9a808f2e76b8e&quot; &quot;2949b355cd00039476d9a808f2e76b8e&quot; &quot;2949b355cd00039476d9a808f2e76b8e&quot; ...
+##  $ Sample       : chr [1:2891049] &quot;IonT_QC0621WK33&quot; &quot;IonT_QC0621WK33&quot; &quot;IonT_QC0621WK33&quot; &quot;IonT_QC0621WK33&quot; ...
+##  $ InputFileName: chr [1:2891049] &quot;B82_9_L001_R1_001.fastq.gz&quot; &quot;B82_9_L001_R1_001.fastq.gz&quot; &quot;B82_9_L001_R1_001.fastq.gz&quot; &quot;B82_9_L001_R1_001.fastq.gz&quot; ...
+##  $ Samplename   : chr [1:2891049] &quot;QC06_21_WK33&quot; &quot;QC06_21_WK33&quot; &quot;QC06_21_WK33&quot; &quot;QC06_21_WK33&quot; ...
+##  $ seq_tech     : chr [1:2891049] &quot;IonTorrent&quot; &quot;IonTorrent&quot; &quot;IonTorrent&quot; &quot;IonTorrent&quot; ...
+##  $ SiteID       : chr [1:2891049] &quot;QC06&quot; &quot;QC06&quot; &quot;QC06&quot; &quot;QC06&quot; ...
+##  $ Region       : chr [1:2891049] &quot;Sherrington&quot; &quot;Sherrington&quot; &quot;Sherrington&quot; &quot;Sherrington&quot; ...
+##  $ Year         : int [1:2891049] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 ...
+##  $ Week         : chr [1:2891049] &quot;WK33&quot; &quot;WK33&quot; &quot;WK33&quot; &quot;WK33&quot; ...
+##  $ X_coord      : num [1:2891049] 45.1 45.1 45.1 45.1 45.1 ...
+##  $ Y_coord      : num [1:2891049] -73.5 -73.5 -73.5 -73.5 -73.5 ...
+##  $ rel_abund    : num [1:2891049] 0.192 0.192 0.192 0.192 0.192 ...
+##  $ level        : chr [1:2891049] &quot;Kingdom&quot; &quot;Phylum&quot; &quot;Class&quot; &quot;Order&quot; ...
+##  $ taxon        : chr [1:2891049] &quot;Eukaryota&quot; &quot;Oomycota&quot; &quot;Stramenopiles&quot; &quot;Peronosporales&quot; ...</code></pre>
+</div>
+<div id="genus-bar-chart" class="section level2">
+<h2>Genus bar chart</h2>
+<p>We then summarize the data, by sequencing technology and by week, at
+the genus level and input them into ggplot2 to obtain our bar chart with
+weeks on the x-axis and relative abundance on the y-axis, with facets
+for sequencing technologies.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>genus_abundance <span class="sc">%&gt;%</span></span>
 <span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>  <span class="fu">filter</span>(level<span class="sc">==</span><span class="st">&quot;Genus&quot;</span>) <span class="sc">%&gt;%</span> </span>
 <span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week, taxon) <span class="sc">%&gt;%</span> </span>
@@ -597,35 +633,40 @@ frame.</p>
 <span id="cb11-18"><a href="#cb11-18" tabindex="-1"></a>                                   <span class="at">vjust =</span> <span class="fl">0.5</span>, </span>
 <span id="cb11-19"><a href="#cb11-19" tabindex="-1"></a>                                   <span class="at">hjust=</span><span class="fl">0.4</span>))</span></code></pre></div>
 <p><img src="4_stacked_barchart_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>predefined_species <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Peronospora manshurica&quot;</span>,</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                     <span class="st">&quot;Peronospora variabilis&quot;</span>,</span>
-<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                      <span class="st">&quot;Bremia elliptica&quot;</span>,</span>
-<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>                      <span class="st">&quot;Hyaloperonospora nesliae&quot;</span>,</span>
-<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>                      <span class="st">&quot;Peronospora destructor&quot;</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>                      <span class="st">&quot;Hyaloperonospora camelinae&quot;</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>                      <span class="st">&quot;Peronospora aparines&quot;</span>,</span>
-<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>                      <span class="st">&quot;Peronospora erucastri&quot;</span>,</span>
-<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>                      <span class="st">&quot;Albugo candida&quot;</span>,</span>
-<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>                      <span class="st">&quot;Plasmopara viticola&quot;</span>,</span>
-<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>                      <span class="st">&quot;Bremia lactucae&quot;</span>,</span>
-<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>                      <span class="st">&quot;Hyaloperonospora brassicae&quot;</span>,</span>
-<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>                      <span class="st">&quot;Pseudoperonospora cubensis&quot;</span></span>
-<span id="cb12-14"><a href="#cb12-14" tabindex="-1"></a>);predefined_species</span></code></pre></div>
-<pre><code>##  [1] &quot;Peronospora manshurica&quot;     &quot;Peronospora variabilis&quot;    
-##  [3] &quot;Bremia elliptica&quot;           &quot;Hyaloperonospora nesliae&quot;  
-##  [5] &quot;Peronospora destructor&quot;     &quot;Hyaloperonospora camelinae&quot;
-##  [7] &quot;Peronospora aparines&quot;       &quot;Peronospora erucastri&quot;     
-##  [9] &quot;Albugo candida&quot;             &quot;Plasmopara viticola&quot;       
-## [11] &quot;Bremia lactucae&quot;            &quot;Hyaloperonospora brassicae&quot;
-## [13] &quot;Pseudoperonospora cubensis&quot;</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a>WorkingPS_melt2 <span class="ot">&lt;-</span>  WorkingPS_melt <span class="sc">%&gt;%</span></span>
-<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species =</span> <span class="fu">case_when</span>(</span>
-<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a>    Species <span class="sc">%in%</span> </span>
-<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a>      predefined_species <span class="sc">~</span> Species,  <span class="co"># Keep valid species as is</span></span>
-<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Other&quot;</span>  <span class="co"># Replace other species with &quot;other&quot;</span></span>
-<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a>  ))</span>
-<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a></span>
-<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="fu">head</span>(WorkingPS_melt2)</span></code></pre></div>
+</div>
+<div id="species-bar-chart" class="section level2">
+<h2>Species bar chart</h2>
+<p>The first bar chart shows that the profiles are fairly similar
+between the three technologies, although some genera appear to be over-
+or under-represented with certain technologies. We would now like to
+examine the distribution of species as a function of time and sequencing
+technology. However, with over 80 species, it is difficult to get a
+clear representation of species distribution with a stacked bar chart,
+and we need to reduce the number of species to be plotted.</p>
+<p>To do that let’s start by creating a list of predefined species that
+we want to be plotted in our bar chart:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>predefined_species <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Albugo candida&quot;</span>,</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                       <span class="st">&quot;Bremia lactucae cluster&quot;</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                       <span class="st">&quot;Hyaloperonospora nesliae&quot;</span>,</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a>                       <span class="st">&quot;Hyaloperonospora brassicae&quot;</span>,</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a>                       <span class="st">&quot;Hyaloperonospora camelinae&quot;</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a>                       <span class="st">&quot;Peronospora manshurica&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a>                       <span class="st">&quot;Peronospora variabilis&quot;</span>,</span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a>                       <span class="st">&quot;Peronospora destructor&quot;</span>,                       </span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a>                       <span class="st">&quot;Peronospora aparines&quot;</span>,</span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a>                       <span class="st">&quot;Peronospora erucastri&quot;</span>,</span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a>                       <span class="st">&quot;Plasmopara viticola&quot;</span>,</span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a>                       <span class="st">&quot;Pseudoperonospora cubensis&quot;</span></span>
+<span id="cb12-13"><a href="#cb12-13" tabindex="-1"></a>)</span></code></pre></div>
+<p>And replace anything not in our list with “Other”:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a>WorkingPS_melt2 <span class="ot">&lt;-</span>  WorkingPS_melt <span class="sc">%&gt;%</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Species =</span> <span class="fu">case_when</span>(</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a>    Species <span class="sc">%in%</span> </span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a>      predefined_species <span class="sc">~</span> Species,  <span class="co"># Keep valid species as is</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">&quot;Other&quot;</span>  <span class="co"># Replace other species with &quot;other&quot;</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a>  ))</span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="fu">head</span>(WorkingPS_melt2)</span></code></pre></div>
 <pre><code>##                                     OTU          Sample Abundance
 ## 61879  2949b355cd00039476d9a808f2e76b8e IonT_QC0621WK33    390300
 ## 61811  2949b355cd00039476d9a808f2e76b8e IonT_QC0421WK33    389752
@@ -654,49 +695,55 @@ frame.</p>
 ## 246764 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
 ## 246613 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
 ## 61983  Peronosporales Peronosporaceae Peronospora Peronospora manshurica</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>genus_abundance2 <span class="ot">&lt;-</span> WorkingPS_melt2 <span class="sc">%&gt;%</span></span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week) <span class="sc">%&gt;%</span></span>
-<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_abund =</span> Abundance <span class="sc">/</span> <span class="fu">sum</span>(Abundance)) <span class="sc">%&gt;%</span></span>
-<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Abundance) <span class="sc">%&gt;%</span></span>
-<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">&quot;Kingdom&quot;</span>, <span class="st">&quot;Phylum&quot;</span>, <span class="st">&quot;Class&quot;</span>, <span class="st">&quot;Order&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Genus&quot;</span>, <span class="st">&quot;Species&quot;</span>),</span>
-<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;level&quot;</span>,</span>
-<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;taxon&quot;</span>)<span class="sc">%&gt;%</span></span>
-<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">taxon =</span> <span class="fu">factor</span>(taxon,</span>
-<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>                       <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;Peronospora manshurica&quot;</span>,</span>
-<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>                                <span class="st">&quot;Peronospora variabilis&quot;</span>,</span>
-<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>                                <span class="st">&quot;Peronospora destructor&quot;</span>,                       </span>
-<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>                                <span class="st">&quot;Peronospora aparines&quot;</span>,</span>
-<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>                                <span class="st">&quot;Peronospora erucastri&quot;</span>,</span>
-<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>                                <span class="st">&quot;Bremia elliptica&quot;</span>,</span>
-<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>                                <span class="st">&quot;Bremia lactucae&quot;</span>,</span>
-<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>                                <span class="st">&quot;Albugo candida&quot;</span>,</span>
-<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>                                <span class="st">&quot;Hyaloperonospora nesliae&quot;</span>,</span>
-<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>                                <span class="st">&quot;Hyaloperonospora brassicae&quot;</span>,</span>
-<span id="cb16-20"><a href="#cb16-20" tabindex="-1"></a>                                <span class="st">&quot;Hyaloperonospora camelinae&quot;</span>,</span>
-<span id="cb16-21"><a href="#cb16-21" tabindex="-1"></a>                                <span class="st">&quot;Plasmopara viticola&quot;</span>,</span>
-<span id="cb16-22"><a href="#cb16-22" tabindex="-1"></a>                                <span class="st">&quot;Pseudoperonospora cubensis&quot;</span>,</span>
-<span id="cb16-23"><a href="#cb16-23" tabindex="-1"></a>                                <span class="st">&quot;Other&quot;</span>)))</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a>genus_abundance2 <span class="sc">%&gt;%</span></span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a>  <span class="fu">filter</span>(level<span class="sc">==</span><span class="st">&quot;Species&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week, taxon) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">rel_abund =</span> <span class="fu">sum</span>(rel_abund), <span class="at">.groups=</span><span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week, taxon) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_rel_abund=</span><span class="fu">mean</span>(rel_abund), <span class="at">.groups=</span><span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Week, <span class="at">y=</span>mean_rel_abund, <span class="at">fill=</span>taxon))<span class="sc">+</span></span>
-<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
-<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(seq_tech), <span class="at">nrow =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
-<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Week&quot;</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;Relative abundance (%)&quot;</span>)<span class="sc">+</span></span>
-<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">&quot;italic&quot;</span>))<span class="sc">+</span></span>
-<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">29</span>))<span class="sc">+</span> <span class="co"># This line calls the &quot;get_cols&quot;&gt;&quot; function above</span></span>
-<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
-<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a>                            <span class="at">keyheight =</span> <span class="fl">0.7</span>, </span>
-<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>                            <span class="at">ncol=</span><span class="dv">1</span>))<span class="sc">+</span></span>
-<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">60</span>, </span>
-<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>                                   <span class="at">vjust =</span> <span class="fl">0.5</span>, </span>
-<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a>                                   <span class="at">hjust=</span><span class="fl">0.4</span>))</span></code></pre></div>
+<p>Generate a second tibble with using this predefined list of
+species:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>genus_abundance2 <span class="ot">&lt;-</span> WorkingPS_melt2 <span class="sc">%&gt;%</span></span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week) <span class="sc">%&gt;%</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">rel_abund =</span> Abundance <span class="sc">/</span> <span class="fu">sum</span>(Abundance)) <span class="sc">%&gt;%</span></span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a>  <span class="fu">ungroup</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>Abundance) <span class="sc">%&gt;%</span></span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(<span class="st">&quot;Kingdom&quot;</span>, <span class="st">&quot;Phylum&quot;</span>, <span class="st">&quot;Class&quot;</span>, <span class="st">&quot;Order&quot;</span>, <span class="st">&quot;Family&quot;</span>, <span class="st">&quot;Genus&quot;</span>, <span class="st">&quot;Species&quot;</span>),</span>
+<span id="cb15-7"><a href="#cb15-7" tabindex="-1"></a>               <span class="at">names_to=</span><span class="st">&quot;level&quot;</span>,</span>
+<span id="cb15-8"><a href="#cb15-8" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;taxon&quot;</span>)<span class="sc">%&gt;%</span></span>
+<span id="cb15-9"><a href="#cb15-9" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">taxon =</span> <span class="fu">factor</span>(taxon,</span>
+<span id="cb15-10"><a href="#cb15-10" tabindex="-1"></a>                       <span class="at">levels=</span><span class="fu">c</span>(<span class="st">&quot;Albugo candida&quot;</span>,</span>
+<span id="cb15-11"><a href="#cb15-11" tabindex="-1"></a>                       <span class="st">&quot;Bremia lactucae cluster&quot;</span>,</span>
+<span id="cb15-12"><a href="#cb15-12" tabindex="-1"></a>                       <span class="st">&quot;Hyaloperonospora nesliae&quot;</span>,</span>
+<span id="cb15-13"><a href="#cb15-13" tabindex="-1"></a>                       <span class="st">&quot;Hyaloperonospora brassicae&quot;</span>,</span>
+<span id="cb15-14"><a href="#cb15-14" tabindex="-1"></a>                       <span class="st">&quot;Hyaloperonospora camelinae&quot;</span>,</span>
+<span id="cb15-15"><a href="#cb15-15" tabindex="-1"></a>                       <span class="st">&quot;Peronospora manshurica&quot;</span>,</span>
+<span id="cb15-16"><a href="#cb15-16" tabindex="-1"></a>                       <span class="st">&quot;Peronospora variabilis&quot;</span>,</span>
+<span id="cb15-17"><a href="#cb15-17" tabindex="-1"></a>                       <span class="st">&quot;Peronospora destructor&quot;</span>,                       </span>
+<span id="cb15-18"><a href="#cb15-18" tabindex="-1"></a>                       <span class="st">&quot;Peronospora aparines&quot;</span>,</span>
+<span id="cb15-19"><a href="#cb15-19" tabindex="-1"></a>                       <span class="st">&quot;Peronospora erucastri&quot;</span>,</span>
+<span id="cb15-20"><a href="#cb15-20" tabindex="-1"></a>                       <span class="st">&quot;Plasmopara viticola&quot;</span>,</span>
+<span id="cb15-21"><a href="#cb15-21" tabindex="-1"></a>                       <span class="st">&quot;Pseudoperonospora cubensis&quot;</span>,</span>
+<span id="cb15-22"><a href="#cb15-22" tabindex="-1"></a>                       <span class="st">&quot;Other&quot;</span>)))</span></code></pre></div>
+<p>summarize the data at the species level and pipe that into ggplot2 to
+get our bar chart at the species level:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a>genus_abundance2 <span class="sc">%&gt;%</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>  <span class="fu">filter</span>(level<span class="sc">==</span><span class="st">&quot;Species&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week, taxon) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">rel_abund =</span> <span class="fu">sum</span>(rel_abund), <span class="at">.groups=</span><span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">group_by</span>(seq_tech, Week, taxon) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_rel_abund=</span><span class="fu">mean</span>(rel_abund), <span class="at">.groups=</span><span class="st">&quot;drop&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Week, <span class="at">y=</span>mean_rel_abund, <span class="at">fill=</span>taxon))<span class="sc">+</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a>  <span class="fu">geom_col</span>()<span class="sc">+</span></span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="fu">vars</span>(seq_tech), <span class="at">nrow =</span> <span class="dv">3</span>)<span class="sc">+</span></span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x=</span><span class="st">&quot;Week&quot;</span>,</span>
+<span id="cb16-11"><a href="#cb16-11" tabindex="-1"></a>       <span class="at">y=</span><span class="st">&quot;Relative abundance (%)&quot;</span>)<span class="sc">+</span></span>
+<span id="cb16-12"><a href="#cb16-12" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">face=</span><span class="st">&quot;italic&quot;</span>))<span class="sc">+</span></span>
+<span id="cb16-13"><a href="#cb16-13" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">get_cols</span>(<span class="dv">14</span>))<span class="sc">+</span> <span class="co"># This line calls the &quot;get_cols&quot;&gt;&quot; function above</span></span>
+<span id="cb16-14"><a href="#cb16-14" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">fill=</span> <span class="fu">guide_legend</span>(<span class="at">keywidth =</span> <span class="fl">0.6</span>, </span>
+<span id="cb16-15"><a href="#cb16-15" tabindex="-1"></a>                            <span class="at">keyheight =</span> <span class="fl">0.7</span>, </span>
+<span id="cb16-16"><a href="#cb16-16" tabindex="-1"></a>                            <span class="at">ncol=</span><span class="dv">1</span>))<span class="sc">+</span></span>
+<span id="cb16-17"><a href="#cb16-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">60</span>, </span>
+<span id="cb16-18"><a href="#cb16-18" tabindex="-1"></a>                                   <span class="at">vjust =</span> <span class="fl">0.5</span>, </span>
+<span id="cb16-19"><a href="#cb16-19" tabindex="-1"></a>                                   <span class="at">hjust=</span><span class="fl">0.4</span>))</span></code></pre></div>
 <p><img src="4_stacked_barchart_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>Again we can see some similitude and differences between sequencing
+technologies, now lets see how different they are.</p>
+</div>
 
 
 

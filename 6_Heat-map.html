@@ -506,8 +506,8 @@ div.tocify {
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ampvis2&quot;</span>)</span>
 <span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggpubr&quot;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>WorkingPS_glom2<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/WorkingPS_glom2.rds&quot;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>WorkingPS_glom2_amp <span class="ot">&lt;-</span> <span class="fu">amp_load</span>(WorkingPS_glom2)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>WorkingPS<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/WorkingPS.rds&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>WorkingPS_glom2_amp <span class="ot">&lt;-</span> <span class="fu">amp_load</span>(WorkingPS)</span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="fu">amp_heatmap</span>(</span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  WorkingPS_glom2_amp,</span>
@@ -519,9 +519,9 @@ div.tocify {
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="at">tax_show =</span> <span class="dv">20</span>,</span>
 <span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="at">showRemainingTaxa =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="at">tax_class =</span> <span class="cn">NULL</span>,</span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="at">tax_empty =</span> <span class="st">&quot;best&quot;</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="at">tax_empty =</span> <span class="st">&quot;remove&quot;</span>,</span>
 <span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="at">plot_values =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="at">plot_values_size =</span> <span class="dv">2</span>,</span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="at">plot_values_size =</span> <span class="dv">1</span>,</span>
 <span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="at">plot_legendbreaks =</span> <span class="cn">NULL</span>,</span>
 <span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="at">plot_colorscale =</span> <span class="st">&quot;log10&quot;</span>,</span>
 <span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  <span class="at">plot_na =</span> <span class="cn">FALSE</span>,</span>
@@ -534,7 +534,7 @@ div.tocify {
 <span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a>                                   <span class="at">vjust =</span> <span class="dv">1</span>),</span>
 <span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">8</span>, </span>
 <span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>                                   <span class="at">face=</span><span class="st">&quot;italic&quot;</span>),</span>
-<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">&quot;right&quot;</span>)</span></code></pre></div>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>        <span class="at">legend.position=</span><span class="st">&quot;bottom&quot;</span>)</span></code></pre></div>
 <p><img src="6_Heat-map_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
 
 
