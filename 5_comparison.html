@@ -463,6 +463,14 @@ div.tocify {
     </li>
   </ul>
 </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io">
+    <span class="fa fa-github"></span>
+     
+  </a>
+</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Supplementary material
@@ -480,14 +488,6 @@ div.tocify {
       <a href="3_summaries.html">Temporal distribution</a>
     </li>
   </ul>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io">
-    <span class="fa fa-github"></span>
-     
-  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -618,8 +618,8 @@ that Illumina’s data seem closer to Nanopore’s than IonTorrent’s.</p>
 <p>Like Venn diagrams, UpSet graphs are a data visualization method for
 quantifying elements shared between and unique to given elements of
 comparison.</p>
-<p>We use the get_upset function from the MicrobiotaProcess package
-to</p>
+<p>We use the get_upset function from the MicrobiotaProcess package to
+create our figure.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>upsetda <span class="ot">&lt;-</span> <span class="fu">get_upset</span>(<span class="at">obj=</span>WorkingPS_glom2, <span class="at">factorNames=</span><span class="st">&quot;seq_tech&quot;</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
 <span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">upset</span>(upsetda, <span class="at">sets=</span><span class="fu">unique</span>(<span class="fu">as.vector</span>(<span class="fu">sample_data</span>(WorkingPS_glom2)<span class="sc">$</span>seq_tech)), </span>
@@ -627,73 +627,93 @@ to</p>
 <span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>      <span class="at">order.by =</span> <span class="st">&quot;freq&quot;</span>, </span>
 <span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>      <span class="at">empty.intersections =</span> <span class="st">&quot;on&quot;</span>)</span></code></pre></div>
 <p><img src="5_comparison_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p>We can see from this graph that 22 taxa are shared by the 3
+technologies, while 35 taxa are unique to IonTorrent and 19 taxa to
+Nanopore.</p>
 </div>
 <div id="permanova" class="section level2">
 <h2>Permanova</h2>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(WorkingPS_glom2, <span class="at">distmethod =</span><span class="st">&quot;unifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(WorkingPS_glom2), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> sampleda[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_mat)),<span class="fu">rownames</span>(sampleda)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>sampleda<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda<span class="sc">$</span>seq_tech)</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>adonis_res <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_mat <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, <span class="at">data=</span>sampleda, <span class="at">permutation=</span><span class="dv">9999</span>)</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">data.frame</span>(adonis_res<span class="sc">$</span>aov.tab)</span></code></pre></div>
-<pre><code>##                Df SumsOfSqs   MeanSqs   F.Model        R2 Pr..F.
-## seq_tech        2 10.974901 5.4874505 53.863157 0.2419643  1e-04
-## Week           15  5.685363 0.3790242  3.720387 0.1253455  1e-04
-## seq_tech:Week  30  5.367287 0.1789096  1.756122 0.1183329  1e-04
-## Residuals     229 23.329976 0.1018776        NA 0.5143573     NA
-## Total         276 45.357527        NA        NA 1.0000000     NA</code></pre>
-<div id="adonis-for-diseased-plantations-vs-forest"
-class="section level5">
-<h5>Adonis for diseased plantations vs forest</h5>
-<p>diseased_forest&lt;- subset_samples(pooledN_soil, Status
-!=“Healthy_plantation”)</p>
-<p>distmeDF &lt;- get_dist(diseased_forest, distmethod =“wunifrac”,
-method=“hellinger”) sampledaDF &lt;-
-data.frame(sample_data(diseased_forest), check.names=FALSE) sampledaDF
-&lt;-
-sampledaDF[match(colnames(as.matrix(distmeDF)),rownames(sampledaDF)),,drop=FALSE]
-sampledaDF<span class="math inline">\(Status &lt;-
-factor(sampledaDF\)</span>Status)</p>
-<p>set.seed(1024) adonis_DF &lt;- adonis(distmeDF ~ Status,
-data=sampledaDF, permutation=9999)</p>
-<p>pairwise_p&lt;-numeric() pairwise_p[“DF”] &lt;-
-adonis_DF[[“aov.tab”]][[“Pr(&gt;F)”]][1]</p>
-</div>
-<div id="adonis-for-healthy-plantations-vs-forest"
-class="section level5">
-<h5>Adonis for healthy plantations vs forest</h5>
-<p>healthy_forest&lt;- subset_samples(pooledN_soil, Status
-!=“Diseased_plantation”)</p>
-<p>distmeHF &lt;- get_dist(healthy_forest, distmethod =“wunifrac”,
-method=“hellinger”) sampledaHF &lt;-
-data.frame(sample_data(healthy_forest), check.names=FALSE) sampledaHF
-&lt;-
-sampledaHF[match(colnames(as.matrix(distmeHF)),rownames(sampledaHF)),,drop=FALSE]
-sampledaHF<span class="math inline">\(Status &lt;-
-factor(sampledaHF\)</span>Status)</p>
-<p>set.seed(1024) adonis_HF &lt;- adonis(distmeHF ~ Status,
-data=sampledaHF, permutation=9999) adonis_HF</p>
-<p>pairwise_p[“HF”] &lt;- adonis_HF[[“aov.tab”]][[“Pr(&gt;F)”]][1]</p>
-</div>
-<div id="adonis-for-diseased-vs-healthy-plantations"
-class="section level5">
-<h5>Adonis for diseased vs healthy plantations</h5>
-<p>diseased_healthy&lt;- subset_samples(pooledN_soil, Status
-!=“Healthy_forest”)</p>
-<p>distmeDH &lt;- get_dist(diseased_healthy, distmethod =“wunifrac”,
-method=“hellinger”) sampledaDH &lt;-
-data.frame(sample_data(diseased_healthy), check.names=FALSE) sampledaDH
-&lt;-
-sampledaDH[match(colnames(as.matrix(distmeDH)),rownames(sampledaDH)),,drop=FALSE]
-sampledaDH<span class="math inline">\(Status &lt;-
-factor(sampledaDH\)</span>Status)</p>
-<p>set.seed(1024) adonis_DH &lt;- adonis2(distmeDH ~
-Status<em>Specie</em>Region, data=sampledaDH, permutation=9999)</p>
-<p>adonis_DH</p>
-<p>pairwise_p[“D_H”] &lt;- adonis_DH[[“aov.tab”]][[“Pr(&gt;F)”]][1]</p>
-<p>p.adjust(pairwise_p, method=“hochberg”)</p>
-</div>
+<p>We can therefore assume that there are differences between squaring
+technologies, but the question remains, is there a significant
+difference between the technologies?</p>
+<p>Let’s use Permutational Multivariate Analysis of Variance (PERMANOVA)
+to determine whether there is such a difference between the
+technologies.</p>
+<p>We’ll be using the Vegan package for this analysis.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># get the distance matrix </span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>dist_mat <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(WorkingPS_glom2, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co"># Match the sample names </span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(WorkingPS_glom2), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>sampleda <span class="ot">&lt;-</span> sampleda[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_mat)),<span class="fu">rownames</span>(sampleda)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>sampleda<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda<span class="sc">$</span>seq_tech)</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="co"># compute the PERMANOVA </span></span>
+<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>adonis_res <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_mat <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, <span class="at">data=</span>sampleda, <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a><span class="co"># print the results</span></span>
+<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a><span class="fu">data.frame</span>(adonis_res<span class="sc">$</span>aov.tab)</span></code></pre></div>
+<pre><code>##                Df SumsOfSqs    MeanSqs   F.Model         R2 Pr..F.
+## seq_tech        2  5.223997 2.61199834 33.069235 0.13252077  0.001
+## Week           15 13.368117 0.89120783 11.283147 0.33911835  0.001
+## seq_tech:Week  30  2.740361 0.09134538  1.156479 0.06951666  0.095
+## Residuals     229 18.087737 0.07898575        NA 0.45884423     NA
+## Total         276 39.420212         NA        NA 1.00000000     NA</code></pre>
+<p>So we can see that there are differences between the technologies,
+but what are they? Let’s try a pairwise comparison.</p>
+<p>First between IonTorrent and Nanopore</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>Ion_nano<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom2, seq_tech <span class="sc">!=</span><span class="st">&quot;Illumina&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>dist_Ion_nano <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Ion_nano, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>sampleda_Ion_nano <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Ion_nano), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>sampleda_Ion_nano <span class="ot">&lt;-</span> sampleda_Ion_nano[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Ion_nano)),<span class="fu">rownames</span>(sampleda_Ion_nano)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>sampleda_Ion_nano<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Ion_nano<span class="sc">$</span>seq_tech)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>adonis_Ion_nano <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Ion_nano <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Ion_nano, </span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a><span class="co"># create an object of type numeric to store the PERMANOVA results </span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>pairwise_p<span class="ot">&lt;-</span><span class="fu">numeric</span>()</span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a><span class="co"># and store the results for each comparison</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Ion_nano&quot;</span>] <span class="ot">&lt;-</span> adonis_Ion_nano[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<p>Then between IonTorrent and Illumina</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">##### Adonis for diseased plantations vs forest  ####</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>Ion_Illu<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom2, seq_tech <span class="sc">!=</span><span class="st">&quot;Nanopore&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a>dist_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Ion_Illu, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a>sampleda_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Ion_Illu), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a>sampleda_Ion_Illu <span class="ot">&lt;-</span> sampleda_Ion_Illu[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Ion_Illu)),<span class="fu">rownames</span>(sampleda_Ion_Illu)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a>sampleda_Ion_Illu<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Ion_Illu<span class="sc">$</span>seq_tech)</span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a>adonis_Ion_Illu <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Ion_Illu <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Ion_Illu, </span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Ion_Illu&quot;</span>] <span class="ot">&lt;-</span> adonis_Ion_Illu[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<p>And finally between NAnopore and Illumina</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="do">##### Adonis for diseased plantations vs forest  ####</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>Nano_Illu<span class="ot">&lt;-</span> <span class="fu">subset_samples</span>(WorkingPS_glom2, seq_tech <span class="sc">!=</span><span class="st">&quot;IonTorrent&quot;</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>dist_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">get_dist</span>(Nano_Illu, <span class="at">distmethod =</span><span class="st">&quot;wunifrac&quot;</span>, <span class="at">method=</span><span class="st">&quot;hellinger&quot;</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a>sampleda_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="fu">sample_data</span>(Nano_Illu), <span class="at">check.names=</span><span class="cn">FALSE</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a>sampleda_Nano_Illu <span class="ot">&lt;-</span> sampleda_Nano_Illu[<span class="fu">match</span>(<span class="fu">colnames</span>(<span class="fu">as.matrix</span>(dist_Nano_Illu)),<span class="fu">rownames</span>(sampleda_Nano_Illu)),,drop<span class="ot">=</span><span class="cn">FALSE</span>]</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a>sampleda_Nano_Illu<span class="sc">$</span>seq_tech <span class="ot">&lt;-</span> <span class="fu">factor</span>(sampleda_Nano_Illu<span class="sc">$</span>seq_tech)</span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a>adonis_Nano_Illu <span class="ot">&lt;-</span> <span class="fu">adonis</span>(dist_Nano_Illu <span class="sc">~</span> seq_tech<span class="sc">*</span>Week, </span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a>                          <span class="at">data=</span>sampleda_Nano_Illu, </span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a>                          <span class="at">permutation=</span><span class="dv">999</span>)</span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a>pairwise_p[<span class="st">&quot;Nano_Illu&quot;</span>] <span class="ot">&lt;-</span> adonis_Nano_Illu[[<span class="st">&quot;aov.tab&quot;</span>]][[<span class="st">&quot;Pr(&gt;F)&quot;</span>]][<span class="dv">1</span>]</span></code></pre></div>
+<p>When processing pairwise data, it is important to correct the
+significance level for multiple comparisons, such as the Bonferroni
+correction. So lets apply the Bonferroni correction to our Permanova
+results.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">p.adjust</span>(pairwise_p, <span class="at">method=</span><span class="st">&quot;bonferroni&quot;</span>)</span></code></pre></div>
+<pre><code>##  Ion_nano  Ion_Illu Nano_Illu 
+##     0.003     0.003     0.003</code></pre>
 </div>
 
 

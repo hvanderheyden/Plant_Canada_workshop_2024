@@ -55,6 +55,10 @@ WorkingPS_glom2 <- phyloseq(phyloseq::tax_table(WorkingPS_glom),
                             WorkingPS_glom_tree,
                             phyloseq::sample_data(WorkingPS_glom))
 
+WorkingPS_glom2
+
+saveRDS(WorkingPS_glom2, file= "Processed_data/WorkingPS_glom2.rds")
+
 ```
 
 PCA 
@@ -163,119 +167,95 @@ We can see from this graph that 22 taxa are shared by the 3 technologies, while 
 Permanova
 ---- 
 
+We can therefore assume that there are differences between squaring technologies, but the question remains, is there a significant difference between the technologies? 
 
+Let's use Permutational Multivariate Analysis of Variance (PERMANOVA) to determine whether there is such a difference between the technologies.  
 
-
+We'll be using the Vegan package for this analysis.
 
 ```{r}
-dist_mat <- get_dist(WorkingPS_glom2, distmethod ="unifrac", method="hellinger")
+# get the distance matrix 
+dist_mat <- get_dist(WorkingPS_glom2, distmethod ="wunifrac", method="hellinger")
+# Match the sample names 
 sampleda <- data.frame(sample_data(WorkingPS_glom2), check.names=FALSE)
 sampleda <- sampleda[match(colnames(as.matrix(dist_mat)),rownames(sampleda)),,drop=FALSE]
 sampleda$seq_tech <- factor(sampleda$seq_tech)
+# compute the PERMANOVA 
 set.seed(1024)
-adonis_res <- adonis(dist_mat ~ seq_tech*Week, data=sampleda, permutation=9999)
+adonis_res <- adonis(dist_mat ~ seq_tech*Week, data=sampleda, permutation=999)
+# print the results
 data.frame(adonis_res$aov.tab)
 
 ```
 
+So we can see that there are differences between the technologies, but what are they? Let's try a pairwise comparison.
 
 
+First between IonTorrent and Nanopore 
+```{r}
+Ion_nano<- subset_samples(WorkingPS_glom2, seq_tech !="Illumina")
 
+dist_Ion_nano <- get_dist(Ion_nano, distmethod ="wunifrac", method="hellinger")
+sampleda_Ion_nano <- data.frame(sample_data(Ion_nano), check.names=FALSE)
+sampleda_Ion_nano <- sampleda_Ion_nano[match(colnames(as.matrix(dist_Ion_nano)),rownames(sampleda_Ion_nano)),,drop=FALSE]
+sampleda_Ion_nano$seq_tech <- factor(sampleda_Ion_nano$seq_tech)
 
+set.seed(1024)
+adonis_Ion_nano <- adonis(dist_Ion_nano ~ seq_tech*Week, 
+                          data=sampleda_Ion_nano, 
+                          permutation=999)
 
+# create an object of type numeric to store the PERMANOVA results 
+pairwise_p<-numeric()
+# and store the results for each comparison
+pairwise_p["Ion_nano"] <- adonis_Ion_nano[["aov.tab"]][["Pr(>F)"]][1]
+```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Then between IonTorrent and Illumina 
 ```{r}
 ##### Adonis for diseased plantations vs forest  ####
-diseased_forest<- subset_samples(pooledN_soil, Status !="Healthy_plantation")
+Ion_Illu<- subset_samples(WorkingPS_glom2, seq_tech !="Nanopore")
 
-distmeDF <- get_dist(diseased_forest, distmethod ="wunifrac", method="hellinger")
-sampledaDF <- data.frame(sample_data(diseased_forest), check.names=FALSE)
-sampledaDF <- sampledaDF[match(colnames(as.matrix(distmeDF)),rownames(sampledaDF)),,drop=FALSE]
-sampledaDF$Status <- factor(sampledaDF$Status)
-
-set.seed(1024)
-adonis_DF <- adonis(distmeDF ~ Status, 
-                               data=sampledaDF, 
-                               permutation=9999)
-
-pairwise_p<-numeric()
-pairwise_p["DF"] <- adonis_DF[["aov.tab"]][["Pr(>F)"]][1]
-```
-
-
-
-```{r}
-##### Adonis for healthy plantations vs forest  #####
-healthy_forest<- subset_samples(pooledN_soil, Status !="Diseased_plantation")
-
-distmeHF <- get_dist(healthy_forest, distmethod ="wunifrac", method="hellinger")
-sampledaHF <- data.frame(sample_data(healthy_forest), check.names=FALSE)
-sampledaHF <- sampledaHF[match(colnames(as.matrix(distmeHF)),rownames(sampledaHF)),,drop=FALSE]
-sampledaHF$Status <- factor(sampledaHF$Status)
+dist_Ion_Illu <- get_dist(Ion_Illu, distmethod ="wunifrac", method="hellinger")
+sampleda_Ion_Illu <- data.frame(sample_data(Ion_Illu), check.names=FALSE)
+sampleda_Ion_Illu <- sampleda_Ion_Illu[match(colnames(as.matrix(dist_Ion_Illu)),rownames(sampleda_Ion_Illu)),,drop=FALSE]
+sampleda_Ion_Illu$seq_tech <- factor(sampleda_Ion_Illu$seq_tech)
 
 set.seed(1024)
-adonis_HF <- adonis(distmeHF ~ Status, 
-                               data=sampledaHF, 
-                               permutation=9999)
-adonis_HF
+adonis_Ion_Illu <- adonis(dist_Ion_Illu ~ seq_tech*Week, 
+                          data=sampleda_Ion_Illu, 
+                          permutation=999)
 
-pairwise_p["HF"] <- adonis_HF[["aov.tab"]][["Pr(>F)"]][1]
+pairwise_p["Ion_Illu"] <- adonis_Ion_Illu[["aov.tab"]][["Pr(>F)"]][1]
 ```
 
-
+And finally between NAnopore and Illumina 
 ```{r}
-##### Adonis for diseased vs healthy plantations ####
-diseased_healthy<- subset_samples(pooledN_soil, Status !="Healthy_forest")
+##### Adonis for diseased plantations vs forest  ####
+Nano_Illu<- subset_samples(WorkingPS_glom2, seq_tech !="IonTorrent")
 
-distmeDH <- get_dist(diseased_healthy, distmethod ="wunifrac", method="hellinger")
-sampledaDH <- data.frame(sample_data(diseased_healthy), check.names=FALSE)
-sampledaDH <- sampledaDH[match(colnames(as.matrix(distmeDH)),rownames(sampledaDH)),,drop=FALSE]
-sampledaDH$Status <- factor(sampledaDH$Status)
+dist_Nano_Illu <- get_dist(Nano_Illu, distmethod ="wunifrac", method="hellinger")
+sampleda_Nano_Illu <- data.frame(sample_data(Nano_Illu), check.names=FALSE)
+sampleda_Nano_Illu <- sampleda_Nano_Illu[match(colnames(as.matrix(dist_Nano_Illu)),rownames(sampleda_Nano_Illu)),,drop=FALSE]
+sampleda_Nano_Illu$seq_tech <- factor(sampleda_Nano_Illu$seq_tech)
 
 set.seed(1024)
-adonis_DH <- adonis2(distmeDH ~ Status*Specie*Region, 
-                    data=sampledaDH, 
-                    permutation=9999)
+adonis_Nano_Illu <- adonis(dist_Nano_Illu ~ seq_tech*Week, 
+                          data=sampleda_Nano_Illu, 
+                          permutation=999)
 
-adonis_DH
 
-pairwise_p["D_H"] <- adonis_DH[["aov.tab"]][["Pr(>F)"]][1]
+pairwise_p["Nano_Illu"] <- adonis_Nano_Illu[["aov.tab"]][["Pr(>F)"]][1]
 ```
 
-
+When processing pairwise data, it is important to correct the significance level for multiple comparisons, such as the Bonferroni correction. So lets apply the Bonferroni correction to our Permanova results. 
 
 ```{r}
-p.adjust(pairwise_p, method="hochberg")
+p.adjust(pairwise_p, method="bonferroni")
 ```
 
+Given these results, we can conclude that the three methods are different from one another.
 
-
-
-
-
-
+```{r}
+detach(package:MicrobiotaProcess)
+```

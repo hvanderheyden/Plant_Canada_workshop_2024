@@ -1,0 +1,53 @@
+---
+title: "Heat map"
+output: html_document
+---
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+
+```{r, message=FALSE,echo=TRUE}
+library("ampvis2")
+library("ggpubr")
+
+WorkingPS_glom2<-readRDS("Processed_data/WorkingPS_glom2.rds")
+
+```
+
+```{r, message=FALSE,echo=TRUE}
+WorkingPS_glom2_amp <- amp_load(WorkingPS_glom2)
+
+amp_heatmap(
+  WorkingPS_glom2_amp,
+  group_by = "Week",
+  facet_by = "seq_tech",
+  normalise = TRUE,
+  tax_aggregate = "Species",
+  tax_add = NULL,
+  tax_show = 20,
+  showRemainingTaxa = FALSE,
+  tax_class = NULL,
+  tax_empty = "best",
+  plot_values = TRUE,
+  plot_values_size = 2,
+  plot_legendbreaks = NULL,
+  plot_colorscale = "log10",
+  plot_na = FALSE,
+  measure = mean,
+  min_abundance = 10,
+  max_abundance = NULL,
+  round = 1)+
+  theme(axis.text.x = element_text(angle = 90, 
+                                   size=10, 
+                                   vjust = 1),
+        axis.text.y = element_text(size=8, 
+                                   face="italic"),
+        legend.position="right")
+```
+
+
+
+
+
+

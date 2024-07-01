@@ -27,13 +27,11 @@ navbar:
     - text: "Part III -- Anlysing diversity"
       menu:
         - text: "Heat maps"
-          href: 1_import_data.html    
+          href: 6_Heat_map.html    
         - text: "alpha diversity"
-          href: 2_preprocessing.html    
+          href: 7_alpha.html    
         - text: "Temporal distribution"
-          href: 3_summaries.html
-          
-         
+          href: 8_time_series.html
           
       
   right:
