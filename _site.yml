@@ -25,13 +25,8 @@ navbar:
           href: 5_comparison.html
           
     - text: "Part III -- Anlysing diversity"
-      menu:
         - text: "Heat maps"
-          href: 6_Heat_map.html    
-        - text: "alpha diversity"
-          href: 7_alpha.html    
-        - text: "Temporal distribution"
-          href: 8_time_series.html
+          href: 6_Heat_map.html
           
       
   right:
