@@ -25,8 +25,7 @@ navbar:
           href: 5_comparison.html
           
     - text: "Part III -- Anlysing diversity"
-        - text: "Heat maps"
-          href: 6_Heat_map.html
+      href: 6_Heat_map.html
           
       
   right:

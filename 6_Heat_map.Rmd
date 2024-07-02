@@ -1,5 +1,5 @@
 ---
-title: "Heat map"
+title: "Diversity over time"
 output: html_document
 ---
 ```{r setup, include=FALSE} 
@@ -17,7 +17,7 @@ library("ggpubr")
 WorkingPS_glom<-readRDS("Processed_data/WorkingPS_glom.rds")
 ```
 
-Sequencing technologies by week 
+Heat map by week and technologies  
 ---- 
 
 First we need to convert our phyloseq object into an Ampvis2 object, then generate the heat map with the weeks (times) in x and the sequencing technology as facets. 
@@ -29,7 +29,7 @@ WorkingPS_amp <- amp_load(WorkingPS_glom)
 # Plot the heat map
 amp_heatmap(
   WorkingPS_amp,
-  group_by = "Week",
+  group_by = "Week2",
   facet_by = "seq_tech",
   normalise = TRUE,
   tax_aggregate = "Species",
@@ -55,7 +55,7 @@ amp_heatmap(
         legend.position="bottom")
 ```
 
-Site by week 
+Heat map by week and site   
 ----
 
 Let's start again by putting sites in the place of sequencing technologies. 
@@ -64,7 +64,7 @@ Let's start again by putting sites in the place of sequencing technologies.
 # Plot the heat map
 amp_heatmap(
   WorkingPS_amp,
-  group_by = "Week",
+  group_by = "Week2",
   facet_by = "SiteID",
   normalise = TRUE,
   tax_aggregate = "Species",
@@ -90,7 +90,7 @@ amp_heatmap(
         legend.position="bottom")
 ```
 
-_Peronospora_ by site 
+Heat map for _Peronospora_ 
 ----
 
 That's a lot of information, so let's try to extract genera of interest to reduce the number of taxa to display.
@@ -103,7 +103,7 @@ Peronospora_amp <- amp_load(PeronosporaPS)
 
 amp_heatmap(
   Peronospora_amp,
-  group_by = "Week",
+  group_by = "Week2",
   facet_by = "SiteID",
   normalise = TRUE,
   tax_aggregate = "Species",
@@ -129,78 +129,50 @@ amp_heatmap(
         legend.position="bottom")
 ```
 
-_Hyaloperonospora_ by site 
-----
+Time series
+---- 
 
-```{r, fig.align="center", echo = TRUE, fig.width = 14, fig.height= 6}
-HyaloperonosporaPS<-subset_taxa(WorkingPS_glom, Genus=="Hyaloperonospora");HyaloperonosporaPS
+When data are collected over time, such as our aerobiome data, we may be tempted to expolve the temporal distribution patterns of specific species. 
+Continuing with the Ampvis2 package, we can use the amp_timeseries function to plot read distribution over time. 
 
+```{r, message=FALSE,echo=TRUE}
 
-HyaloperonosporaPS_amp <- amp_load(HyaloperonosporaPS)
-
-amp_heatmap(
-  HyaloperonosporaPS_amp,
-  group_by = "Week",
-  facet_by = "SiteID",
-  normalise = TRUE,
+amp_timeseries(WorkingPS_amp,
+  time_variable = "Date",
   tax_aggregate = "Species",
-  tax_add = NULL,
-  tax_show = 12,
-  showRemainingTaxa = FALSE,
-  tax_class = NULL,
-  tax_empty = "remove",
-  plot_values = TRUE,
-  plot_values_size = 2,
-  plot_legendbreaks = NULL,
-  plot_colorscale = "log10",
-  plot_na = FALSE,
-  measure = mean,
-  min_abundance = 10,
-  max_abundance = NULL,
-  round = 1)+
-  theme(axis.text.x = element_text(angle = 90, 
-                                   size=8, 
-                                   vjust = 0),
-        axis.text.y = element_text(size=12, 
-                                   face="italic"),
-        legend.position="bottom")
+  tax_show = 9,
+  normalise=FALSE
+)
 ```
 
-_Phytophthora_ by site 
-----
+Or with read counts to be in percent per sample.
+
+```{r, message=FALSE,echo=TRUE}
+
+amp_timeseries(WorkingPS_amp,
+  time_variable = "Date",
+  tax_aggregate = "Species",
+  tax_show = 9,
+  normalise=TRUE
+)
+```
+
+We can also generate our curves by species in individual graphs. 
+
+
 
 ```{r, fig.align="center", echo = TRUE, fig.width = 14, fig.height= 6}
-PhytophthoraPS<-subset_taxa(WorkingPS_glom, Genus=="Phytophthora");PhytophthoraPS
 
-
-Phytophthora_amp <- amp_load(PhytophthoraPS)
-
-amp_heatmap(
-  Phytophthora_amp,
-  group_by = "Week",
-  facet_by = "SiteID",
-  normalise = TRUE,
+amp_timeseries(WorkingPS_amp,
+  time_variable = "Date",
+  #group_by = "seq_tech",
+  split = TRUE,
+  scales = "free_y",
+  tax_show = 12,
   tax_aggregate = "Species",
   tax_add = NULL,
-  tax_show = 12,
-  showRemainingTaxa = FALSE,
-  tax_class = NULL,
-  tax_empty = "remove",
-  plot_values = TRUE,
-  plot_values_size = 2,
-  plot_legendbreaks = NULL,
-  plot_colorscale = "log10",
-  plot_na = FALSE,
-  measure = mean,
-  min_abundance = 10,
-  max_abundance = NULL,
-  round = 1)+
-  theme(axis.text.x = element_text(angle = 90, 
-                                   size=8, 
-                                   vjust = 0),
-        axis.text.y = element_text(size=12, 
-                                   face="italic"),
-        legend.position="bottom")
+  normalise=TRUE
+)
 ```
 
 

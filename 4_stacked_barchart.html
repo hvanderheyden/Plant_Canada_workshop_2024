@@ -445,23 +445,8 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part III -- Anlysing diversity
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="6_Heat_map.html">Heat maps</a>
-    </li>
-    <li>
-      <a href="7_alpha.html">alpha diversity</a>
-    </li>
-    <li>
-      <a href="8_time_series.html">Temporal distribution</a>
-    </li>
-  </ul>
+<li>
+  <a href="6_Heat_map.html">Part III -- Anlysing diversity</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -516,14 +501,14 @@ but let’s do it manually this time instead.</p>
 <span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a>WorkingPS<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/combinedPS_clean_pruned_filtered.rds&quot;</span>);WorkingPS</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 2969 taxa and 277 samples ]
-## sample_data() Sample Data:       [ 277 samples by 9 sample variables ]
+## sample_data() Sample Data:       [ 277 samples by 11 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 2969 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 2969 tips and 2968 internal nodes ]</code></pre>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Because The Nanopore data set also contains fungi, lets keep only the Oomycota Phylum. </span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>WorkingPS<span class="ot">&lt;-</span><span class="fu">subset_taxa</span>(WorkingPS, Phylum<span class="sc">==</span><span class="st">&quot;Oomycota&quot;</span>);WorkingPS</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 1491 taxa and 277 samples ]
-## sample_data() Sample Data:       [ 277 samples by 9 sample variables ]
+## sample_data() Sample Data:       [ 277 samples by 11 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 1491 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 1491 tips and 1490 internal nodes ]</code></pre>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">saveRDS</span>(WorkingPS, <span class="at">file=</span> <span class="st">&quot;Processed_data/WorkingPS.rds&quot;</span>)</span></code></pre></div>
@@ -564,20 +549,27 @@ frame.</p>
 ## 246764 B89_9_L001_R1_001.fastq.gz QC06_21_WK34 IonTorrent   QC06 Sherrington
 ## 246613 B81_9_L001_R1_001.fastq.gz QC05_21_WK33 IonTorrent   QC05  St-Edouard
 ## 61983  B75_9_L001_R1_001.fastq.gz QC06_21_WK32 IonTorrent   QC06 Sherrington
-##        Year Week  X_coord  Y_coord   Kingdom   Phylum         Class
-## 61879  2021 WK33 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-## 61811  2021 WK33 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
-## 246724 2021 WK32 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
-## 246764 2021 WK34 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-## 246613 2021 WK33 45.19820 -73.5421 Eukaryota Oomycota Stramenopiles
-## 61983  2021 WK32 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-##                 Order          Family       Genus                Species
-## 61879  Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 61811  Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 246724 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 246764 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 246613 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 61983  Peronosporales Peronosporaceae Peronospora Peronospora manshurica</code></pre>
+##        Year Week Week2       Date  X_coord  Y_coord   Kingdom   Phylum
+## 61879  2021 WK33    33 2021-08-09 45.13174 -73.4719 Eukaryota Oomycota
+## 61811  2021 WK33    33 2021-08-09 45.18664 -73.3426 Eukaryota Oomycota
+## 246724 2021 WK32    32 2021-08-02 45.18664 -73.3426 Eukaryota Oomycota
+## 246764 2021 WK34    34 2021-08-16 45.13174 -73.4719 Eukaryota Oomycota
+## 246613 2021 WK33    33 2021-08-09 45.19820 -73.5421 Eukaryota Oomycota
+## 61983  2021 WK32    32 2021-08-02 45.13174 -73.4719 Eukaryota Oomycota
+##                Class          Order          Family       Genus
+## 61879  Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 61811  Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 246724 Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 246764 Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 246613 Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 61983  Stramenopiles Peronosporales Peronosporaceae Peronospora
+##                       Species
+## 61879  Peronospora manshurica
+## 61811  Peronospora manshurica
+## 246724 Peronospora manshurica
+## 246764 Peronospora manshurica
+## 246613 Peronospora manshurica
+## 61983  Peronospora manshurica</code></pre>
 <p>Using the dplyr package (included in the tidyverse package) we create
 a tibble to summarize abundance and use the pivot_longer function to
 transpose the taxonomy from column to row.</p>
@@ -591,7 +583,7 @@ transpose the taxonomy from column to row.</p>
 <span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a>               <span class="at">values_to=</span><span class="st">&quot;taxon&quot;</span>)</span>
 <span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a></span>
 <span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="fu">str</span>(genus_abundance)</span></code></pre></div>
-<pre><code>## tibble [2,891,049 × 14] (S3: tbl_df/tbl/data.frame)
+<pre><code>## tibble [2,891,049 × 16] (S3: tbl_df/tbl/data.frame)
 ##  $ OTU          : chr [1:2891049] &quot;2949b355cd00039476d9a808f2e76b8e&quot; &quot;2949b355cd00039476d9a808f2e76b8e&quot; &quot;2949b355cd00039476d9a808f2e76b8e&quot; &quot;2949b355cd00039476d9a808f2e76b8e&quot; ...
 ##  $ Sample       : chr [1:2891049] &quot;IonT_QC0621WK33&quot; &quot;IonT_QC0621WK33&quot; &quot;IonT_QC0621WK33&quot; &quot;IonT_QC0621WK33&quot; ...
 ##  $ InputFileName: chr [1:2891049] &quot;B82_9_L001_R1_001.fastq.gz&quot; &quot;B82_9_L001_R1_001.fastq.gz&quot; &quot;B82_9_L001_R1_001.fastq.gz&quot; &quot;B82_9_L001_R1_001.fastq.gz&quot; ...
@@ -601,6 +593,8 @@ transpose the taxonomy from column to row.</p>
 ##  $ Region       : chr [1:2891049] &quot;Sherrington&quot; &quot;Sherrington&quot; &quot;Sherrington&quot; &quot;Sherrington&quot; ...
 ##  $ Year         : int [1:2891049] 2021 2021 2021 2021 2021 2021 2021 2021 2021 2021 ...
 ##  $ Week         : chr [1:2891049] &quot;WK33&quot; &quot;WK33&quot; &quot;WK33&quot; &quot;WK33&quot; ...
+##  $ Week2        : int [1:2891049] 33 33 33 33 33 33 33 33 33 33 ...
+##  $ Date         : chr [1:2891049] &quot;2021-08-09&quot; &quot;2021-08-09&quot; &quot;2021-08-09&quot; &quot;2021-08-09&quot; ...
 ##  $ X_coord      : num [1:2891049] 45.1 45.1 45.1 45.1 45.1 ...
 ##  $ Y_coord      : num [1:2891049] -73.5 -73.5 -73.5 -73.5 -73.5 ...
 ##  $ rel_abund    : num [1:2891049] 0.192 0.192 0.192 0.192 0.192 ...
@@ -681,20 +675,27 @@ we want to be plotted in our bar chart:</p>
 ## 246764 B89_9_L001_R1_001.fastq.gz QC06_21_WK34 IonTorrent   QC06 Sherrington
 ## 246613 B81_9_L001_R1_001.fastq.gz QC05_21_WK33 IonTorrent   QC05  St-Edouard
 ## 61983  B75_9_L001_R1_001.fastq.gz QC06_21_WK32 IonTorrent   QC06 Sherrington
-##        Year Week  X_coord  Y_coord   Kingdom   Phylum         Class
-## 61879  2021 WK33 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-## 61811  2021 WK33 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
-## 246724 2021 WK32 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
-## 246764 2021 WK34 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-## 246613 2021 WK33 45.19820 -73.5421 Eukaryota Oomycota Stramenopiles
-## 61983  2021 WK32 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-##                 Order          Family       Genus                Species
-## 61879  Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 61811  Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 246724 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 246764 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 246613 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 61983  Peronosporales Peronosporaceae Peronospora Peronospora manshurica</code></pre>
+##        Year Week Week2       Date  X_coord  Y_coord   Kingdom   Phylum
+## 61879  2021 WK33    33 2021-08-09 45.13174 -73.4719 Eukaryota Oomycota
+## 61811  2021 WK33    33 2021-08-09 45.18664 -73.3426 Eukaryota Oomycota
+## 246724 2021 WK32    32 2021-08-02 45.18664 -73.3426 Eukaryota Oomycota
+## 246764 2021 WK34    34 2021-08-16 45.13174 -73.4719 Eukaryota Oomycota
+## 246613 2021 WK33    33 2021-08-09 45.19820 -73.5421 Eukaryota Oomycota
+## 61983  2021 WK32    32 2021-08-02 45.13174 -73.4719 Eukaryota Oomycota
+##                Class          Order          Family       Genus
+## 61879  Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 61811  Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 246724 Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 246764 Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 246613 Stramenopiles Peronosporales Peronosporaceae Peronospora
+## 61983  Stramenopiles Peronosporales Peronosporaceae Peronospora
+##                       Species
+## 61879  Peronospora manshurica
+## 61811  Peronospora manshurica
+## 246724 Peronospora manshurica
+## 246764 Peronospora manshurica
+## 246613 Peronospora manshurica
+## 61983  Peronospora manshurica</code></pre>
 <p>Generate a second tibble with using this predefined list of
 species:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>genus_abundance2 <span class="ot">&lt;-</span> WorkingPS_melt2 <span class="sc">%&gt;%</span></span>

@@ -445,23 +445,8 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part III -- Anlysing diversity
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="6_Heat_map.html">Heat maps</a>
-    </li>
-    <li>
-      <a href="7_alpha.html">alpha diversity</a>
-    </li>
-    <li>
-      <a href="8_time_series.html">Temporal distribution</a>
-    </li>
-  </ul>
+<li>
+  <a href="6_Heat_map.html">Part III -- Anlysing diversity</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -510,7 +495,7 @@ depths.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a>combinedPS_clean<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/combinedPS_clean.rds&quot;</span>);combinedPS_clean</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
-## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
+## sample_data() Sample Data:       [ 282 samples by 11 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 5790 tips and 5789 internal nodes ]</code></pre>
 <p>and needed packages</p>
@@ -540,8 +525,8 @@ data.</p>
 ##  $ : chr &quot;6] Any OTU sum to 1 or less? YES&quot;
 ##  $ : chr &quot;8] Number of singletons = 1639&quot;
 ##  $ : chr &quot;9] Percent of OTUs that are singletons \n        (i.e. exactly one read detected across all samples)11.5371329879102&quot;
-##  $ : chr &quot;10] Number of sample variables are: 9&quot;
-##  $ : chr [1:9] &quot;InputFileName&quot; &quot;Samplename&quot; &quot;seq_tech&quot; &quot;SiteID&quot; ...</code></pre>
+##  $ : chr &quot;10] Number of sample variables are: 11&quot;
+##  $ : chr [1:11] &quot;InputFileName&quot; &quot;Samplename&quot; &quot;seq_tech&quot; &quot;SiteID&quot; ...</code></pre>
 <p>Since we have a more than 1600 singletons, lets remove the taxa that
 are not supported by at least 10 occurrences over the whole data set.
 This will help us control for technical errors, even if such a threshold
@@ -554,7 +539,7 @@ al. 2023</a> for examples of filtering thresholds.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>combinedPS_clean_pruned <span class="ot">=</span> <span class="fu">prune_taxa</span>(<span class="fu">taxa_sums</span>(combinedPS_clean) <span class="sc">&gt;</span> <span class="dv">09</span>, combinedPS_clean); combinedPS_clean_pruned</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 2969 taxa and 282 samples ]
-## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
+## sample_data() Sample Data:       [ 282 samples by 11 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 2969 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 2969 tips and 2968 internal nodes ]</code></pre>
 <p>Lets have another look at the data summary:</p>
@@ -569,8 +554,8 @@ al. 2023</a> for examples of filtering thresholds.</p>
 ##  $ : chr &quot;6] Any OTU sum to 1 or less? NO&quot;
 ##  $ : chr &quot;8] Number of singletons = 0&quot;
 ##  $ : chr &quot;9] Percent of OTUs that are singletons \n        (i.e. exactly one read detected across all samples)0&quot;
-##  $ : chr &quot;10] Number of sample variables are: 9&quot;
-##  $ : chr [1:9] &quot;InputFileName&quot; &quot;Samplename&quot; &quot;seq_tech&quot; &quot;SiteID&quot; ...</code></pre>
+##  $ : chr &quot;10] Number of sample variables are: 11&quot;
+##  $ : chr [1:11] &quot;InputFileName&quot; &quot;Samplename&quot; &quot;seq_tech&quot; &quot;SiteID&quot; ...</code></pre>
 </div>
 <div id="sample-filtering" class="section level2">
 <h2>Sample filtering</h2>
@@ -602,7 +587,7 @@ rarefy_even_depth function from the phyloseq package)</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>combinedPS_clean_pruned_filtered <span class="ot">&lt;-</span> <span class="fu">prune_samples</span>(<span class="fu">sample_sums</span>(combinedPS_clean_pruned) <span class="sc">&gt;=</span> <span class="dv">1000</span>, combinedPS_clean_pruned);combinedPS_clean_pruned_filtered</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 2969 taxa and 277 samples ]
-## sample_data() Sample Data:       [ 277 samples by 9 sample variables ]
+## sample_data() Sample Data:       [ 277 samples by 11 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 2969 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 2969 tips and 2968 internal nodes ]</code></pre>
 <p>Lets first have a look at the read distribution per sample after

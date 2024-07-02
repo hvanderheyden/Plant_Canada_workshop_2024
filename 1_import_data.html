@@ -445,23 +445,8 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Part III -- Anlysing diversity
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="6_Heat_map.html">Heat maps</a>
-    </li>
-    <li>
-      <a href="7_alpha.html">alpha diversity</a>
-    </li>
-    <li>
-      <a href="8_time_series.html">Temporal distribution</a>
-    </li>
-  </ul>
+<li>
+  <a href="6_Heat_map.html">Part III -- Anlysing diversity</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -775,13 +760,13 @@ phyloseq::tax_table)</p>
 ## 4 IonT_QC0221WK23 B10_9_L001_R1_001.fastq.gz QC02_21_WK23 IonTorrent   QC02
 ## 5 IonT_QC0221WK24 B16_9_L001_R1_001.fastq.gz QC02_21_WK24 IonTorrent   QC02
 ## 6 IonT_QC0221WK25 B22_9_L001_R1_001.fastq.gz QC02_21_WK25 IonTorrent   QC02
-##         Region Year Week  X_coord  Y_coord
-## 1 Frelighsburg 2021 WK20 45.05353 -72.8625
-## 2 Frelighsburg 2021 WK21 45.05353 -72.8625
-## 3 Frelighsburg 2021 WK22 45.05353 -72.8625
-## 4 Frelighsburg 2021 WK23 45.05353 -72.8625
-## 5 Frelighsburg 2021 WK24 45.05353 -72.8625
-## 6 Frelighsburg 2021 WK25 45.05353 -72.8625</code></pre>
+##         Region Year Week Week2       Date  X_coord  Y_coord
+## 1 Frelighsburg 2021 WK20    20 2021-05-10 45.05353 -72.8625
+## 2 Frelighsburg 2021 WK21    21 2021-05-17 45.05353 -72.8625
+## 3 Frelighsburg 2021 WK22    22 2021-05-24 45.05353 -72.8625
+## 4 Frelighsburg 2021 WK23    23 2021-05-31 45.05353 -72.8625
+## 5 Frelighsburg 2021 WK24    24 2021-06-07 45.05353 -72.8625
+## 6 Frelighsburg 2021 WK25    25 2021-06-14 45.05353 -72.8625</code></pre>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a>meta <span class="ot">&lt;-</span> meta <span class="sc">%&gt;%</span> </span>
 <span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a>  tibble<span class="sc">::</span><span class="fu">column_to_rownames</span>(<span class="st">&quot;SampleID&quot;</span>)</span>
 <span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a></span>
@@ -791,7 +776,7 @@ phyloseq object:</p>
 <div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>combinedPS <span class="ot">&lt;-</span> <span class="fu">merge_phyloseq</span>(combined_otu, combined_tax, samples);combinedPS</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
-## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
+## sample_data() Sample Data:       [ 282 samples by 11 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ape&quot;</span>)</span>
 <span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a></span>
@@ -804,7 +789,7 @@ phyloseq object:</p>
 <span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a>combinedPS_final</span></code></pre></div>
 <pre><code>## phyloseq-class experiment-level object
 ## otu_table()   OTU Table:         [ 5790 taxa and 282 samples ]
-## sample_data() Sample Data:       [ 282 samples by 9 sample variables ]
+## sample_data() Sample Data:       [ 282 samples by 11 sample variables ]
 ## tax_table()   Taxonomy Table:    [ 5790 taxa by 7 taxonomic ranks ]
 ## phy_tree()    Phylogenetic Tree: [ 5790 tips and 5789 internal nodes ]</code></pre>
 </div>
