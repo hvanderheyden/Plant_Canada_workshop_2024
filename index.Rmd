@@ -51,6 +51,9 @@ The Centre québécois des sciences de la biodiversité (CQBS) also offers a wid
 
 https://r.qcbs.ca/workshops/ 
 
+Another great source of R tutorials and codes is the Riffomonas code club page: 
+
+(https://riffomonas.org/code_club/)
 
 Data used for the workshop
 -----
