@@ -315,9 +315,83 @@ ggarrange(ggarrange(Observe_status,
                     ncol = 2, labels = c("A", "B"),
                     heights = c(2.5, 1)))
 
-detach(package:MicrobiotaProcess)
 ```
 
+
+Linear discriminant effect size analysis (LEfSe)
+----
+
+
+LEfSe analysis can be use to determine which species might explain the differences between groups. 
+This approach uses a non-parametric Kruskal–Wallis test to detect species with significant differential abundance relative to the groups. 
+Then, biological significance is tested using pairwise Wilcoxon's rank-sum tests, with the Benjamini–Hochberg correction to control the false discovery rate (FDR). 
+In the final step, a linear discriminant analysis (LDA) is used to estimate the effect size of each differentially abundant feature.
+
+
+
+```{r}
+
+library("coin")
+library("stringr")
+library("ggtree") # BiocManager::install("ggtree")
+library("ggtreeExtra") #install.packages("ggExtra")
+library("MicrobiotaProcess")
+library("tidyverse")
+
+WorkingPS<-readRDS("Processed_data/WorkingPS.rds")
+
+set.seed(1024)
+oom_diff_res <- diff_analysis(obj = WorkingPS,
+                       classgroup = "seq_tech",
+                       mlfun = "lda",
+                       ratio=0.70,
+                       filtermod = "pvalue",
+                       firstcomfun = "kruskal.test",
+                       padjust = "fdr", #“holm”, “hochberg”, “hommel”, “bonferroni”, “BH”, “BY”, “fdr”, “none”
+                       firstalpha = 0.05,
+                       strictmod = TRUE,
+                       secondcomfun = "wilcox_test",
+                       clmin = 10,
+                       subclmin = 5,
+                       subclwilc = TRUE,
+                       ldascore = 4,
+                       secondalpha = 0.05,
+                       lda = 4,
+                       normalization = 1e+06,
+                       bootnums=999,
+                       ci=0.95,
+                       type = "species")
+
+
+oom_ana_results <- oom_diff_res@result
+
+oom_ana_results[c('order', 'Species')] <- str_split_fixed(oom_ana_results$f, '__', 2)
+
+oom_ana_results_S <- subset(oom_ana_results, order == 's')
+
+```
+
+```{r,  fig.align="center", echo = TRUE, fig.width = 8, fig.height= 6}
+
+ggplot(oom_ana_results_S,
+       aes(x=LDAmean, y=reorder(Species, LDAmean)))+
+  geom_segment(aes(yend=Species), xend=0, colour= "grey", 
+               linetype="dashed")+
+  geom_errorbarh(aes(xmin=oom_ana_results_S$LDAlower, 
+                      xmax=oom_ana_results_S$LDAupper,
+                      height = .2))+
+  geom_point(size=2, shape=21, aes(fill=seq_tech))+
+  scale_fill_manual(values=c("#990038", 
+                             "#01AED9",
+                             "#999999"))+
+  theme_bw(base_size = 10)+
+  theme(panel.grid.major.y = element_blank())+
+  theme(legend.position="top")+
+  xlab(bquote(Log[10](LDA)))+
+  ylab("Indicator species")+
+  theme(axis.text.y = element_text(face = "italic"))
+
+```
 
 
 

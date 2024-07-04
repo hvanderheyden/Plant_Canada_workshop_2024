@@ -19,11 +19,17 @@ R Biovigilance of Phytopathogens Based on a Metabarcoding Approach
 Workshop organization committee
 -----
 
-Wen Chen (AAFC -Workshop Instructor)
-
 Hervé Van der Heyden (AAFC - Preparation of workshop materials and website development)
 
+Wen Chen (AAFC - Workshop Instructor)
+
+Shaheen Bibi (Manitoba University - co-instructor),
+
 Guillaume J. Bilodeau (CFIA)
+
+Teaching assistants: 
+
+Minuka Hewapathirana (CFIA), Carol Bvindi (Manitoba University). 
 
 Description 
 -----
@@ -53,7 +59,7 @@ https://r.qcbs.ca/workshops/
 
 Another great source of R tutorials and codes is the Riffomonas code club page: 
 
-(https://riffomonas.org/code_club/)
+https://riffomonas.org/code_club/
 
 Data used for the workshop
 -----

@@ -33,7 +33,7 @@ library("remotes")
 library("BiocManager")
 library("UpSetR")
 
-# BiocManager::install(c("phyloseq", "microbiome","MicrobiotaProcess")
+# BiocManager::install(c("phyloseq", "microbiome","MicrobiotaProcess"))
 library("phyloseq")
 library("microbiome")
 library("MicrobiotaProcess")
@@ -48,3 +48,12 @@ library("ampvis2")
 
 ``` 
 
+Session info
+----
+
+```{r, message=FALSE,echo=TRUE, warning=FALSE}
+library("knitr")
+
+devtools::session_info()
+
+``` 

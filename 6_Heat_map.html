@@ -445,17 +445,6 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li>
-  <a href="6_Heat_map.html">Part III -- Anlysing diversity</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io">
-    <span class="fa fa-github"></span>
-     
-  </a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Supplementary material
@@ -464,15 +453,17 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1_import_data.html">Heat maps</a>
-    </li>
-    <li>
-      <a href="2_preprocessing.html">alpha diversity</a>
-    </li>
-    <li>
-      <a href="3_summaries.html">Temporal distribution</a>
+      <a href="6_Heat_map.html">Diversity</a>
     </li>
   </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io">
+    <span class="fa fa-github"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -672,33 +663,33 @@ not in our list with “Other”:</p>
 <span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a></span>
 <span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="fu">head</span>(WorkingPS_melt)</span></code></pre></div>
 <pre><code>##                                   OTU          Sample Abundance
-## 1422 2949b355cd00039476d9a808f2e76b8e IonT_QC0621WK33    397142
-## 1662 2949b355cd00039476d9a808f2e76b8e IonT_QC0421WK33    393894
-## 1631 2949b355cd00039476d9a808f2e76b8e IonT_QC0421WK32    342518
-## 1403 2949b355cd00039476d9a808f2e76b8e IonT_QC0621WK34    327917
-## 1445 2949b355cd00039476d9a808f2e76b8e IonT_QC0521WK33    307748
-## 1646 2949b355cd00039476d9a808f2e76b8e IonT_QC0621WK32    270097
+## 1632 2949b355cd00039476d9a808f2e76b8e IonT_QC0621WK33    397142
+## 1639 2949b355cd00039476d9a808f2e76b8e IonT_QC0421WK33    393894
+## 1567 2949b355cd00039476d9a808f2e76b8e IonT_QC0421WK32    342518
+## 1649 2949b355cd00039476d9a808f2e76b8e IonT_QC0621WK34    327917
+## 1545 2949b355cd00039476d9a808f2e76b8e IonT_QC0521WK33    307748
+## 1587 2949b355cd00039476d9a808f2e76b8e IonT_QC0621WK32    270097
 ##                   InputFileName   Samplename   seq_tech SiteID      Region Year
-## 1422 B82_9_L001_R1_001.fastq.gz QC06_21_WK33 IonTorrent   QC06 Sherrington 2021
-## 1662 B80_9_L001_R1_001.fastq.gz QC04_21_WK33 IonTorrent   QC04 Napierville 2021
-## 1631 B73_9_L001_R1_001.fastq.gz QC04_21_WK32 IonTorrent   QC04 Napierville 2021
-## 1403 B89_9_L001_R1_001.fastq.gz QC06_21_WK34 IonTorrent   QC06 Sherrington 2021
-## 1445 B81_9_L001_R1_001.fastq.gz QC05_21_WK33 IonTorrent   QC05  St-Edouard 2021
-## 1646 B75_9_L001_R1_001.fastq.gz QC06_21_WK32 IonTorrent   QC06 Sherrington 2021
+## 1632 B82_9_L001_R1_001.fastq.gz QC06_21_WK33 IonTorrent   QC06 Sherrington 2021
+## 1639 B80_9_L001_R1_001.fastq.gz QC04_21_WK33 IonTorrent   QC04 Napierville 2021
+## 1567 B73_9_L001_R1_001.fastq.gz QC04_21_WK32 IonTorrent   QC04 Napierville 2021
+## 1649 B89_9_L001_R1_001.fastq.gz QC06_21_WK34 IonTorrent   QC06 Sherrington 2021
+## 1545 B81_9_L001_R1_001.fastq.gz QC05_21_WK33 IonTorrent   QC05  St-Edouard 2021
+## 1587 B75_9_L001_R1_001.fastq.gz QC06_21_WK32 IonTorrent   QC06 Sherrington 2021
 ##      Week Week2       Date  X_coord  Y_coord   Kingdom   Phylum         Class
-## 1422 WK33    33 2021-08-09 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-## 1662 WK33    33 2021-08-09 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
-## 1631 WK32    32 2021-08-02 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
-## 1403 WK34    34 2021-08-16 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
-## 1445 WK33    33 2021-08-09 45.19820 -73.5421 Eukaryota Oomycota Stramenopiles
-## 1646 WK32    32 2021-08-02 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
+## 1632 WK33    33 2021-08-09 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
+## 1639 WK33    33 2021-08-09 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
+## 1567 WK32    32 2021-08-02 45.18664 -73.3426 Eukaryota Oomycota Stramenopiles
+## 1649 WK34    34 2021-08-16 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
+## 1545 WK33    33 2021-08-09 45.19820 -73.5421 Eukaryota Oomycota Stramenopiles
+## 1587 WK32    32 2021-08-02 45.13174 -73.4719 Eukaryota Oomycota Stramenopiles
 ##               Order          Family       Genus                Species
-## 1422 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 1662 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 1631 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 1403 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 1445 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
-## 1646 Peronosporales Peronosporaceae Peronospora Peronospora manshurica</code></pre>
+## 1632 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
+## 1639 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
+## 1567 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
+## 1649 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
+## 1545 Peronosporales Peronosporaceae Peronospora Peronospora manshurica
+## 1587 Peronosporales Peronosporaceae Peronospora Peronospora manshurica</code></pre>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>predefined_species <span class="ot">=</span> <span class="fu">c</span>(<span class="st">&quot;Peronospora manshurica&quot;</span>,</span>
 <span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>                       <span class="st">&quot;Peronospora variabilis&quot;</span>,</span>
 <span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a>                       <span class="st">&quot;Bremia lactucae cluster&quot;</span>,</span>
@@ -772,13 +763,13 @@ evolution of alpha diversity as a function of time.</p>
 <span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a>alpha_oom <span class="ot">&lt;-</span> <span class="fu">get_alphaindex</span>(WorkingPS_glom)</span>
 <span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a></span>
 <span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="fu">head</span>(<span class="fu">as.data.frame</span>(alpha_oom))</span></code></pre></div>
-<pre><code>##                 Observe Chao1      ACE   Shannon   Simpson    Pielou
-## IonT_QC0221WK20       3  3.00 3.584000 0.8647401 0.5390625 0.7871204
-## IonT_QC0221WK22       8  8.75 9.846154 1.9600951 0.8437500 0.9426065
-## IonT_QC0221WK23       4  4.00 4.603259 1.1803046 0.6484375 0.8514098
-## IonT_QC0221WK24       5  5.00 5.831111 1.3535914 0.6796875 0.8410336
-## IonT_QC0221WK25       3  3.00 3.584000 0.8647401 0.5390625 0.7871204
-## IonT_QC0221WK26       4  4.00 4.679111 1.1432752 0.6328125 0.8246987
+<pre><code>##                 Observe Chao1       ACE   Shannon   Simpson    Pielou
+## IonT_QC0221WK20       3  3.00  4.125000 0.7774621 0.4609375 0.7076765
+## IonT_QC0221WK22       7  8.00 10.224852 1.7214023 0.7812500 0.8846258
+## IonT_QC0221WK23       3  3.00  3.527111 0.8815323 0.5546875 0.8024052
+## IonT_QC0221WK24       7  7.25  8.152381 1.8037194 0.8125000 0.9269284
+## IonT_QC0221WK25       4  4.00  4.603259 1.1626998 0.6484375 0.8387106
+## IonT_QC0221WK26       3  3.00  3.000000 1.0821955 0.6562500 0.9850568
 ##                              InputFileName   Samplename   seq_tech SiteID
 ## IonT_QC0221WK20  B1_9_L001_R1_001.fastq.gz QC02_21_WK20 IonTorrent   QC02
 ## IonT_QC0221WK22  B4_9_L001_R1_001.fastq.gz QC02_21_WK22 IonTorrent   QC02
@@ -823,7 +814,73 @@ evolution of alpha diversity as a function of time.</p>
 <span id="cb17-28"><a href="#cb17-28" tabindex="-1"></a>                    <span class="at">ncol =</span> <span class="dv">2</span>, <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>),</span>
 <span id="cb17-29"><a href="#cb17-29" tabindex="-1"></a>                    <span class="at">heights =</span> <span class="fu">c</span>(<span class="fl">2.5</span>, <span class="dv">1</span>)))</span></code></pre></div>
 <p><img src="6_Heat_map_files/figure-html/unnamed-chunk-11-1.png" width="1344" style="display: block; margin: auto;" /></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">detach</span>(package<span class="sc">:</span>MicrobiotaProcess)</span></code></pre></div>
+</div>
+<div id="linear-discriminant-effect-size-analysis-lefse"
+class="section level2">
+<h2>Linear discriminant effect size analysis (LEfSe)</h2>
+<p>LEfSe analysis can be use to determine which species might explain
+the differences between groups. This approach uses a non-parametric
+Kruskal–Wallis test to detect species with significant differential
+abundance relative to the groups. Then, biological significance is
+tested using pairwise Wilcoxon’s rank-sum tests, with the
+Benjamini–Hochberg correction to control the false discovery rate (FDR).
+In the final step, a linear discriminant analysis (LDA) is used to
+estimate the effect size of each differentially abundant feature.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;coin&quot;</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;stringr&quot;</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggtree&quot;</span>) <span class="co"># BiocManager::install(&quot;ggtree&quot;)</span></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;ggtreeExtra&quot;</span>) <span class="co">#install.packages(&quot;ggExtra&quot;)</span></span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;MicrobiotaProcess&quot;</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">library</span>(<span class="st">&quot;tidyverse&quot;</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a></span>
+<span id="cb18-8"><a href="#cb18-8" tabindex="-1"></a>WorkingPS<span class="ot">&lt;-</span><span class="fu">readRDS</span>(<span class="st">&quot;Processed_data/WorkingPS.rds&quot;</span>)</span>
+<span id="cb18-9"><a href="#cb18-9" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1024</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" tabindex="-1"></a>oom_diff_res <span class="ot">&lt;-</span> <span class="fu">diff_analysis</span>(<span class="at">obj =</span> WorkingPS,</span>
+<span id="cb18-12"><a href="#cb18-12" tabindex="-1"></a>                       <span class="at">classgroup =</span> <span class="st">&quot;seq_tech&quot;</span>,</span>
+<span id="cb18-13"><a href="#cb18-13" tabindex="-1"></a>                       <span class="at">mlfun =</span> <span class="st">&quot;lda&quot;</span>,</span>
+<span id="cb18-14"><a href="#cb18-14" tabindex="-1"></a>                       <span class="at">ratio=</span><span class="fl">0.70</span>,</span>
+<span id="cb18-15"><a href="#cb18-15" tabindex="-1"></a>                       <span class="at">filtermod =</span> <span class="st">&quot;pvalue&quot;</span>,</span>
+<span id="cb18-16"><a href="#cb18-16" tabindex="-1"></a>                       <span class="at">firstcomfun =</span> <span class="st">&quot;kruskal.test&quot;</span>,</span>
+<span id="cb18-17"><a href="#cb18-17" tabindex="-1"></a>                       <span class="at">padjust =</span> <span class="st">&quot;fdr&quot;</span>, <span class="co">#“holm”, “hochberg”, “hommel”, “bonferroni”, “BH”, “BY”, “fdr”, “none”</span></span>
+<span id="cb18-18"><a href="#cb18-18" tabindex="-1"></a>                       <span class="at">firstalpha =</span> <span class="fl">0.05</span>,</span>
+<span id="cb18-19"><a href="#cb18-19" tabindex="-1"></a>                       <span class="at">strictmod =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-20"><a href="#cb18-20" tabindex="-1"></a>                       <span class="at">secondcomfun =</span> <span class="st">&quot;wilcox_test&quot;</span>,</span>
+<span id="cb18-21"><a href="#cb18-21" tabindex="-1"></a>                       <span class="at">clmin =</span> <span class="dv">10</span>,</span>
+<span id="cb18-22"><a href="#cb18-22" tabindex="-1"></a>                       <span class="at">subclmin =</span> <span class="dv">5</span>,</span>
+<span id="cb18-23"><a href="#cb18-23" tabindex="-1"></a>                       <span class="at">subclwilc =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb18-24"><a href="#cb18-24" tabindex="-1"></a>                       <span class="at">ldascore =</span> <span class="dv">4</span>,</span>
+<span id="cb18-25"><a href="#cb18-25" tabindex="-1"></a>                       <span class="at">secondalpha =</span> <span class="fl">0.05</span>,</span>
+<span id="cb18-26"><a href="#cb18-26" tabindex="-1"></a>                       <span class="at">lda =</span> <span class="dv">4</span>,</span>
+<span id="cb18-27"><a href="#cb18-27" tabindex="-1"></a>                       <span class="at">normalization =</span> <span class="fl">1e+06</span>,</span>
+<span id="cb18-28"><a href="#cb18-28" tabindex="-1"></a>                       <span class="at">bootnums=</span><span class="dv">999</span>,</span>
+<span id="cb18-29"><a href="#cb18-29" tabindex="-1"></a>                       <span class="at">ci=</span><span class="fl">0.95</span>,</span>
+<span id="cb18-30"><a href="#cb18-30" tabindex="-1"></a>                       <span class="at">type =</span> <span class="st">&quot;species&quot;</span>)</span>
+<span id="cb18-31"><a href="#cb18-31" tabindex="-1"></a></span>
+<span id="cb18-32"><a href="#cb18-32" tabindex="-1"></a></span>
+<span id="cb18-33"><a href="#cb18-33" tabindex="-1"></a>oom_ana_results <span class="ot">&lt;-</span> oom_diff_res<span class="sc">@</span>result</span>
+<span id="cb18-34"><a href="#cb18-34" tabindex="-1"></a></span>
+<span id="cb18-35"><a href="#cb18-35" tabindex="-1"></a>oom_ana_results[<span class="fu">c</span>(<span class="st">&#39;order&#39;</span>, <span class="st">&#39;Species&#39;</span>)] <span class="ot">&lt;-</span> <span class="fu">str_split_fixed</span>(oom_ana_results<span class="sc">$</span>f, <span class="st">&#39;__&#39;</span>, <span class="dv">2</span>)</span>
+<span id="cb18-36"><a href="#cb18-36" tabindex="-1"></a></span>
+<span id="cb18-37"><a href="#cb18-37" tabindex="-1"></a>oom_ana_results_S <span class="ot">&lt;-</span> <span class="fu">subset</span>(oom_ana_results, order <span class="sc">==</span> <span class="st">&#39;s&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">ggplot</span>(oom_ana_results_S,</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>LDAmean, <span class="at">y=</span><span class="fu">reorder</span>(Species, LDAmean)))<span class="sc">+</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">yend=</span>Species), <span class="at">xend=</span><span class="dv">0</span>, <span class="at">colour=</span> <span class="st">&quot;grey&quot;</span>, </span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a>               <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin=</span>oom_ana_results_S<span class="sc">$</span>LDAlower, </span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>                      <span class="at">xmax=</span>oom_ana_results_S<span class="sc">$</span>LDAupper,</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a>                      <span class="at">height =</span> .<span class="dv">2</span>))<span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>, <span class="at">shape=</span><span class="dv">21</span>, <span class="fu">aes</span>(<span class="at">fill=</span>seq_tech))<span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#990038&quot;</span>, </span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a>                             <span class="st">&quot;#01AED9&quot;</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a>                             <span class="st">&quot;#999999&quot;</span>))<span class="sc">+</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb19-13"><a href="#cb19-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb19-14"><a href="#cb19-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="sc">+</span></span>
+<span id="cb19-15"><a href="#cb19-15" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">bquote</span>(Log[<span class="dv">10</span>](LDA)))<span class="sc">+</span></span>
+<span id="cb19-16"><a href="#cb19-16" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Indicator species&quot;</span>)<span class="sc">+</span></span>
+<span id="cb19-17"><a href="#cb19-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;italic&quot;</span>))</span></code></pre></div>
+<p><img src="6_Heat_map_files/figure-html/unnamed-chunk-13-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 
 

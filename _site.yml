@@ -24,22 +24,16 @@ navbar:
         - text: "Comparisons"
           href: 5_comparison.html
           
-    - text: "Part III -- Anlysing diversity"
-      href: 6_Heat_map.html
-          
-      
+    - text: "Supplementary material"
+      menu:
+        - text: "Diversity"
+          href: 6_Heat_map.html    
+
   right:
   - icon: fa-github
     href: https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io
     
-  - text: "Supplementary material"
-    menu:
-      - text: "Heat maps"
-        href: 1_import_data.html    
-      - text: "alpha diversity"
-        href: 2_preprocessing.html    
-      - text: "Temporal distribution"
-        href: 3_summaries.html    
+   
 
 output:
   html_document:

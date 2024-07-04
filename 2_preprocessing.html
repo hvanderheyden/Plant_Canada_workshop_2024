@@ -445,17 +445,6 @@ div.tocify {
     </li>
   </ul>
 </li>
-<li>
-  <a href="6_Heat_map.html">Part III -- Anlysing diversity</a>
-</li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li>
-  <a href="https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io">
-    <span class="fa fa-github"></span>
-     
-  </a>
-</li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Supplementary material
@@ -464,15 +453,17 @@ div.tocify {
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="1_import_data.html">Heat maps</a>
-    </li>
-    <li>
-      <a href="2_preprocessing.html">alpha diversity</a>
-    </li>
-    <li>
-      <a href="3_summaries.html">Temporal distribution</a>
+      <a href="6_Heat_map.html">Diversity</a>
     </li>
   </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/hvanderheyden/Plant_Canada_2024_workshop.github.io">
+    <span class="fa fa-github"></span>
+     
+  </a>
 </li>
       </ul>
     </div><!--/.nav-collapse -->
@@ -517,20 +508,20 @@ version the taxonomy table, as a new dataframe (taxM.clean).</p>
 <span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a> <span class="fu">mutate</span>(<span class="at">Species=</span><span class="fu">str_replace</span>(Species, <span class="st">&quot;_&quot;</span>, <span class="st">&quot; &quot;</span>))</span>
 <span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a></span>
 <span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a><span class="fu">head</span>(tax.cleanM[,<span class="dv">5</span><span class="sc">:</span><span class="dv">7</span>])</span></code></pre></div>
-<pre><code>##                                           Family             Genus
-## d179d3d81266cb9f8f44a38640abf4da         unknown           unknown
-## MH107905.1                        Thyridariaceae    Parathyridaria
-## U72607.1                             Orbiliaceae           Orbilia
-## JF313731.1                        Hygrophoraceae         Hygrocybe
-## MF190124.1                             Valsaceae         Cytospora
-## KM484876.1                       Pyriculariaceae Pseudopyricularia
+<pre><code>##                                              Family       Genus
+## OM809222.1                            Clitocybaceae Singerocybe
+## AY340012.1                         Hymenochaetaceae   Phellinus
+## MH856479.1                          Psathyrellaceae Coprinopsis
+## MT611529.1                               Irpicaceae     Efibula
+## cdfa0cc0a1ccbc5309f6166a35e728a4    Peronosporaceae Peronospora
+## EU070924.1                       Bulleribasidiaceae   Dioszegia
 ##                                                      Species
-## d179d3d81266cb9f8f44a38640abf4da                     unknown
-## MH107905.1                        Parathyridaria philadelphi
-## U72607.1                                Orbilia luteorubella
-## JF313731.1                             Hygrocybe chlorophana
-## MF190124.1                           Cytospora centrivillosa
-## KM484876.1                       Pseudopyricularia kyllingae</code></pre>
+## OM809222.1                       Singerocybe adirondackensis
+## AY340012.1                                Phellinus hartigii
+## MH856479.1                            Coprinopsis cothurnata
+## MT611529.1                               Efibula yunnanensis
+## cdfa0cc0a1ccbc5309f6166a35e728a4      Peronospora manshurica
+## EU070924.1                               Dioszegia butyracea</code></pre>
 </div>
 <div id="species-clusters" class="section level2">
 <h2>Species clusters</h2>
