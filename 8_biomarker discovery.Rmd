@@ -13,12 +13,10 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE)
 Linear discriminant effect size analysis (LEfSe)
 ----
 
-
 LEfSe analysis can be use to determine which species might explain the differences between groups. 
 This approach uses a non-parametric Kruskal–Wallis test to detect species with significant differential abundance relative to the groups. 
 Then, biological significance is tested using pairwise Wilcoxon's rank-sum tests, with the Benjamini–Hochberg correction to control the false discovery rate (FDR). 
 In the final step, a linear discriminant analysis (LDA) is used to estimate the effect size of each differentially abundant feature.
-
 
 
 ```{r}
