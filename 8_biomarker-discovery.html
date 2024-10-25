@@ -504,7 +504,7 @@ estimate the effect size of each differentially abundant feature.</p>
 <span id="cb1-11"><a href="#cb1-11" tabindex="-1"></a>oom_diff_res <span class="ot">&lt;-</span> <span class="fu">diff_analysis</span>(<span class="at">obj =</span> WorkingPS,</span>
 <span id="cb1-12"><a href="#cb1-12" tabindex="-1"></a>                       <span class="at">classgroup =</span> <span class="st">&quot;seq_tech&quot;</span>,</span>
 <span id="cb1-13"><a href="#cb1-13" tabindex="-1"></a>                       <span class="at">mlfun =</span> <span class="st">&quot;lda&quot;</span>,</span>
-<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>                       <span class="at">ratio=</span><span class="fl">0.70</span>,</span>
+<span id="cb1-14"><a href="#cb1-14" tabindex="-1"></a>                       <span class="at">ratio=</span><span class="fl">0.80</span>,</span>
 <span id="cb1-15"><a href="#cb1-15" tabindex="-1"></a>                       <span class="at">filtermod =</span> <span class="st">&quot;pvalue&quot;</span>,</span>
 <span id="cb1-16"><a href="#cb1-16" tabindex="-1"></a>                       <span class="at">firstcomfun =</span> <span class="st">&quot;kruskal.test&quot;</span>,</span>
 <span id="cb1-17"><a href="#cb1-17" tabindex="-1"></a>                       <span class="at">padjust =</span> <span class="st">&quot;fdr&quot;</span>, <span class="co">#“holm”, “hochberg”, “hommel”, “bonferroni”, “BH”, “BY”, “fdr”, “none”</span></span>
@@ -518,7 +518,7 @@ estimate the effect size of each differentially abundant feature.</p>
 <span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>                       <span class="at">secondalpha =</span> <span class="fl">0.01</span>,</span>
 <span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>                       <span class="at">lda =</span> <span class="dv">4</span>,</span>
 <span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>                       <span class="at">normalization =</span> <span class="fl">1e+06</span>,</span>
-<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>                       <span class="at">bootnums=</span><span class="dv">999</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>                       <span class="at">bootnums=</span><span class="dv">99</span>,</span>
 <span id="cb1-29"><a href="#cb1-29" tabindex="-1"></a>                       <span class="at">ci=</span><span class="fl">0.95</span>,</span>
 <span id="cb1-30"><a href="#cb1-30" tabindex="-1"></a>                       <span class="at">type =</span> <span class="st">&quot;species&quot;</span>)</span>
 <span id="cb1-31"><a href="#cb1-31" tabindex="-1"></a></span>
@@ -531,12 +531,12 @@ estimate the effect size of each differentially abundant feature.</p>
 <span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a></span>
 <span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="fu">head</span>(oom_ana_results_S)</span></code></pre></div>
 <pre><code>##                                        f LDAupper  LDAmean LDAlower   seq_tech
-## 1                 s__Plasmopara viticola 4.140866 4.130304 4.119480 IonTorrent
-## 2  s__Hyaloperonospora sisymbrii-sophiae 4.084519 4.073358 4.061903   Nanopore
-## 4                s__Brevilegnia gracilis 4.090683 4.079273 4.067555   Nanopore
-## 5                   s__un_g__Peronospora 4.327897 4.320203 4.312371 IonTorrent
-## 6    s__Peronospora boni-henrici cluster 4.147639 4.135961 4.123960 IonTorrent
-## 11         s__Hyaloperonospora camelinae 4.249655 4.242375 4.234972   Nanopore
+## 1                 s__Plasmopara viticola 4.166827 4.134217 4.098958 IonTorrent
+## 2  s__Hyaloperonospora sisymbrii-sophiae 4.109395 4.075094 4.037850   Nanopore
+## 4                s__Brevilegnia gracilis 4.114551 4.079879 4.042196   Nanopore
+## 5                   s__un_g__Peronospora 4.341739 4.318472 4.293887 IonTorrent
+## 6    s__Peronospora boni-henrici cluster 4.167613 4.132625 4.094570 IonTorrent
+## 11         s__Hyaloperonospora camelinae 4.260718 4.239672 4.217554   Nanopore
 ##          pvalue          fdr order                            Species
 ## 1  1.709812e-38 2.274050e-36     s                Plasmopara viticola
 ## 2  1.158482e-35 7.703905e-34     s Hyaloperonospora sisymbrii-sophiae

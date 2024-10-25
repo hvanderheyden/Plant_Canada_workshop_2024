@@ -34,7 +34,7 @@ set.seed(1024)
 oom_diff_res <- diff_analysis(obj = WorkingPS,
                        classgroup = "seq_tech",
                        mlfun = "lda",
-                       ratio=0.70,
+                       ratio=0.80,
                        filtermod = "pvalue",
                        firstcomfun = "kruskal.test",
                        padjust = "fdr", #“holm”, “hochberg”, “hommel”, “bonferroni”, “BH”, “BY”, “fdr”, “none”
@@ -48,7 +48,7 @@ oom_diff_res <- diff_analysis(obj = WorkingPS,
                        secondalpha = 0.01,
                        lda = 4,
                        normalization = 1e+06,
-                       bootnums=999,
+                       bootnums=99,
                        ci=0.95,
                        type = "species")
 
