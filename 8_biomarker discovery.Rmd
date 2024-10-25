@@ -45,7 +45,7 @@ oom_diff_res <- diff_analysis(obj = WorkingPS,
                        subclmin = 5,
                        subclwilc = TRUE,
                        ldascore = 4,
-                       secondalpha = 0.05,
+                       secondalpha = 0.01,
                        lda = 4,
                        normalization = 1e+06,
                        bootnums=999,
@@ -59,7 +59,10 @@ oom_ana_results[c('order', 'Species')] <- str_split_fixed(oom_ana_results$f, '__
 
 oom_ana_results_S <- subset(oom_ana_results, order == 's')
 
+head(oom_ana_results_S)
+
 ```
+
 
 ```{r,  fig.align="center", echo = TRUE, fig.width = 8, fig.height= 6}
 
@@ -83,3 +86,35 @@ ggplot(oom_ana_results_S,
 
 ```
 
+```{r,  fig.align="center", echo = TRUE, fig.width = 8, fig.height= 6}
+diffclade_p <- ggdiffclade(
+                   obj=oom_diff_res,
+                   alpha=0.03, 
+                   linewd=0.15,
+                   skpointsize=0.6, 
+                   layout="radial",
+                   taxlevel=7, 
+                   removeUnkown=FALSE
+                 ) +
+               scale_fill_manual(
+                   values=c("#990038", 
+                             "#01AED9",
+                             "#999999")
+               ) +
+               guides(color = guide_legend(
+                                  keywidth = 0.1, 
+                                  keyheight = 0.6,
+                                  order = 3,
+                                  ncol=1)
+               ) +
+               theme(
+                   panel.background=element_rect(fill=NA),
+                   legend.position="right", 
+                   plot.margin=margin(0,0,0,0),
+                   legend.spacing.y=unit(0.02, "cm"), 
+                   legend.title=element_text(size=7),
+                   legend.text=element_text(size=6), 
+                   legend.box.spacing=unit(0.02,"cm")
+               )
+diffclade_p
+```

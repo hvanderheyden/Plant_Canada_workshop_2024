@@ -515,7 +515,7 @@ estimate the effect size of each differentially abundant feature.</p>
 <span id="cb1-22"><a href="#cb1-22" tabindex="-1"></a>                       <span class="at">subclmin =</span> <span class="dv">5</span>,</span>
 <span id="cb1-23"><a href="#cb1-23" tabindex="-1"></a>                       <span class="at">subclwilc =</span> <span class="cn">TRUE</span>,</span>
 <span id="cb1-24"><a href="#cb1-24" tabindex="-1"></a>                       <span class="at">ldascore =</span> <span class="dv">4</span>,</span>
-<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>                       <span class="at">secondalpha =</span> <span class="fl">0.05</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" tabindex="-1"></a>                       <span class="at">secondalpha =</span> <span class="fl">0.01</span>,</span>
 <span id="cb1-26"><a href="#cb1-26" tabindex="-1"></a>                       <span class="at">lda =</span> <span class="dv">4</span>,</span>
 <span id="cb1-27"><a href="#cb1-27" tabindex="-1"></a>                       <span class="at">normalization =</span> <span class="fl">1e+06</span>,</span>
 <span id="cb1-28"><a href="#cb1-28" tabindex="-1"></a>                       <span class="at">bootnums=</span><span class="dv">999</span>,</span>
@@ -527,25 +527,72 @@ estimate the effect size of each differentially abundant feature.</p>
 <span id="cb1-34"><a href="#cb1-34" tabindex="-1"></a></span>
 <span id="cb1-35"><a href="#cb1-35" tabindex="-1"></a>oom_ana_results[<span class="fu">c</span>(<span class="st">&#39;order&#39;</span>, <span class="st">&#39;Species&#39;</span>)] <span class="ot">&lt;-</span> <span class="fu">str_split_fixed</span>(oom_ana_results<span class="sc">$</span>f, <span class="st">&#39;__&#39;</span>, <span class="dv">2</span>)</span>
 <span id="cb1-36"><a href="#cb1-36" tabindex="-1"></a></span>
-<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a>oom_ana_results_S <span class="ot">&lt;-</span> <span class="fu">subset</span>(oom_ana_results, order <span class="sc">==</span> <span class="st">&#39;s&#39;</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">ggplot</span>(oom_ana_results_S,</span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>LDAmean, <span class="at">y=</span><span class="fu">reorder</span>(Species, LDAmean)))<span class="sc">+</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">yend=</span>Species), <span class="at">xend=</span><span class="dv">0</span>, <span class="at">colour=</span> <span class="st">&quot;grey&quot;</span>, </span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>               <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin=</span>oom_ana_results_S<span class="sc">$</span>LDAlower, </span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>                      <span class="at">xmax=</span>oom_ana_results_S<span class="sc">$</span>LDAupper,</span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>                      <span class="at">height =</span> .<span class="dv">2</span>))<span class="sc">+</span></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>, <span class="at">shape=</span><span class="dv">21</span>, <span class="fu">aes</span>(<span class="at">fill=</span>seq_tech))<span class="sc">+</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#990038&quot;</span>, </span>
-<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>                             <span class="st">&quot;#01AED9&quot;</span>,</span>
-<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>                             <span class="st">&quot;#999999&quot;</span>))<span class="sc">+</span></span>
-<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
-<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
-<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="sc">+</span></span>
-<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">bquote</span>(Log[<span class="dv">10</span>](LDA)))<span class="sc">+</span></span>
-<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Indicator species&quot;</span>)<span class="sc">+</span></span>
-<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;italic&quot;</span>))</span></code></pre></div>
+<span id="cb1-37"><a href="#cb1-37" tabindex="-1"></a>oom_ana_results_S <span class="ot">&lt;-</span> <span class="fu">subset</span>(oom_ana_results, order <span class="sc">==</span> <span class="st">&#39;s&#39;</span>)</span>
+<span id="cb1-38"><a href="#cb1-38" tabindex="-1"></a></span>
+<span id="cb1-39"><a href="#cb1-39" tabindex="-1"></a><span class="fu">head</span>(oom_ana_results_S)</span></code></pre></div>
+<pre><code>##                                        f LDAupper  LDAmean LDAlower   seq_tech
+## 1                 s__Plasmopara viticola 4.140866 4.130304 4.119480 IonTorrent
+## 2  s__Hyaloperonospora sisymbrii-sophiae 4.084519 4.073358 4.061903   Nanopore
+## 4                s__Brevilegnia gracilis 4.090683 4.079273 4.067555   Nanopore
+## 5                   s__un_g__Peronospora 4.327897 4.320203 4.312371 IonTorrent
+## 6    s__Peronospora boni-henrici cluster 4.147639 4.135961 4.123960 IonTorrent
+## 11         s__Hyaloperonospora camelinae 4.249655 4.242375 4.234972   Nanopore
+##          pvalue          fdr order                            Species
+## 1  1.709812e-38 2.274050e-36     s                Plasmopara viticola
+## 2  1.158482e-35 7.703905e-34     s Hyaloperonospora sisymbrii-sophiae
+## 4  1.984491e-30 5.278746e-29     s               Brevilegnia gracilis
+## 5  1.088230e-28 2.412243e-27     s                  un_g__Peronospora
+## 6  3.219376e-26 6.116814e-25     s   Peronospora boni-henrici cluster
+## 11 4.483981e-17 4.259782e-16     s         Hyaloperonospora camelinae</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="fu">ggplot</span>(oom_ana_results_S,</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>LDAmean, <span class="at">y=</span><span class="fu">reorder</span>(Species, LDAmean)))<span class="sc">+</span></span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>  <span class="fu">geom_segment</span>(<span class="fu">aes</span>(<span class="at">yend=</span>Species), <span class="at">xend=</span><span class="dv">0</span>, <span class="at">colour=</span> <span class="st">&quot;grey&quot;</span>, </span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>               <span class="at">linetype=</span><span class="st">&quot;dashed&quot;</span>)<span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>  <span class="fu">geom_errorbarh</span>(<span class="fu">aes</span>(<span class="at">xmin=</span>oom_ana_results_S<span class="sc">$</span>LDAlower, </span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>                      <span class="at">xmax=</span>oom_ana_results_S<span class="sc">$</span>LDAupper,</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a>                      <span class="at">height =</span> .<span class="dv">2</span>))<span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size=</span><span class="dv">2</span>, <span class="at">shape=</span><span class="dv">21</span>, <span class="fu">aes</span>(<span class="at">fill=</span>seq_tech))<span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#990038&quot;</span>, </span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>                             <span class="st">&quot;#01AED9&quot;</span>,</span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>                             <span class="st">&quot;#999999&quot;</span>))<span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="fu">theme_bw</span>(<span class="at">base_size =</span> <span class="dv">10</span>)<span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.major.y =</span> <span class="fu">element_blank</span>())<span class="sc">+</span></span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position=</span><span class="st">&quot;top&quot;</span>)<span class="sc">+</span></span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">bquote</span>(Log[<span class="dv">10</span>](LDA)))<span class="sc">+</span></span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;Indicator species&quot;</span>)<span class="sc">+</span></span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">face =</span> <span class="st">&quot;italic&quot;</span>))</span></code></pre></div>
 <p><img src="8_biomarker-discovery_files/figure-html/unnamed-chunk-2-1.png" width="768" style="display: block; margin: auto;" /></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>diffclade_p <span class="ot">&lt;-</span> <span class="fu">ggdiffclade</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>                   <span class="at">obj=</span>oom_diff_res,</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                   <span class="at">alpha=</span><span class="fl">0.03</span>, </span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>                   <span class="at">linewd=</span><span class="fl">0.15</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a>                   <span class="at">skpointsize=</span><span class="fl">0.6</span>, </span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>                   <span class="at">layout=</span><span class="st">&quot;radial&quot;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>                   <span class="at">taxlevel=</span><span class="dv">7</span>, </span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>                   <span class="at">removeUnkown=</span><span class="cn">FALSE</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a>                 ) <span class="sc">+</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>               <span class="fu">scale_fill_manual</span>(</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a>                   <span class="at">values=</span><span class="fu">c</span>(<span class="st">&quot;#990038&quot;</span>, </span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a>                             <span class="st">&quot;#01AED9&quot;</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a>                             <span class="st">&quot;#999999&quot;</span>)</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a>               ) <span class="sc">+</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a>               <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a>                                  <span class="at">keywidth =</span> <span class="fl">0.1</span>, </span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a>                                  <span class="at">keyheight =</span> <span class="fl">0.6</span>,</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a>                                  <span class="at">order =</span> <span class="dv">3</span>,</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a>                                  <span class="at">ncol=</span><span class="dv">1</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a>               ) <span class="sc">+</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>               <span class="fu">theme</span>(</span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a>                   <span class="at">panel.background=</span><span class="fu">element_rect</span>(<span class="at">fill=</span><span class="cn">NA</span>),</span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a>                   <span class="at">legend.position=</span><span class="st">&quot;right&quot;</span>, </span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a>                   <span class="at">plot.margin=</span><span class="fu">margin</span>(<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>,<span class="dv">0</span>),</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a>                   <span class="at">legend.spacing.y=</span><span class="fu">unit</span>(<span class="fl">0.02</span>, <span class="st">&quot;cm&quot;</span>), </span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a>                   <span class="at">legend.title=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">7</span>),</span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a>                   <span class="at">legend.text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">6</span>), </span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a>                   <span class="at">legend.box.spacing=</span><span class="fu">unit</span>(<span class="fl">0.02</span>,<span class="st">&quot;cm&quot;</span>)</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a>               )</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a>diffclade_p</span></code></pre></div>
+<p><img src="8_biomarker-discovery_files/figure-html/unnamed-chunk-3-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 
 
