@@ -24,10 +24,20 @@ navbar:
         - text: "Comparisons"
           href: 5_comparison.html
           
-    - text: "Supplementary material"
+    - text: "Beta diversity and comaprison"
       menu:
-        - text: "Diversity"
-          href: 6_Heat_map.html    
+        - text: "Beta diversity"
+          href: 6_Heat_map.html
+          
+    - text: "Temporal variation"
+      menu:
+        - text: "Temporal variation"
+          href: 7_Time_series.html
+          
+    - text: "Biomarker-discovery"
+      menu:
+        - text: "Temporal variation"
+          href: 8_biomarker-discovery.html 
 
   right:
   - icon: fa-github
